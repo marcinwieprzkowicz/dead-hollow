@@ -3,7 +3,7 @@ Dead Hollow is a HTML5 game built like a typical website where animations and tr
 
 
 ##Demo
-soon
+**[Let's play Dead Hollow](http://marcinwieprzkowicz.github.io/dead-hollow/)**
 
 
 ##Hire me
