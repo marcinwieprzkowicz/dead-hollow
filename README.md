@@ -1,4 +1,4 @@
-#Dead Hollow
+#Dead Hollow (preview version)
 Dead Hollow is a HTML5 game built like a typical website where animations and transformations are made by CSS3.
 
 ##Demo
@@ -34,7 +34,11 @@ Sounds:
 soon
 
 ##Issues
-soon
+The game is still unfinished and has a few issues that has to be solved.
+* performance: moving platforms eats more CPU than your mother
+* touchmove event: unhandled
+* the map is static: templates?
+* ...and so on
 
 ##License
 Dead Hollow is released under the **[Creative Commons NonCommercial](http://creativecommons.org/licenses/by-nc/3.0/)** license.
