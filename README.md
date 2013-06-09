@@ -1,8 +1,10 @@
 #Dead Hollow (preview version)
 Dead Hollow is a HTML5 game built like a typical website where animations and transformations are made by CSS3.
 
+
 ##Demo
 soon
+
 
 ##Credits
 * Marcin Wieprzkowicz: Originator
@@ -31,15 +33,27 @@ Sounds:
 
 
 ##Brief of history
-soon
+I think you're going to ask: *"Why has the game been developed that way? There is plenty of game engines ready to use based on WebGl."*.
+
+Well, let's start from beginning. At first, It was supposed to be a pure CSS3 animation. This idea was born just after the **[PNG-TO-CSS library](https://github.com/marcinwieprzkowicz/png-to-css)**.
+
+When I saw the final result I was really impressed. I thought to myself, why not to make the game? I shared the idea with my friends from work. Natalia said she likes the idea and can help. As you can see in the demo map is absolutely fantastic.
+
+One day, Dawid asked if I checked the game on iPad. Well, I did not. Since that day, I learned how to optimize website for iPad ;).
+
+Development took me a long time, it was my activity after hours. Optimization, sounds, finding solutions, etc., it was all on my head. I consider this project more as an experiment than a game. In the future I plan to write this game again, this time using WebGl.
+
+P.S. There is a reason why I didn't use ready-made solutions. I wanted to improve my own skills :).
+
 
 ##Issues
-The game is still unfinished and has a few issues that has to be solved.
+The game is still **unfinished** and has a few issues that has to be solved.
 * performance: moving platforms eats more CPU than your mother
 * touchmove event: unhandled
 * the map is static: templates?
 * ...and so on
 
+
 ##License
 Dead Hollow is released under the **[Creative Commons NonCommercial](http://creativecommons.org/licenses/by-nc/3.0/)** license.
-Furthermore, remember about credits section. All rights for graphics belongs to **[Natalia Berowska](http://dribbble.com/nberowska)**. Not all used scripts are free for commercial use, for example: fleXcroll.
+Moreover, remember about credits section. All rights for graphics belongs to **[Natalia Berowska](http://dribbble.com/nberowska)**. Not all used scripts are free for commercial use, for example: fleXcroll.
