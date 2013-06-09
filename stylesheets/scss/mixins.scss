@@ -1,0 +1,105 @@
+/*
+ *
+ * Mixins.
+ *
+ * @author: Marcin Wieprzkowicz (marcin.wieprzkowicz@gmail.com)
+ *
+ */
+
+
+@mixin box-shadow($shadows...){
+  -webkit-box-shadow: $shadows;
+  -moz-box-shadow: $shadows;
+  box-shadow: $shadows;
+}
+
+@mixin border-radius($radius){
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin linear-gradient($colors, $direction: top){
+  background: -webkit-linear-gradient($direction, #{$colors});
+  background: -moz-linear-gradient($direction, #{$colors});
+  background: -ms-linear-gradient($direction, #{$colors});
+  @if $direction == top {
+    background: linear-gradient(to bottom, #{$colors});
+  }
+  @if $direction == left {
+    background: linear-gradient(to right, #{$colors});
+  }
+}
+
+@mixin animation($animation){
+  -webkit-animation: $animation;
+  -moz-animation: $animation;
+  -ms-animation: $animation;
+  animation: $animation;
+}
+
+@mixin animation-name($name){
+  -webkit-animation-name: $name;
+  -moz-animation-name: $name;
+  -ms-animation-name: $name;
+  animation-name: $name;
+}
+
+@mixin animation-play-state($state) {
+  -webkit-animation-play-state: $state;
+  -moz-animation-play-state: $state;
+  -ms-animation-play-state: $state;
+  animation-play-state: $state;
+}
+
+@mixin animation-fill-mode($mode){
+  -webkit-animation-fill-mode: $mode;
+  -moz-animation-fill-mode: $mode;
+  -ms-animation-fill-mode: $mode;
+  animation-fill-mode: $mode;
+}
+
+@mixin transition($transitions...){
+  -webkit-transition: $transitions;
+  -moz-transition: $transitions;
+  -ms-transition: $transitions;
+  transition: $transitions;
+}
+
+@mixin transform($transforms...){
+  -webkit-transform: $transforms;
+  -moz-transform: $transforms;
+  -ms-transform: $transforms;
+  transform: $transforms;
+}
+
+@mixin perspective($perspective){
+  -webkit-perspective: $perspective;
+  -moz-perspective: $perspective;
+  -ms-perspective: $perspective;
+  perspective: $perspective;
+}
+
+@mixin no-touchie(){
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+  @-ms-keyframes #{$name} {
+    @content;
+  }
+  @keyframes #{$name} {
+    @content;
+  }
+}

@@ -1,0 +1,63 @@
+/*
+ *
+ * CSS reset based on: https://github.com/oskarkrawczyk/project-template/.
+ *
+ */
+
+
+body {
+  font-size: 100%;
+}
+
+body, button, input, textarea, select {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body, head, h1, h2, h3, h4, h5, h6, p, blockquote, ul, ol, li, dd, dt, dl, form, fieldset, input, textarea, button {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border: none;
+  font-weight: normal;
+  line-height: 100%;
+  font-size: 1em;
+}
+
+table {
+  border-spacing: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  border: none;
+  display: block;
+}
+
+legend {
+  display: none;
+}
+
+.authors li:after,
+.range:after,
+.keyWrap:after,
+.twoColumns:after {
+  display: block;
+  content: ' ';
+  clear: both;
+  height: 0;
+  font-size: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+p {
+  line-height: 1.5em;
+}
+
+input, select, textarea {
+  font-family: Helvetica, Arial, Verdana, Tahoma, sans-serif;
+}

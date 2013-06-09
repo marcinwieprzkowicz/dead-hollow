@@ -1,0 +1,1220 @@
+/*!
+ *
+ * Background and foreground elements.
+ *
+ * @author: Marcin Wieprzkowicz (marcin.wieprzkowicz@gmail.com)
+ *
+ */
+
+
+@import 'mixins';
+
+/*= character
+============================================================================ */
+#character {
+  height: 50px;
+  left: 50%;
+  margin: 0 0 0 -20px;
+  position: absolute;
+  width: 40px;
+  top: 240px;
+  z-index: 100;
+
+  .visualization {
+    bottom: 0;
+    left: -4px;
+    height: 54px;
+    position: absolute;
+    width: 44px;
+  }
+
+  &.run .visualization {
+    @include animation(character-move-right .9s step-start 0s infinite);
+  }
+  &.inverted .visualization {
+    @include transform(scaleX(-1));
+  }
+  &.jump .visualization {
+    @include animation(character-jump .3s step-start 0s 1);
+    @include animation-fill-mode(forwards);
+  }
+  &.landing .visualization {
+    @include animation(character-landing .2s step-start 0s 1);
+    @include animation-fill-mode(forwards);
+  }
+  &.paused .visualization {
+    @include animation-play-state(paused);
+  }
+  &.death {
+    @include transition(1s linear);
+  }
+}
+
+/*= map
+============================================================================ */
+#map {
+  height: 360px;
+  left: 50%;
+  margin: -180px 0 0 -180px;
+  position: absolute;
+  width: 360px;
+  top: 50%;
+}
+
+#background,
+#foreground {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 5797px;
+  @include transition(.05s linear);
+}
+
+#foreground {
+  z-index: 150;
+}
+
+.above {
+  z-index: 110;
+}
+
+.below,
+.platform.below {
+  z-index: 90;
+}
+
+#the-end-trigger {
+  bottom: 11px;
+  height: 360px;
+  left: 1950px;
+  position: absolute;
+  width: 100px;
+}
+
+/*= info
+============================================================================ */
+#info {
+  background: url(../images/info-icon.png) no-repeat;
+  bottom: 215px;
+  height: 70px;
+  left: 2440px;
+  position: absolute;
+  width: 70px;
+  z-index: 110;
+  @include perspective(1000);
+
+  div {
+    color: #1f222f;
+    font-family: Georgia;
+    font-size: 1.75em;
+    font-weight: bold;
+    height: 34px;
+    left: 50%;
+    line-height: 34px;
+    margin: -19px 0 0 -17px;
+    position: absolute;
+    width: 34px;
+    text-align: center;
+    top: 50%;
+  }
+}
+
+/*= parts
+============================================================================ */
+.parts {
+  position: absolute;
+  z-index: 50;
+  &.floor {
+    background: url(../images/backgrounds/base-3.jpg) repeat-x;
+    height: 160px;
+    z-index: 60;
+    @include perspective(1000);
+
+    .part {
+      background: url(../images/backgrounds/base-1.jpg) repeat-x;
+
+      > .solid {
+        bottom: 0;
+        height: 40px;
+        position: absolute;
+        width: 100%;
+      }
+    }
+  }
+  &.wallBg {
+    background: url(../images/backgrounds/border.png) repeat-x 0 100%,
+                url(../images/backgrounds/pipelines.png),
+                url(../images/backgrounds/base-2.jpg);
+  }
+}
+
+.parts-1 {
+  left: 2420px;
+  bottom: 80px;
+  width: 3052px;
+
+  .part-1 {
+    margin-right: 380px;
+    width: 1557px;
+  }
+
+  .part-2 {
+    margin-left: 90px;
+    width: 630px;
+  }
+}
+
+.parts-2 {
+  bottom: 240px;
+  left: 2297px;
+  height: 264px;
+  width: 3175px;
+}
+
+.parts-3 {
+  bottom: 440px;
+
+  .part-1 {
+    margin-right: 455px;
+    width: 575px;
+  }
+
+  .part-2 {
+    margin-right: 455px;
+    width: 0;
+  }
+
+  .part-3 {
+    margin-right: 455px;
+    width: 0;
+  }
+
+  .part-4 {
+    margin-right: 360px;
+    width: 0;
+  }
+
+  .part-5 {
+    margin-left: 90px;
+    margin-right: 370px;
+    width: 683px;
+  }
+
+  .part-6 {
+    margin-right: 560px;
+    width: 475px;
+  }
+
+  .part-7 {
+    margin-left: 90px;
+    margin-right: 330px;
+    width: 449px;
+  }
+
+  .part-8 {
+    margin-left: 87px;
+    width: 363px;
+  }
+}
+
+.parts-4 {
+  bottom: 600px;
+  height: 264px;
+  width: 100%;
+}
+
+.parts-5 {
+  bottom: 800px;
+
+  .part-1 {
+    margin-right: 1637px;
+    width: 2px;
+  }
+
+  .part-2 {
+    margin-left: 94px;
+    margin-right: 1786px;
+    width: 920px;
+  }
+
+  .part-3 {
+    margin-right: 1020px;
+    width: 184px;
+  }
+
+  .part-4 {
+    margin-left: 90px;
+    width: 64px;
+  }
+}
+
+.parts-6 {
+  bottom: 960px;
+  height: 264px;
+  width: 100%;
+}
+
+.parts-7 {
+  bottom: 1160px;
+
+  .part-1 {
+    margin-right: 1874px;
+    width: 2620px;
+  }
+
+  .part-2 {
+    margin-right: 733px;
+    width: 506px;
+  }
+
+  .part-3 {
+    width: 64px;
+  }
+}
+
+.parts-8 {
+  bottom: 1320px;
+  height: 212px;
+  width: 100%;
+}
+
+.parts .part {
+  float: left;
+  height: inherit;
+  position: relative;
+
+  .floorDirection {
+    bottom: 0;
+    left: -220px;
+  }
+
+  .floorAltDirection {
+    bottom: 0;
+    right: -130px;
+  }
+}
+
+/*= wall
+============================================================================ */
+.wall {
+  background: url(../images/backgrounds/wall.png) no-repeat;
+  height: 349px;
+  position: absolute;
+  z-index: 100;
+  @include perspective(1000);
+}
+
+.wall-1 {
+  bottom: 91px;
+  left: 2296px;
+}
+
+.wall-2 {
+  bottom: 451px;
+  left: -1px;
+}
+
+.wall-3 {
+  bottom: 811px;
+  left: -1px;
+}
+
+.wall-4 {
+  bottom: 91px;
+  left: 3050px;
+}
+
+.wall-5 {
+  bottom: 91px;
+  left: 3350px;
+}
+
+.wall-6 {
+  bottom: 91px;
+  left: 3844px;
+}
+
+.wall-7 {
+  bottom: 451px;
+  left: 2630px;
+}
+
+.wall-8 {
+  bottom: 91px;
+  left: 4600px;
+}
+
+.wall-9 {
+  bottom: 451px;
+  left: 4600px;
+}
+
+.wall-10 {
+  bottom: 91px;
+  left: 5340px;
+}
+
+.wall-11 {
+  bottom: 451px;
+  left: 5664px;
+}
+
+.wall-12 {
+  bottom: 811px;
+  left: 1496px;
+}
+
+.wall-13 {
+  bottom: 811px;
+  left: 5664px;
+}
+
+.wall-14 {
+  bottom: 811px;
+  left: 4600px;
+}
+
+.wall-15 {
+  bottom: 1171px;
+  left: -1px;
+}
+
+.wall-16 {
+  bottom: 1171px;
+  left: 5664px;
+}
+
+.wall-17 {
+  bottom: 1171px;
+  left: 2050px;
+}
+
+#background .wall {
+  width: 153px;
+  z-index: 70;
+}
+
+#foreground .wall {
+  background-position: -80px 0;
+  margin-left: 80px;
+  width: 73px;
+
+  .solid {
+    height: 100%;
+    width: 1px;
+  }
+}
+
+/*= wall clear
+============================================================================ */
+.wall.clear {
+  background: url(../images/backgrounds/wall-clear.png) no-repeat;
+  width: 133px;
+}
+
+#foreground .wall.clear {
+  width: 53px;
+}
+
+/*= wall with door
+============================================================================ */
+#background .wall.door,
+#foreground .wall.door {
+  background: none;
+}
+
+.wall.door {
+  .bg {
+    background: url(../images/backgrounds/wall-door.png) no-repeat;
+    height: inherit;
+    position: relative;
+    z-index: inherit;
+  }
+
+  .doorLeaf {
+    background: url(../images/backgrounds/door-leafs.png) no-repeat;
+    height: 103px;
+    position: absolute;
+    @include transition(all 1s linear);
+  }
+}
+
+#background {
+  .wall.door {
+    width: 80px;
+
+    .doorLeaf {
+      bottom: 24px;
+      left: 51px;
+      width: 47px;
+      @include transform(translate3d(0, 0, 0));
+    }
+    &.open .doorLeaf {
+      @include transform(translate3d(-24px, -10px, 0));
+    }
+  }
+}
+
+#foreground {
+  .wall.door {
+    .bg {
+      background-position: -80px 0;
+      width: 73px;
+    }
+
+    .solid {
+      height: inherit;
+      position: absolute;
+      top: 0;
+    }
+
+    .doorLeaf {
+      background-position: -48px 0;
+      left: -3px;
+      bottom: 17px;
+      width: 49px;
+      @include transform(translate3d(0, 0, 0));
+    }
+    &.open {
+      .solid {
+        height: 225px;
+      }
+
+      .doorLeaf {
+        @include transform(translate3d(27px, 11px, 0));
+      }
+    }
+  }
+}
+
+/*= box
+============================================================================ */
+.box {
+  height: 126px;
+  position: absolute;
+  width: 189px;
+  @include perspective(1000);
+
+  .solid {
+    height: 95px;
+    margin: 8px 0 0 21px;
+    width: 147px;
+  }
+
+  .shadow,
+  .cover {
+    background: url(../images/backgrounds/box.png) no-repeat;
+    position: absolute;
+  }
+
+  .shadow {
+    background-position: 0 -102px;
+    bottom: 0;
+    left: 0;
+    height: 24px;
+    width: 100%;
+  }
+
+  .cover {
+    background-position: -159px -10px;
+    height: 92px;
+    right: 0;
+    width: 30px;
+    top: 10px;
+  }
+}
+
+#background .box {
+  background: url(../images/backgrounds/box.png) no-repeat;
+  height: 102px;
+  margin-bottom: 24px;
+}
+
+.box-1 {
+  bottom: 96px;
+  left: 2380px;
+}
+
+.box-2 {
+  bottom: 456px;
+  left: 260px;
+}
+
+.box-3 {
+  bottom: 456px;
+  left: 3810px;
+}
+
+.box-4 {
+  bottom: 552px;
+  left: 3790px;
+}
+
+.box-5 {
+  bottom: 456px;
+  left: 3450px;
+}
+
+.box-6 {
+  bottom: 456px;
+  left: 5550px;
+}
+
+.box-7 {
+  bottom: 816px;
+  left: 2520px;
+}
+
+.box-8 {
+  bottom: 816px;
+  left: 4270px;
+}
+
+.box-9 {
+  bottom: 816px;
+  left: 5555px;
+}
+
+.box-10 {
+  bottom: 1176px;
+  left: 4780px;
+}
+
+.box-11 {
+  bottom: 1176px;
+  left: 90px;
+}
+
+.box-12 {
+  bottom: 1176px;
+  left: 280px;
+}
+
+.box-13 {
+  bottom: 1272px;
+  left: 200px;
+}
+
+.box-14 {
+  bottom: 1176px;
+  left: 1100px;
+}
+
+.box-15 {
+  bottom: 1176px;
+  left: 1310px;
+}
+
+/*= trellis
+============================================================================ */
+.trellis {
+  background: url(../images/backgrounds/trellis.png) no-repeat;
+  height: 40px;
+  position: absolute;
+  width: 160px;
+  z-index: 110;
+  @include perspective(1000);
+  &.type-1 {
+  }
+  &.type-2 {
+    background-position: 0 -41px;
+  }
+  &.type-3 {
+    background-position: 0 -82px;
+    height: 33px;
+    width: 178px;
+  }
+}
+
+.trellis-1 {
+  bottom: 100px;
+  left: 2840px;
+}
+
+.trellis-2 {
+  bottom: 463px;
+  left: 2810px;
+}
+
+.trellis-3 {
+  bottom: 100px;
+  left: 3600px;
+}
+
+.trellis-4 {
+  bottom: 100px;
+  left: 4850px;
+}
+
+.trellis-5 {
+  bottom: 460px;
+  left: 4500px;
+}
+
+.trellis-6 {
+  bottom: 820px;
+  left: 2050px;
+}
+
+.trellis-7 {
+  bottom: 463px;
+  left: 80px;
+}
+
+.trellis-8 {
+  bottom: 1180px;
+  left: 530px;
+}
+
+.trellis-9 {
+  bottom: 1180px;
+  left: 860px;
+}
+
+.trellis-10 {
+  bottom: 1180px;
+  left: 1800px;
+}
+
+.trellis-11 {
+  bottom: 460px;
+  left: 3650px;
+}
+
+/*= grating
+============================================================================ */
+.grating {
+  height: 349px;
+  position: absolute;
+  z-index: 80;
+  @include perspective(1000);
+
+  li {
+    background: url(../images/backgrounds/grating.png) no-repeat 0 -29px;
+    float: left;
+    height: inherit;
+    margin-left: 4px;
+    position: relative;
+    width: 188px;
+    &:first-child {
+      margin-left: 0;
+    }
+    &.rare {
+      background-position: -189px -29px;
+    }
+    &.torn {
+      background-position: -378px -29px;
+    }
+    &.between:before {
+      background: url(../images/backgrounds/grating.png) no-repeat -567px -29px;
+      content: ' ';
+      height: 266px;
+      position: absolute;
+      right: -35px;
+      width: 36px;
+      top: 0;
+    }
+    &.toWall:after {
+      background: url(../images/backgrounds/grating.png) no-repeat -608px -29px;
+      content: ' ';
+      height: 269px;
+      position: absolute;
+      right: -88px;
+      width: 89px;
+      top: 0;
+    }
+    &.space {
+      margin-left: 192px;
+    }
+  }
+
+  &.mini {
+    height: 296px;
+
+    li {
+      background-position: 0 -82px;
+      &.rare {
+        background-position: -189px -82px;
+      }
+      &.torn {
+        background-position: -378px -82px;
+      }
+      &.between:before {
+        background-position: -567px -82px;
+        height: 184px;
+      }
+      &.toWall:after {
+        background-position: -608px -82px;
+        height: 187px;
+      }
+    }
+  }
+}
+
+.grating-1 {
+  bottom: 144px;
+  left: 2440px;
+}
+
+.grating-2 {
+  bottom: 144px;
+  left: 3430px;
+}
+
+.grating-3 {
+  bottom: 504px;
+  left: 90px;
+}
+
+.grating-4 {
+  bottom: 504px;
+  left: 1635px;
+}
+
+.grating-5 {
+  bottom: 504px;
+  left: 2720px;
+}
+
+.grating-6 {
+  bottom: 144px;
+  left: 3960px;
+}
+
+.grating-7 {
+  bottom: 144px;
+  left: 4690px;
+}
+
+.grating-8 {
+  bottom: 504px;
+  left: 4370px;
+}
+
+.grating-9 {
+  bottom: 504px;
+  left: 4750px;
+}
+
+.grating-10 {
+  bottom: 864px;
+  left: 90px;
+}
+
+.grating-11 {
+  bottom: 864px;
+  left: 1635px;
+}
+
+.grating-12 {
+  bottom: 864px;
+  left: 2720px;
+}
+
+.grating-13 {
+  bottom: 864px;
+  left: 4370px;
+}
+
+.grating-14 {
+  bottom: 864px;
+  left: 5135px;
+}
+
+.grating-15 {
+  bottom: 1224px;
+  left: 90px;
+}
+
+.grating-16 {
+  bottom: 1224px;
+  left: 2720px;
+}
+
+.grating-17 {
+  bottom: 1224px;
+  left: 5135px;
+}
+
+/*= platform
+============================================================================ */
+.platform {
+  background: url(../images/backgrounds/platform.png) no-repeat;
+  height: 50px;
+  position: absolute;
+  width: 189px;
+  z-index: 110;
+  @include perspective(1000);
+  &.moving {
+    @include transition(0.05s linear);
+  }
+  &.cropped {
+    background-position: -34px 0;
+    width: 155px;
+
+    .solid {
+      margin-left: 0;
+      width: 88px;
+    }
+  }
+  &.floorDirection {
+    background-position: 0 -51px;
+    height: 64px;
+    width: 221px;
+
+    .solid {
+      margin: 24px 0 0 60px;
+      width: 161px;
+    }
+  }
+  &.floorAltDirection {
+    background-position: 0 -116px;
+    height: 64px;
+    width: 130px;
+
+    .solid {
+      margin: 24px 0 0 0;
+      width: 60px;
+    }
+  }
+
+  .solid {
+    height: 1px;
+    margin: 0 0 0 27px;
+    width: 85px;
+  }
+}
+
+#foreground .platform {
+  background-position: 0 -10px;
+  height: 40px;
+  margin: 10px 0 0 0;
+  &.cropped {
+    background-position: -34px -10px;
+  }
+  &.floorDirection {
+    background-position: 0 -75px;
+    margin: 24px 0 0 0;
+  }
+  &.floorAltDirection {
+    background-position: 0 -140px;
+    margin: 24px 0 0 0;
+  }
+}
+
+.platform-1 {
+  bottom: 189px;
+  left: 3305px;
+}
+
+.platform-2 {
+  bottom: 315px;
+  left: 3130px;
+}
+
+.platform-3 {
+  bottom: 440px;
+  left: 1937px;
+}
+
+.platform-4 {
+  bottom: 440px;
+  left: 1483px;
+}
+
+.platform-5 {
+  bottom: 440px;
+  left: 1029px;
+}
+
+.platform-6 {
+  bottom: 440px;
+  left: 575px;
+}
+
+.platform-7 {
+  bottom: 660px;
+  left: 80px;
+}
+
+.platform-8 {
+  bottom: 799px;
+  left: 2px;
+}
+
+.platform-9 {
+  bottom: 440px;
+  left: 3073px;
+}
+
+.platform-10 {
+  bottom: 440px;
+  left: 3920px;
+}
+
+.platform-11 {
+  bottom: 80px;
+  left: 5077px;
+}
+
+.platform-12 {
+  bottom: 189px;
+  left: 5275px;
+}
+
+.platform-13 {
+  bottom: 315px;
+  left: 5135px;
+}
+
+.platform-14 {
+  bottom: 440px;
+  left: 5017px;
+}
+
+.platform-15 {
+  bottom: 440px;
+  left: 5214px;
+}
+
+.platform-16 {
+  bottom: 760px;
+  left: 260px;
+}
+
+.platform-17 {
+  bottom: 814px;
+  left: 460px;
+}
+
+.platform-18 {
+  bottom: 814px;
+  left: 1020px;
+}
+
+.platform-19 {
+  bottom: 600px;
+  left: 5260px;
+}
+
+.platform-20 {
+  bottom: 660px;
+  left: 5030px;
+}
+
+.platform-21 {
+  bottom: 720px;
+  left: 4800px;
+}
+
+.platform-22 {
+  bottom: 800px;
+  left: 4623px;
+}
+
+.platform-23 {
+  bottom: 800px;
+  left: 2653px;
+}
+
+.platform-24 {
+  bottom: 907px;
+  left: 2870px;
+}
+
+.platform-25 {
+  bottom: 907px;
+  left: 3960px;
+}
+
+.platform-26 {
+  bottom: 1000px;
+  left: 3050px;
+}
+
+.platform-27 {
+  bottom: 1110px;
+  left: 3500px;
+}
+
+.platform-28 {
+  bottom: 1174px;
+  left: 3750px;
+}
+
+.platform-29 {
+  bottom: 1291px;
+  left: 3060px;
+}
+
+.platform-30 {
+  bottom: 1291px;
+  left: 2870px;
+}
+
+/*= lighting
+============================================================================ */
+.lighting {
+  background: url(../images/backgrounds/lighting.png) no-repeat;
+  height: 33px;
+  position: absolute;
+  width: 33px;
+  z-index: 110;
+  &.broken {
+    background-position: -33px 0;
+  }
+  &.blinking {
+    @include animation(blinking-lighting 5s step-end infinite);
+  }
+}
+
+.wall .lighting {
+  background-position: 0 -33px;
+  bottom: 45px;
+  left: 19px;
+  &.broken {
+    background-position: -33px;
+  }
+  &.blinking {
+    @include animation-name(blinking-lighting-skew);
+  }
+}
+
+.grating .lighting {
+  bottom: -1px;
+  right: -3px;
+}
+
+/*= blinking lighting
+============================================================================ */
+@include keyframes(blinking-lighting) {
+  0% {
+    background-position: -33px 0;
+  }
+  20% {
+    background-position: 0 0;
+  }
+  22% {
+    background-position: -33px 0;
+  }
+  24% {
+    background-position: 0 0;
+  }
+  26% {
+    background-position: -33px 0;
+  }
+  36% {
+    background-position: 0 0;
+  }
+  38% {
+    background-position: -33px 0;
+  }
+  45% {
+    background-position: 0 0;
+  }
+  60% {
+    background-position: -33px 0;
+  }
+}
+
+/*= blinking lighting skew
+============================================================================ */
+@include keyframes(blinking-lighting-skew) {
+  0% {
+    background-position: -33px -33px;
+  }
+  50% {
+    background-position: 0 -33px;
+  }
+  52% {
+    background-position: -33px -33px;
+  }
+  54% {
+    background-position: 0 -33px;
+  }
+  56% {
+    background-position: -33px -33px;
+  }
+  66% {
+    background-position: 0 -33px;
+  }
+  68% {
+    background-position: -33px -33px;
+  }
+  75% {
+    background-position: 0 -33px;
+  }
+  90% {
+    background-position: -33px -33px;
+  }
+}
+
+/*= control
+============================================================================ */
+.control {
+  bottom: 20px;
+  display: none;
+  position: absolute;
+  z-index: 300;
+  &.move {
+    left: 20px;
+  }
+  &.buttons {
+    right: 20px;
+  }
+  &.pause {
+    bottom: auto;
+    top: 15px;
+    right: 15px;
+
+    li a {
+      background-position: -300px 0;
+      height: 55px;
+      width: 55px;
+      &.touched {
+        background-position: -300px -75px;
+      }
+    }
+  }
+
+  li {
+    float: left;
+    margin-left: 20px;
+    &:first-child {
+      margin-left: 0;
+    }
+
+    a {
+      background: url(../images/controls-sprites.png) no-repeat;
+      display: block;
+      height: 74px;
+      position: relative;
+      width: 74px;
+      text-indent: -900em;
+      @include no-touchie();
+      &.backward {
+      }
+      &.backward.touched {
+        background-position: 0 -75px;
+      }
+      &.forward {
+        background-position: -75px 0;
+      }
+      &.forward.touched {
+        background-position: -75px -75px;
+      }
+      &.buttonB {
+        background-position: -150px 0;
+      }
+      &.buttonB.touched {
+        background-position: -150px -75px;
+      }
+      &.buttonA {
+        background-position: -225px 0;
+      }
+      &.buttonA.touched {
+        background-position: -225px -75px;
+      }
+    }
+  }
+}

@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:og="http://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <meta name="og:title" content="Dead Hollow" />
+    <meta name="og:type" content="game" />
+    <meta name="og:url" content="http://marcinwieprzkowicz.github.io/dead-hollow/" />
+    <meta name="og:image" content="http://marcinwieprzkowicz.github.io/dead-hollow/images/favicon/fb-image.png" />
+    <meta name="og:site_name" content="Dead Hollow" />
+    <meta name="og:description" content="Dead Hollow is a HTML5 game built like a typical website where animations and transformations are made by CSS3." />
+
+    <meta name="keywords" content="dead hollow, game, web games, javascript, coffeescript, html5, html5 games, html5 game, html5games, html5game, css3, css3 games, css3 game, css3games, css3game, Marcin Wieprzkowicz" />
+    <meta name="description" content="Dead Hollow is a HTML5 game built like a typical website where animations and transformations are made by CSS3." />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Marcin Wieprzkowicz, marcin.wieprzkowicz@gmail.com" />
+    <meta name="designer" content="Natalia Berowska, n.berowska@gmail.com" />
+
+    <link rel="shortcut icon" href="images/favicons/favicon-16.png" />
+    <link rel="apple-touch-icon" href="images/favicons/touch-icon-iphone-57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="images/favicons/touch-icon-ipad-72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="images/favicons/touch-icon-iphone-retina-114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="images/favicons/touch-icon-ipad-retina-144.png" />
+
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" type="text/css" />
+    <link rel="stylesheet" href="stylesheets/reset.css" type="text/css" media="screen, projection, print" />
+    <link rel="stylesheet" href="stylesheets/flexcroll.css" type="text/css" media="screen, projection" />
+    <link rel="stylesheet" href="stylesheets/screen.css" type="text/css" media="screen, projection" />
+
+    <script type="text/javascript" charset="utf-8" src="javascripts/base.js"></script>
+    <script type="text/javascript" charset="utf-8" src="javascripts/dragdealer.js"></script>
+    <script type="text/javascript" charset="utf-8" src="javascripts/flexcroll.js"></script>
+    <script type="text/javascript" charset="utf-8" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" charset="utf-8" src="javascripts/menu.js"></script>
+    <script type="text/javascript" charset="utf-8" src="javascripts/loading.js"></script>
+
+    <title>Dead Hollow</title>
+  </head>
+  <body>
+    <div id="game">
+      <div class="overlay"></div>
+
+      <div id="map">
+        <div id="foreground">
+          <!-- /platforms -->
+          <div class="platform platform-1">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-2 cropped below">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-3 floorAltDirection"></div>
+          <div class="platform platform-4 floorAltDirection"></div>
+          <div class="platform platform-5 floorAltDirection"></div>
+          <div class="platform platform-6 floorAltDirection"></div>
+          <div class="platform platform-7 cropped below">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-8 floorAltDirection"></div>
+          <div class="platform platform-9 floorAltDirection"></div>
+          <div class="platform platform-10 floorAltDirection below"></div>
+          <div class="platform platform-11 floorAltDirection"></div>
+          <div class="platform platform-12">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-13">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-14 floorAltDirection"></div>
+          <div class="platform platform-15 floorDirection"></div>
+          <div class="platform platform-16">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-17 moving" data-offset="400" data-range="589">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-18 moving" data-offset="0" data-range="589">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-19">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-20">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-21">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-22 floorAltDirection"></div>
+          <div class="platform platform-23 floorAltDirection"></div>
+          <div class="platform platform-24">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-25">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-26 moving" data-offset="0" data-range="939">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-27">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-28">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-29 moving" data-offset="0" data-range="789">
+            <div class="solid"></div>
+          </div>
+          <div class="platform platform-30">
+            <div class="solid"></div>
+          </div>
+          <!-- /end of platforms -->
+
+          <!-- /walls -->
+          <div class="wall wall-1 clear">
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-2 clear">
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-3 clear">
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-4 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-5">
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-6 clear">
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-7 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-8 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-9 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-10 clear">
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-11 clear">
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-12 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-13 clear">
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-14 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-15 clear">
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-16 clear">
+            <div class="solid"></div>
+          </div>
+          <div class="wall wall-17 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="solid"></div>
+          </div>
+          <!-- /end of walls -->
+
+          <!-- /boxes -->
+          <div class="box box-1">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-2">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-3 below">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-4 above">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-5">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-6 above">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-7 above">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-8 above">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-9 above">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-10 above">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-11">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-12">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-13">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-14">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <div class="box box-15">
+            <div class="cover"></div>
+            <div class="shadow"></div>
+          </div>
+          <!-- /end of boxes -->
+        </div> <!-- foreground -->
+
+        <div id="background">
+          <!-- /platforms -->
+          <div class="platform platform-1"></div>
+          <div class="platform platform-2 cropped below"></div>
+
+          <div class="platform platform-7 cropped below"></div>
+
+          <div class="platform platform-12"></div>
+          <div class="platform platform-13"></div>
+
+          <div class="platform platform-16"></div>
+          <div class="platform platform-17 moving" data-offset="400" data-range="589"></div>
+          <div class="platform platform-18 moving" data-offset="0" data-range="589"></div>
+          <div class="platform platform-19"></div>
+          <div class="platform platform-20"></div>
+          <div class="platform platform-21"></div>
+
+          <div class="platform platform-24"></div>
+          <div class="platform platform-25"></div>
+          <div class="platform platform-26 moving" data-offset="0" data-range="939"></div>
+          <div class="platform platform-27"></div>
+          <div class="platform platform-28"></div>
+          <div class="platform platform-29 moving" data-offset="0" data-range="789"></div>
+          <div class="platform platform-30"></div>
+          <!-- /end of platforms -->
+
+          <!-- /walls -->
+          <div class="wall wall-1 clear"></div>
+          <div class="wall wall-2 clear"></div>
+          <div class="wall wall-3 clear"></div>
+          <div class="wall wall-4 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="lighting blinking"></div>
+          </div>
+          <div class="wall wall-5"></div>
+          <div class="wall wall-6 clear"></div>
+          <div class="wall wall-7 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="lighting"></div>
+          </div>
+          <div class="wall wall-8 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="lighting blinking"></div>
+          </div>
+          <div class="wall wall-9 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="lighting"></div>
+          </div>
+          <div class="wall wall-10 clear"></div>
+          <div class="wall wall-11 clear"></div>
+          <div class="wall wall-12 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="lighting blinking"></div>
+          </div>
+          <div class="wall wall-13 clear"></div>
+          <div class="wall wall-14 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="lighting"></div>
+          </div>
+          <div class="wall wall-15 clear"></div>
+          <div class="wall wall-16 clear"></div>
+          <div class="wall wall-17 door">
+            <div class="bg"></div>
+            <div class="doorLeaf"></div>
+            <div class="lighting"></div>
+          </div>
+          <!-- /end of walls -->
+
+          <!-- /boxes -->
+          <div class="box box-1 below">
+            <div class="solid"></div>
+          </div>
+          <div class="box box-2 below">
+            <div class="solid"></div>
+          </div>
+          <div class="box box-3 below">
+            <div class="solid"></div>
+          </div>
+          <div class="box box-4 above">
+            <div class="solid"></div>
+          </div>
+          <div class="box box-5 below">
+            <div class="solid"></div>
+          </div>
+          <div class="box box-6 above">
+            <div class="solid"></div>
+          </div>
+          <div class="box box-7 above">
+            <div class="solid"></div>
+          </div>
+          <div class="box box-8 above">
+            <div class="solid"></div>
+          </div>
+          <div class="box box-9 above"></div>
+          <div class="box box-10 above"></div>
+          <div class="box box-11 below"></div>
+          <div class="box box-12 below"></div>
+          <div class="box box-13 above"></div>
+          <div class="box box-14 below"></div>
+          <div class="box box-15 below"></div>
+          <!-- /end of boxes -->
+
+          <!-- /trellis -->
+          <div class="trellis trellis-1 type-2"></div>
+          <div class="trellis trellis-2 type-3"></div>
+          <div class="trellis trellis-3 type-1"></div>
+          <div class="trellis trellis-4 type-2"></div>
+          <div class="trellis trellis-5 type-1"></div>
+          <div class="trellis trellis-6 type-2"></div>
+          <div class="trellis trellis-7 type-3"></div>
+          <div class="trellis trellis-8 type-2"></div>
+          <div class="trellis trellis-9 type-2"></div>
+          <div class="trellis trellis-10 type-1"></div>
+          <div class="trellis trellis-11 type-2"></div>
+          <!-- /end of trellis -->
+
+          <!-- /grating -->
+          <ul class="grating grating-1 mini">
+            <li class="torn"></li>
+            <li class="rare between">
+              <div class="lighting"></div>
+            </li>
+            <li class="toWall"></li>
+          </ul>
+
+          <ul class="grating grating-2 mini">
+            <li class="between">
+              <div class="lighting"></div>
+            </li>
+            <li class="rare toWall"></li>
+          </ul>
+
+          <ul class="grating grating-3">
+            <li class="torn"></li>
+            <li class="between">
+              <div class="lighting blinking"></div>
+            </li>
+            <li class="rare"></li>
+            <li class="space between"></li>
+            <li class="torn between">
+              <div class="lighting"></div>
+            </li>
+            <li class="rare"></li>
+          </ul>
+
+          <ul class="grating grating-4 mini">
+            <li class="torn between">
+              <div class="lighting broken"></div>
+            </li>
+            <li></li>
+            <li class="rare"></li>
+            <li class="torn between">
+              <div class="lighting"></div>
+            </li>
+            <li class="toWall"></li>
+          </ul>
+
+          <ul class="grating grating-5">
+            <li class="between">
+              <div class="lighting broken"></div>
+            </li>
+            <li class="rare"></li>
+            <li class="torn space"></li>
+            <li class="between">
+              <div class="lighting blinking"></div>
+            </li>
+            <li class="torn"></li>
+          </ul>
+
+          <ul class="grating grating-6">
+            <li class="rare between"></li>
+            <li>
+              <div class="lighting"></div>
+            </li>
+          </ul>
+
+          <ul class="grating grating-7 mini">
+            <li class="torn between"></li>
+            <li>
+              <div class="lighting"></div>
+            </li>
+          </ul>
+
+          <ul class="grating grating-8 mini">
+            <li class="torn toWall"></li>
+          </ul>
+
+          <ul class="grating grating-9">
+            <li class="rare between">
+              <div class="lighting"></div>
+            </li>
+            <li class="torn between"></li>
+            <li>
+              <div class="lighting blinking"></div>
+            </li>
+            <li class="rare"></li>
+          </ul>
+
+          <ul class="grating grating-10 mini">
+            <li class="torn"></li>
+            <li class="between">
+              <div class="lighting"></div>
+            </li>
+            <li class="rare"></li>
+            <li class="torn">
+              <div class="lighting"></div>
+            </li>
+            <li class="between"></li>
+            <li class="torn">
+              <div class="lighting broken"></div>
+            </li>
+            <li class="rare"></li>
+          </ul>
+
+          <ul class="grating grating-11 mini">
+            <li class="torn between">
+              <div class="lighting"></div>
+            </li>
+            <li></li>
+            <li class="rare"></li>
+            <li class="torn between">
+              <div class="lighting"></div>
+            </li>
+            <li></li>
+          </ul>
+
+          <ul class="grating grating-12">
+            <li class="between">
+              <div class="lighting blinking"></div>
+            </li>
+            <li class="rare"></li>
+            <li class="torn space"></li>
+            <li class="between">
+              <div class="lighting"></div>
+            </li>
+            <li class="torn"></li>
+            <li class="rare space">
+              <div class="lighting"></div>
+            </li>
+          </ul>
+
+          <ul class="grating grating-13 mini">
+            <li class="torn toWall"></li>
+            <li class="rare space">
+              <div class="lighting broken"></div>
+            </li>
+          </ul>
+
+          <ul class="grating grating-14">
+            <li class="between">
+              <div class="lighting"></div>
+            </li>
+            <li class="rare"></li>
+          </ul>
+
+          <ul class="grating grating-15 mini">
+            <li class="torn"></li>
+            <li class="between"></li>
+            <li class="rare"></li>
+            <li class="torn">
+              <div class="lighting"></div>
+            </li>
+            <li class="between"></li>
+            <li class="torn"></li>
+            <li class="rare"></li>
+            <li class="between"></li>
+            <li class="torn">
+              <div class="lighting broken"></div>
+            </li>
+            <li class="rare toWall"></li>
+            <li class="torn between space">
+              <div class="lighting"></div>
+            </li>
+            <li></li>
+          </ul>
+
+          <ul class="grating grating-16 mini">
+            <li class="between">
+              <div class="lighting"></div>
+            </li>
+            <li class="rare"></li>
+            <li class="between"></li>
+            <li class="torn"></li>
+            <li class="between">
+              <div class="lighting"></div>
+            </li>
+            <li class="torn"></li>
+            <li class="rare space">
+              <div class="lighting blinking"></div>
+            </li>
+            <li class="torn between space"></li>
+            <li></li>
+            <li class="rare"></li>
+          </ul>
+
+          <ul class="grating grating-17 mini">
+            <li>
+              <div class="lighting"></div>
+            </li>
+            <li class="rare"></li>
+          </ul>
+          <!-- /end of grating -->
+
+          <div id="info">
+            <div>i</div>
+          </div>
+
+          <!-- /parts -->
+          <div class="parts parts-8 wallBg"></div>
+
+          <div class="parts parts-7 floor">
+            <div class="part-1 part">
+              <div id="the-end-trigger"></div>
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="solid"></div>
+            </div>
+
+            <div class="part-2 part">
+              <div class="platform floorDirection"></div>
+              <div class="platform floorAltDirection"></div>
+            </div>
+
+            <div class="part-3 part">
+              <div class="platform floorDirection"></div>
+            </div>
+          </div> <!-- /parts-7 -->
+
+          <div class="parts parts-6 wallBg"></div>
+
+          <div class="parts parts-5 floor">
+            <div class="part-1 part">
+              <div class="platform floorAltDirection"></div>
+            </div>
+
+            <div class="part-2 part">
+              <div class="platform floorDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="solid"></div>
+            </div>
+
+            <div class="part-3 part">
+              <div class="platform floorDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="solid"></div>
+            </div>
+
+            <div class="part-4 part">
+              <div class="platform floorDirection"></div>
+            </div>
+          </div> <!-- /parts-5 -->
+
+          <div class="parts parts-4 wallBg"></div>
+
+          <div class="parts parts-3 floor">
+            <div class="part-1 part">
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="solid"></div>
+            </div>
+
+            <div class="part-2 part">
+              <div class="platform floorDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+            </div>
+
+            <div class="part-3 part">
+              <div class="platform floorDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+            </div>
+
+            <div class="part-4 part">
+              <div class="platform floorDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+            </div>
+
+            <div class="part-5 part">
+              <div class="platform floorDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="solid"></div>
+            </div>
+
+            <div class="part-6 part">
+              <div class="platform floorDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="solid"></div>
+            </div>
+
+            <div class="part-7 part">
+              <div class="platform floorDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="solid"></div>
+            </div>
+
+            <div class="part-8 part">
+              <div class="platform floorDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="solid"></div>
+            </div>
+          </div> <!-- /parts-3 -->
+
+          <div class="parts parts-2 wallBg"></div>
+
+          <div class="parts parts-1 floor">
+            <div class="part-1 part">
+              <div class="solid"></div>
+            </div>
+
+            <div class="part-2 part">
+              <div class="platform floorDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="platform floorAltDirection">
+                <div class="solid"></div>
+              </div>
+              <div class="solid"></div>
+            </div>
+          </div> <!-- /parts-1 -->
+          <!-- /end of parts -->
+
+        </div> <!-- /background -->
+      </div> <!-- /map -->
+
+
+      <ul class="control move touch">
+        <li>
+          <a href="#" class="backward">Left</a>
+        </li>
+        <li>
+          <a href="#" class="forward">Right</a>
+        </li>
+      </ul> <!-- /control move -->
+      <ul class="control buttons touch">
+        <li>
+          <a href="#" class="buttonB">B</a>
+        </li>
+        <li>
+          <a href="#" class="buttonA">A</a>
+        </li>
+      </ul> <!-- /control buttons -->
+      <ul class="control pause touch">
+        <li>
+          <a href="#">Pause</a>
+        </li>
+      </ul> <!-- /control pause -->
+    </div> <!-- /game -->
+
+
+    <div id="features-test" class="overlay">
+      <div class="overlayWrap info">
+        <div class="heading">
+          <h2>Loading...</h2>
+        </div>
+
+        <div class="progressWrap">
+          <div class="progressBar">0%</div>
+        </div>
+        <p class="description"></p>
+      </div> <!-- /overlayWrap -->
+    </div> <!-- /features-test -->
+
+
+    <div id="error-occured" class="overlay">
+      <div class="overlayWrap info">
+        <div class="heading">
+          <h2>A problem has occured while loading game</h2>
+        </div>
+        <p class="description"></p>
+      </div> <!-- /overlayWrap -->
+    </div> <!-- /support-problem -->
+
+
+    <div id="menu" class="overlay">
+      <div class="overlayWrap">
+        <ul>
+          <li>
+            <a href="#" data-bind="startGame">
+              <span id="start-game">Start game</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" data-bind="settings">
+              <span>Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" data-bind="credits">
+              <span>Credits</span>
+            </a>
+          </li>
+          <li>
+            <a href="http://github.com/marcinwieprzkowicz" data-bind="quit">
+              <span>Quit</span>
+            </a>
+          </li>
+        </ul>
+      </div> <!-- /overlayWrap -->
+    </div> <!-- /menu -->
+
+
+    <div id="credits" class="overlay">
+      <div class="overlayWrap panel">
+        <div class="heading">
+          <a href="#" class="back backToMenu" data-back="credits">
+            <em>Back</em>
+          </a>
+          <h2>Credits</h2>
+        </div>
+
+        <div class="content flexcroll">
+          <div class="wrap">
+            <div class="congratulations">
+              <h5>Congratulations!</h5>
+              <p class="description">
+                You successfully completed the first level of <strong>Dead Hollow</strong> preview version.<br />
+                I hope you enjoyed the game :)
+              </p>
+            </div>
+
+            <ul class="authors">
+              <li>
+                <h3>Marcin Wieprzkowicz</h3>
+                <h4>Created by</h4>
+                <p>
+                  <a href="http://github.com/marcinwieprzkowicz" title="Marcin Wieprzkowicz" rel="external">github.com/marcinwieprzkowicz</a>
+                </p>
+              </li>
+            </ul> <!-- /authors -->
+
+            <h5>Many thanks to:</h5>
+            <ul class="authors">
+              <li>
+                <h3>Natalia Berowska</h3>
+                <h4>Maps and Graphics</h4>
+                <p>
+                  <a href="http://dribbble.com/nberowska" title="Natalia Berowska" rel="external">dribbble.com/nberowska</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>Andry Shango</h3>
+                <h4>Inspiration</h4>
+                <p>
+                  <a href="http://andry-shango.deviantart.com/art/Dead-Space-352669811" title="Andry Shango" rel="external">andry-shango.deviantart.com/art/Dead-Space-352669811</a><br />
+                  Blog: <a href="http://elshangowuzhere.blogspot.com" title="Andry Shango Blog" rel="external">elshangowuzhere.blogspot.com</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>David Mauro</h3>
+                <h4>Keypress</h4>
+                <p>
+                  <a href="http://github.com/dmauro" title="David Mauro" rel="external">github.com/dmauro</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>Jay Salvat</h3>
+                <h4>Buzz</h4>
+                <p>
+                  <a href="http://jaysalvat.com" title="Jay Salvat" rel="external">jaysalvat.com</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>Ovidiu Cherecheș</h3>
+                <h4>Dragdealer JS</h4>
+                <p>
+                  <a href="http://code.ovidiu.ch/dragdealer/" title="Ovidiu Cherecheș" rel="external">code.ovidiu.ch/dragdealer</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>Hesido.com</h3>
+                <h4>fleXcroll</h4>
+                <p>
+                  <a href="http://www.hesido.com/web.php?page=customscrollbar" title="Hesido.com" rel="external">hesido.com/web.php?page=customscrollbar</a>
+                </p>
+              </li>
+            </ul> <!-- /authors -->
+
+            <h5>Also thanks to:</h5>
+            <ul class="authors">
+              <li>
+                <h3>Adrian Woźniak</h3>
+                <p>
+                  <a href="http://github.com/Eraden" title="Adrian Woźniak" rel="external">github.com/Eraden</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>Dawid Liberadzki</h3>
+                <p>
+                  <a href="http://dribbble.com/liberadzki" title="Dawid Liberadzki" rel="external">dribbble.com/liberadzki</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>Konrad Księżopolski</h3>
+                <p>
+                  <a href="http://dribbble.com/kondziorny" title="Konrad Księżopolski" rel="external">dribbble.com/kondziorny</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>Oskar Krawczyk</h3>
+                <p>
+                  <a href="http://github.com/oskarkrawczyk" title="Oskar Krawczyk" rel="external">github.com/oskarkrawczyk</a>
+                </p>
+              </li>
+            </ul> <!-- /authors -->
+
+            <h5>Sounds</h5>
+            <ul class="authors">
+              <li>
+                <h3>Argitoth</h3>
+                <h4>Background</h4>
+                <p>
+                  <a href="http://freesound.org/people/Argitoth/sounds/38969/" title="Background music" rel="external">freesound.org/people/Argitoth/sounds/38969</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>OwlStorm</h3>
+                <h4>Running</h4>
+                <p>
+                  <a href="http://freesound.org/people/OwlStorm/sounds/151227/" title="Running sound" rel="external">freesound.org/people/OwlStorm/sounds/151227</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>mcpable</h3>
+                <h4>Openning doors</h4>
+                <p>
+                  <a href="http://freesound.org/people/mcpable/sounds/131934/" title="Opening doors sound" rel="external">freesound.org/people/mcpable/sounds/131934</a>
+                </p>
+              </li>
+
+              <li>
+                <h3>pintsogin87</h3>
+                <h4>Landing</h4>
+                <p>
+                  <a href="http://www.freesound.org/people/pintsogin87/sounds/118097/" title="Landing sound" rel="external">freesound.org/people/pintsogin87/sounds/118097</a>
+                </p>
+              </li>
+            </ul> <!-- /authors -->
+
+          </div> <!-- /wrap -->
+        </div> <!-- content -->
+      </div> <!-- /overlayWrap -->
+    </div> <!-- /credits -->
+
+
+    <div id="settings" class="overlay">
+      <div class="overlayWrap panel">
+        <div class="heading">
+          <a href="#" class="back backToMenu" data-back="settings">
+            <em>Back</em>
+          </a>
+          <h2>Settings</h2>
+        </div>
+
+        <div class="content flexcroll">
+          <div class="wrap">
+            <h5 class="musicVolume">Music</h5>
+            <div id="music-volume-slider" class="dragdealer progressWrap musicVolume">
+              <div class="handle">Change the music volume</div>
+              <div class="filled progressBar"></div>
+              <ul class="range">
+                <li>Min</li>
+                <li>Max</li>
+              </ul>
+            </div>
+
+            <h5>Sounds</h5>
+            <div id="sounds-volume-slider" class="dragdealer progressWrap">
+              <div class="handle">Change the sounds volume</div>
+              <div class="filled progressBar"></div>
+              <ul class="range">
+                <li>Min</li>
+                <li>Max</li>
+              </ul>
+            </div>
+
+            <h5>Controls</h5>
+            <div class="twoColumns">
+              <div class="half">
+                <div class="keyWrap">
+                  <span class="label">Pause</span>
+                  <ul>
+                    <li>P</li>
+                    <li>esc</li>
+                  </ul>
+                </div> <!-- /keyWrap -->
+
+                <div class="keyWrap space">
+                  <span class="label">Action</span>
+                  <ul>
+                    <li>Space</li>
+                  </ul>
+                </div> <!-- /keyWrap -->
+              </div> <!-- /half -->
+
+              <div class="half movements">
+                <div class="keyWrap backward">
+                  <span class="label">Backward</span>
+                  <ul>
+                    <li>
+                      <em>Backward</em>
+                    </li>
+                  </ul>
+                </div> <!-- /keyWrap -->
+
+                <div class="keyWrap forward">
+                  <span class="label">Forward</span>
+                  <ul>
+                    <li>
+                      <em>Forward</em>
+                    </li>
+                  </ul>
+                </div> <!-- /keyWrap -->
+
+                <div class="keyWrap jump">
+                  <span class="label">Jump</span>
+                  <ul>
+                    <li>
+                      <em>Jump</em>
+                    </li>
+                  </ul>
+                </div> <!-- /keyWrap -->
+              </div> <!-- /half -->
+            </div> <!-- /twoColumns -->
+
+          </div> <!-- /wrap -->
+        </div> <!-- /content -->
+      </div> <!-- /overlayWrap -->
+    </div> <!-- /settings -->
+
+
+    <div id="game-over" class="overlay">
+      <div class="overlayWrap">
+        <h2>You died</h2>
+        <ul>
+          <li>
+            <a href="#" class="retryTrigger">Retry</a>
+          </li>
+          <li>
+            <a href="#" class="backToMenu" data-back="gameOver">Menu</a>
+          </li>
+        </ul>
+      </div> <!-- /overlayWrap -->
+    </div> <!-- /game-over -->
+
+
+    <div id="about-me" class="overlay">
+      <div class="overlayWrap panel">
+        <div class="heading">
+          <a href="#" class="back backToMenu" data-back="aboutMe">
+            <em>Back</em>
+          </a>
+          <h2>Hire me</h2>
+        </div>
+
+        <div class="content flexcroll">
+          <div class="wrap">
+            <img src="images/avatar.png" width="130" height="130" alt="avatar" />
+            <p class="description">
+              Hi there!<br />
+              Quick information (<strong>TL;DR</strong>):<br />
+              In mid-July 2013 I'm moving to London, UK. So, if you are looking for Frontend developer with knowledge of ruby on rails, I'm open for proposals. Just send me a message on: <a href="mailto:marcin.wieprzkowicz@gmail.com" title="Send message">marcin.wieprzkowicz@gmail.com</a><br /><br />
+
+              Also check out my:
+            </p>
+            <ul class="socialLinks">
+              <li>
+                <a href="http://www.linkedin.com/profile/view?id=203866325" title="LinkedIn" rel="external">http://www.linkedin.com/profile/view?id=203866325</a>
+              </li>
+              <li>
+                <a href="http://twitter.com/mwieprzkowicz" title="Twitter" rel="external">http://twitter.com/mwieprzkowicz</a>
+              </li>
+              <li>
+                <a href="http://github.com/marcinwieprzkowicz" title="Github" rel="external">http://github.com/marcinwieprzkowicz</a>
+              </li>
+            </ul>
+          </div> <!-- /wrap -->
+        </div> <!-- /content -->
+      </div> <!-- /overlayWrap -->
+    </div> <!-- /about-me -->
+
+
+    <script type="text/javascript">
+      //<![CDATA[
+        window.loading = new Loading();
+      //]]>
+    </script>
+  </body>
+</html>
