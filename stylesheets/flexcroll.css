@@ -1,0 +1,72 @@
+/*
+ * Custom style for fleXcroll.
+ *
+ * @author: Marcin Wieprzkowicz (marcin.wieprzkowicz@gmail.com)
+ *
+ */
+
+
+.scrollgeneric {
+  font-size: 1px;
+  left: 0;
+  line-height: 1px;
+  position: absolute;
+  top: 0;
+}
+
+.vscrollerbarbeg {
+  background: url(../images/scrollbar.png) -52px 0;
+  height: 12px !important;
+  width: 26px;
+}
+
+.vscrollerbarmid {
+  background: url(../images/scrollbar.png) -26px 0;
+  width: 26px;
+}
+
+.vscrollerbarend {
+  background: url(../images/scrollbar.png) -52px -13px;
+  height: 16px;
+  width: 26px;
+}
+
+.vscrollerbase {
+  width: 26px;
+}
+
+.vscrollerbasebeg {
+  background: url(../images/scrollbar.png) -78px 0;
+  height: 12px !important;
+  width: 26px;
+}
+
+.vscrollerbasemid {
+  background: url(../images/scrollbar.png) repeat-y;
+}
+
+.vscrollerbaseend {
+  background: url(../images/scrollbar.png) -78px -13px;
+  height: 16px;
+  width: 26px;
+}
+
+.hscrollerbase,
+.hscrollerbar {
+  height: 16px;
+}
+
+.vscrollerbar,
+.hscrollerbar {
+  padding: 0;
+  z-index: 2;
+}
+
+.scrollerjogbox {
+  bottom: 0;
+  height: 16px;
+  left: auto;
+  right: 0;
+  width: 26px;
+  top: auto;
+}
