@@ -7,7 +7,7 @@ Dead Hollow is a HTML5 game built like a typical website where animations and tr
 
 
 ##Hire me
-In mid-July 2013 I'm moving to London, UK. So, if you are looking for Frontend developer with knowledge of ruby on rails, I'm open for proposals. Just send me a message on: **[marcin.wieprzkowicz@gmail.com](mailto:marcin.wieprzkowicz@gmail.com)**.
+In mid-July 2013 I'm moving to London, UK. If you are looking for Front-end engineer with knowledge of ruby on rails, I'm open for proposals. Just send me a message on: **[marcin.wieprzkowicz@gmail.com](mailto:marcin.wieprzkowicz@gmail.com)**.
 
 
 ##Credits

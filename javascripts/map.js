@@ -92,7 +92,7 @@ Moves/draws a map, handles collisions and also contains animations object.
       transitionEnd = this.getTransitionEndName();
       while (i < this.elements.door.length) {
         this.addEvent(this.elements.door[i], transitionEnd, function(event) {
-          return event.srcElement.parentNode.classList.remove('pending');
+          event.target.parentNode.classList.remove('pending');
         });
         i++;
       }

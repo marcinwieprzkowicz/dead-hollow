@@ -75,7 +75,8 @@ class Map extends Base
 
     while i < @elements.door.length
       @addEvent(@elements.door[i], transitionEnd, (event) ->
-        event.srcElement.parentNode.classList.remove 'pending'
+        event.target.parentNode.classList.remove 'pending'
+        return
       )
       i++
     return
