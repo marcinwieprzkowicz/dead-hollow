@@ -143,7 +143,7 @@ class Control extends Base
       prevent_default: true
     ]
     keypress.register_many movements
-    this
+    return
 
 
   showTouchItems: ->
@@ -151,7 +151,7 @@ class Control extends Base
     while i < @touchItems.length
       @touchItems[i].style.display = 'block'
       i++
-    this
+    return
 
 
   addControlEvents: ->
@@ -209,14 +209,14 @@ class Control extends Base
       document.body.onkeyup keyCode: 27
       @controls.pause.classList.remove 'touched'
     )
-    this
+    return
 
 
   pause: ->
     @game.pause()
     @fadeIn @game.elements.game.overlay
     @fadeIn @game.menu.element.main.element
-    this
+    return
 
 
 (exports ? this).Control = Control

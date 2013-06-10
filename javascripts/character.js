@@ -49,14 +49,12 @@ Creates a main character and controls all of his behavior.
       this.domEl = document.createElement('div');
       this.domEl.id = this.options.id;
       this.domEl.appendChild(subEl);
-      return this;
     };
 
     Character.prototype.clear = function() {
       this.domEl.style[this.cssTransform] = 'translate3d(0, 0, 0)';
       this.domEl.classList.remove('death');
       this.domEl.classList.remove('paused');
-      return this;
     };
 
     Character.prototype.move = function(inverted) {
@@ -74,7 +72,6 @@ Creates a main character and controls all of his behavior.
           this.audio.running.play();
         }
       }
-      return this;
     };
 
     Character.prototype.jump = function() {
@@ -83,7 +80,6 @@ Creates a main character and controls all of his behavior.
       if (this.audio.running.getVolume() > 0) {
         this.audio.running.stop();
       }
-      return this;
     };
 
     Character.prototype.stop = function(animation, callback) {
@@ -114,7 +110,6 @@ Creates a main character and controls all of his behavior.
             }
           }, 200);
       }
-      return this;
     };
 
     return Character;

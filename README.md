@@ -53,6 +53,7 @@ P.S. There is a reason why I didn't use ready-made solutions. I wanted to improv
 ##Issues
 The game is still **unfinished** and has a few issues that has to be solved.
 * performance: moving platforms eats more CPU than your mother
+* performance under iPad
 * touchmove event: unhandled
 * the map is static: templates?
 * ...and so on

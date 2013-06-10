@@ -191,7 +191,6 @@ Handles keyboard and touch events.
         }
       ];
       keypress.register_many(movements);
-      return this;
     };
 
     Control.prototype.showTouchItems = function() {
@@ -201,7 +200,6 @@ Handles keyboard and touch events.
         this.touchItems[i].style.display = 'block';
         i++;
       }
-      return this;
     };
 
     Control.prototype.addControlEvents = function() {
@@ -266,14 +264,12 @@ Handles keyboard and touch events.
         });
         return _this.controls.pause.classList.remove('touched');
       });
-      return this;
     };
 
     Control.prototype.pause = function() {
       this.game.pause();
       this.fadeIn(this.game.elements.game.overlay);
       this.fadeIn(this.game.menu.element.main.element);
-      return this;
     };
 
     return Control;
