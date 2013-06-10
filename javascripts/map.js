@@ -172,7 +172,8 @@ Moves/draws a map, handles collisions and also contains animations object.
           this.move(0, -this.options.animation.shift);
         } else if (!this.objs.character.inAir) {
           this.animations.up.stopped = true;
-          this.objs.character.stop('run').jump();
+          this.objs.character.stop('run');
+          this.objs.character.jump();
         } else if (!(this.animations.up.interval != null)) {
           y = this.options.animation.gravity * this.objs.character.inAir;
           this.move(0, -y);

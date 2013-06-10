@@ -41,14 +41,14 @@ class Character extends Base
     @domEl = document.createElement 'div'
     @domEl.id = @options.id
     @domEl.appendChild subEl
-    this
+    return
 
 
   clear: ->
     @domEl.style[@cssTransform] = 'translate3d(0, 0, 0)'
     @domEl.classList.remove 'death'
     @domEl.classList.remove 'paused'
-    this
+    return
 
 
   move: (inverted = false) ->
@@ -56,14 +56,14 @@ class Character extends Base
     if !@inAir
       @domEl.classList.add 'run'
       @audio.running.play() if @audio.running.getVolume() > 0
-    this
+    return
 
 
   jump: ->
     @inAir = 1
     @domEl.classList.add 'jump'
     @audio.running.stop() if @audio.running.getVolume() > 0
-    this
+    return
 
 
   stop: (animation, callback) ->
@@ -83,7 +83,7 @@ class Character extends Base
           @domEl.classList.remove 'inAir'
           callback.call this if callback?
         , 200)
-    this
+    return
 
 
 (exports ? this).Character = Character

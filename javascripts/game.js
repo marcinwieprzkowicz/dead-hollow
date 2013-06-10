@@ -55,7 +55,8 @@ and in the darkness bind them."
       if (this.paused === null) {
         this.control.addKeyboardEvents();
         if (Modernizr.touch) {
-          this.control.showTouchItems().addControlEvents();
+          this.control.showTouchItems();
+          this.control.addControlEvents();
         }
         this.map.add(this.character);
         this.map.movingPlatform.initPlatforms();

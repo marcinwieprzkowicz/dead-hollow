@@ -155,7 +155,8 @@ class Map extends Base
       else if !@objs.character.inAir
         #handle jumping
         @animations.up.stopped = true
-        @objs.character.stop('run').jump()
+        @objs.character.stop 'run'
+        @objs.character.jump()
       else if !@animations.up.interval?
         y = @options.animation.gravity * @objs.character.inAir
         @move 0, -y

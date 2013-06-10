@@ -45,7 +45,9 @@ class Game extends Base
 
     if @paused is null
       @control.addKeyboardEvents()
-      @control.showTouchItems().addControlEvents() if Modernizr.touch
+      if Modernizr.touch
+        @control.showTouchItems()
+        @control.addControlEvents()
 
       @map.add @character #add character mainObj to map
       @map.movingPlatform.initPlatforms()
