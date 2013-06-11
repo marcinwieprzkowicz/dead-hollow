@@ -609,11 +609,10 @@
 ============================================================================ */
 .trellis {
   background: url(../images/backgrounds/trellis.png) no-repeat;
+  bottom: 20px;
   height: 40px;
   position: absolute;
   width: 160px;
-  z-index: 110;
-  @include perspective(1000);
   &.type-1 {
   }
   &.type-2 {
@@ -621,64 +620,55 @@
   }
   &.type-3 {
     background-position: 0 -82px;
+    bottom: 23px;
     height: 33px;
     width: 178px;
   }
 }
 
 .trellis-1 {
-  bottom: 100px;
-  left: 2840px;
+  left: 430px;
 }
 
 .trellis-2 {
-  bottom: 463px;
-  left: 2810px;
+  left: 420px;
 }
 
 .trellis-3 {
-  bottom: 100px;
-  left: 3600px;
+  left: 1190px;
 }
 
 .trellis-4 {
-  bottom: 100px;
-  left: 4850px;
+  left: 440px;
 }
 
 .trellis-5 {
-  bottom: 460px;
-  left: 4500px;
+  left: -80px;
+  z-index: 120;
 }
 
 .trellis-6 {
-  bottom: 820px;
-  left: 2050px;
+  left: 310px;
 }
 
 .trellis-7 {
-  bottom: 463px;
   left: 80px;
 }
 
 .trellis-8 {
-  bottom: 1180px;
   left: 530px;
 }
 
 .trellis-9 {
-  bottom: 1180px;
   left: 860px;
 }
 
 .trellis-10 {
-  bottom: 1180px;
   left: 1800px;
 }
 
 .trellis-11 {
-  bottom: 460px;
-  left: 3650px;
+  left: 210px;
 }
 
 /*= grating
