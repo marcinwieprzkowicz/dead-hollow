@@ -37,9 +37,11 @@ class Collision extends Base
 
 
   calcPositions: (el) ->
-    if el.length
+    length = el.length
+
+    if length
       i = 0
-      while i < el.length
+      while i < length
         current = el[i]
         current.position = getPosition current
         i++
@@ -61,6 +63,7 @@ class Collision extends Base
   checkAll: (element, elements = @elements.solid, shiftX, shiftY) ->
     handle =
       status: false
+    length = elements.length - 1
 
     i = 0
     while true
@@ -69,7 +72,7 @@ class Collision extends Base
           status: true
           element: elements[i]
         break
-      else if i is elements.length - 1
+      else if i is length
         break
       i++
 

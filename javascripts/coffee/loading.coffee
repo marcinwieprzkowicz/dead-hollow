@@ -114,7 +114,7 @@ class Loading extends Base
           has3d = window.getComputedStyle(el).getPropertyValue(transforms[t])
 
       document.body.removeChild el
-      typeof has3d != 'undefined' && has3d.length > 0 && has3d != 'none'
+      typeof has3d != 'undefined' && has3d.length && has3d != 'none'
 
     Modernizr.addTest 'ismobile', ->
       navi = navigator.userAgent || navigator.vendor || window.opera

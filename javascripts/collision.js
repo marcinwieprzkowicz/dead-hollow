@@ -53,10 +53,11 @@ Provides two very useful methods: checkBetween & checkAll.
     }
 
     Collision.prototype.calcPositions = function(el) {
-      var current, i;
-      if (el.length) {
+      var current, i, length;
+      length = el.length;
+      if (length) {
         i = 0;
-        while (i < el.length) {
+        while (i < length) {
           current = el[i];
           current.position = getPosition(current);
           i++;
@@ -76,13 +77,14 @@ Provides two very useful methods: checkBetween & checkAll.
     };
 
     Collision.prototype.checkAll = function(element, elements, shiftX, shiftY) {
-      var handle, i;
+      var handle, i, length;
       if (elements == null) {
         elements = this.elements.solid;
       }
       handle = {
         status: false
       };
+      length = elements.length - 1;
       i = 0;
       while (true) {
         if (this.checkBetween(element, elements[i], shiftX, shiftY)) {
@@ -91,7 +93,7 @@ Provides two very useful methods: checkBetween & checkAll.
             element: elements[i]
           };
           break;
-        } else if (i === elements.length - 1) {
+        } else if (i === length) {
           break;
         }
         i++;

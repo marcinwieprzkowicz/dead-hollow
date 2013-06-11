@@ -60,13 +60,11 @@ class Game extends Base
     @character.clear()
     @map.animationsStopped false
 
-    @animation = setInterval(=>
-      @tick()
-    , 50)
+    @animation = setInterval @tick, 50
     return
 
 
-  tick: ->
+  tick: =>
     @map.draw()
     @map.handleCollisions()
     return

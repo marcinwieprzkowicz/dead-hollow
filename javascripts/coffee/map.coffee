@@ -71,9 +71,10 @@ class Map extends Base
 
   addEvents: ->
     i = 0
+    length = @elements.door.length
     transitionEnd = @getTransitionEndName()
 
-    while i < @elements.door.length
+    while i < length
       @addEvent(@elements.door[i], transitionEnd, (event) ->
         event.target.parentNode.classList.remove 'pending'
         return
