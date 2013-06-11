@@ -87,10 +87,11 @@ Moves/draws a map, handles collisions and also contains animations object.
     };
 
     Map.prototype.addEvents = function() {
-      var i, transitionEnd;
+      var i, length, transitionEnd;
       i = 0;
+      length = this.elements.door.length;
       transitionEnd = this.getTransitionEndName();
-      while (i < this.elements.door.length) {
+      while (i < length) {
         this.addEvent(this.elements.door[i], transitionEnd, function(event) {
           event.target.parentNode.classList.remove('pending');
         });

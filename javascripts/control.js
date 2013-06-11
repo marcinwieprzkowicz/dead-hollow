@@ -194,9 +194,10 @@ Handles keyboard and touch events.
     };
 
     Control.prototype.showTouchItems = function() {
-      var i;
+      var i, length;
       i = 0;
-      while (i < this.touchItems.length) {
+      length = this.touchItems.length;
+      while (i < length) {
         this.touchItems[i].style.display = 'block';
         i++;
       }

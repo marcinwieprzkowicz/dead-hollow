@@ -15,6 +15,7 @@ and in the darkness bind them."
 
 (function() {
   var Game,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -31,6 +32,8 @@ and in the darkness bind them."
 
     function Game(options, menu) {
       this.menu = menu;
+      this.tick = __bind(this.tick, this);
+
       Game.__super__.constructor.apply(this, arguments);
       this.paused = null;
       this.elements = {
@@ -67,9 +70,7 @@ and in the darkness bind them."
       this.paused = false;
       this.character.clear();
       this.map.animationsStopped(false);
-      this.animation = setInterval(function() {
-        return _this.tick();
-      }, 50);
+      this.animation = setInterval(this.tick, 50);
     };
 
     Game.prototype.tick = function() {

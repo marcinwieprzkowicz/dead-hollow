@@ -148,7 +148,9 @@ class Control extends Base
 
   showTouchItems: ->
     i = 0
-    while i < @touchItems.length
+    length = @touchItems.length
+
+    while i < length
       @touchItems[i].style.display = 'block'
       i++
     return

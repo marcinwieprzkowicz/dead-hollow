@@ -102,7 +102,7 @@ Loads files via yepnope.js.
           }
         }
         document.body.removeChild(el);
-        return typeof has3d !== 'undefined' && has3d.length > 0 && has3d !== 'none';
+        return typeof has3d !== 'undefined' && has3d.length && has3d !== 'none';
       });
       Modernizr.addTest('ismobile', function() {
         var navi;
