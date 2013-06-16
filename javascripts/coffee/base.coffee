@@ -29,9 +29,20 @@ class Base
     element
 
 
-  preventDefault: (event) ->
-    event.preventDefault() if event && event.preventDefault
-    event
+  stop: (event) ->
+    e = event || window.event
+    e.preventDefault && e.preventDefault()
+    e.stopPropagation && e.stopPropagation()
+    e.cancelBubble = true
+    e.returnValue = false
+    e
+
+
+  preventLongPressMenu: (element) ->
+    element.ontouchstart = @stop
+    element.ontouchmove = @stop
+    element.ontouchend = @stop
+    element.ontouchcancel = @stop
 
 
   fadeIn: (element) ->

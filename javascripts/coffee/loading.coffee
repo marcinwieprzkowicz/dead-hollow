@@ -90,7 +90,7 @@ class Loading extends Base
 
   preventScrolling: ->
     @addEvent(document, 'touchmove', (event) =>
-      @preventDefault event
+      @stop event
     )
     return
 

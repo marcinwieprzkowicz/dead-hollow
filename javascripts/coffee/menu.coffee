@@ -62,7 +62,7 @@ class Menu extends Base
     @backToMenu link for link in @element.backToMenu
 
     @addEvent @element.retry, 'click', (event) =>
-      @preventDefault event
+      @stop event
       @fadeOut @element.section.gameOver
       @game.start()
     return
@@ -77,7 +77,7 @@ class Menu extends Base
 
   backToMenu: (link) ->
     @addEvent link, 'click', (event) =>
-      @preventDefault event
+      @stop event
       activeEl = link.getAttribute 'data-back'
       @fadeOut @element.section[activeEl]
       @fadeIn @element.main.element
@@ -85,14 +85,14 @@ class Menu extends Base
 
 
   startGame: (event) ->
-    @preventDefault event
+    @stop event
     @game.start()
     @fadeOut @element.main.element
     return
 
 
   settings: (event) ->
-    @preventDefault event
+    @stop event
     @fadeOut @element.main.element
     @fadeIn @element.section.settings
     @flexcrollContent @element.section.settings
@@ -118,7 +118,7 @@ class Menu extends Base
 
 
   credits: (event) ->
-    @preventDefault event
+    @stop event
 
     @setText @element.theEnd.header, 'Credits'
     @element.theEnd.congratulations.style.display = 'none'
@@ -130,7 +130,7 @@ class Menu extends Base
 
 
   quit: (event) ->
-    @preventDefault event unless confirm 'Are you sure?'
+    @stop event unless confirm 'Are you sure?'
     return
 
 

@@ -88,7 +88,7 @@ Provides all services for menu.
         this.backToMenu(link);
       }
       this.addEvent(this.element.retry, 'click', function(event) {
-        _this.preventDefault(event);
+        _this.stop(event);
         _this.fadeOut(_this.element.section.gameOver);
         return _this.game.start();
       });
@@ -109,7 +109,7 @@ Provides all services for menu.
       var _this = this;
       this.addEvent(link, 'click', function(event) {
         var activeEl;
-        _this.preventDefault(event);
+        _this.stop(event);
         activeEl = link.getAttribute('data-back');
         _this.fadeOut(_this.element.section[activeEl]);
         return _this.fadeIn(_this.element.main.element);
@@ -117,7 +117,7 @@ Provides all services for menu.
     };
 
     Menu.prototype.startGame = function(event) {
-      this.preventDefault(event);
+      this.stop(event);
       this.game.start();
       this.fadeOut(this.element.main.element);
     };
@@ -125,7 +125,7 @@ Provides all services for menu.
     Menu.prototype.settings = function(event) {
       var musicVolumeOptions, soundsVolumeOptions,
         _this = this;
-      this.preventDefault(event);
+      this.stop(event);
       this.fadeOut(this.element.main.element);
       this.fadeIn(this.element.section.settings);
       this.flexcrollContent(this.element.section.settings);
@@ -154,7 +154,7 @@ Provides all services for menu.
     };
 
     Menu.prototype.credits = function(event) {
-      this.preventDefault(event);
+      this.stop(event);
       this.setText(this.element.theEnd.header, 'Credits');
       this.element.theEnd.congratulations.style.display = 'none';
       this.fadeOut(this.element.main.element);
@@ -164,7 +164,7 @@ Provides all services for menu.
 
     Menu.prototype.quit = function(event) {
       if (!confirm('Are you sure?')) {
-        this.preventDefault(event);
+        this.stop(event);
       }
     };
 

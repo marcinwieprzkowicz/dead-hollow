@@ -37,11 +37,21 @@ It also contains many useful functions.
       return element;
     };
 
-    Base.prototype.preventDefault = function(event) {
-      if (event && event.preventDefault) {
-        event.preventDefault();
-      }
-      return event;
+    Base.prototype.stop = function(event) {
+      var e;
+      e = event || window.event;
+      e.preventDefault && e.preventDefault();
+      e.stopPropagation && e.stopPropagation();
+      e.cancelBubble = true;
+      e.returnValue = false;
+      return e;
+    };
+
+    Base.prototype.preventLongPressMenu = function(element) {
+      element.ontouchstart = this.stop;
+      element.ontouchmove = this.stop;
+      element.ontouchend = this.stop;
+      return element.ontouchcancel = this.stop;
     };
 
     Base.prototype.fadeIn = function(element) {

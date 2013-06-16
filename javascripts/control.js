@@ -204,7 +204,13 @@ Handles keyboard and touch events.
     };
 
     Control.prototype.addControlEvents = function() {
-      var _this = this;
+      var controller, _i, _len, _ref,
+        _this = this;
+      _ref = this.controls;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        controller = _ref[_i];
+        this.preventLongPressMenu(controller);
+      }
       this.addEvent(this.controls.backward, 'touchstart', function() {
         document.body.onkeydown({
           keyCode: 37
