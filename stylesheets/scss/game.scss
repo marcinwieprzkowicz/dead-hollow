@@ -837,6 +837,11 @@
   @include perspective(1000);
   &.moving {
     @include transition(0.05s linear);
+
+    .solid {
+      margin: 10px 0 0 27px;
+      width: 94px;
+    }
   }
   &.cropped {
     background-position: -34px 0;
