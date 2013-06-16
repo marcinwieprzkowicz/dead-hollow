@@ -79,7 +79,7 @@ Loads files via yepnope.js.
     Loading.prototype.preventScrolling = function() {
       var _this = this;
       this.addEvent(document, 'touchmove', function(event) {
-        return _this.preventDefault(event);
+        return _this.stop(event);
       });
     };
 

@@ -157,6 +157,9 @@ class Control extends Base
 
 
   addControlEvents: ->
+    # disabling the context menu on long taps (Android)
+    @preventLongPressMenu controller for controller in @controls
+
     # left
     @addEvent(@controls.backward, 'touchstart', =>
       document.body.onkeydown keyCode: 37
