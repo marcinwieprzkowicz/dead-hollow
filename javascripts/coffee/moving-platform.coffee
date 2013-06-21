@@ -39,8 +39,6 @@ class MovingPlatform extends Base
 
 
   move: (platform) ->
-    # child position są z dupy?!
-
     if platform.direction == 'normal'
       platform.offset += @options.animation.shift
       platform.child.position.x += @options.animation.shift
