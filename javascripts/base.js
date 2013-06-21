@@ -70,6 +70,10 @@ It also contains many useful functions.
       return element;
     };
 
+    Base.prototype.getIndex = function(element) {
+      return parseInt(element.className.match(/\w*-(\d+)/)[1], 10);
+    };
+
     Base.prototype.setText = function(element, text) {
       if (element.innerText) {
         element.innerText = text;

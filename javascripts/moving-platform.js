@@ -21,76 +21,57 @@ Creates special type of platforms - moving platforms (Wow! I know, impressive, i
     MovingPlatform.prototype.defaults = {
       movingPlatform: '.platform.moving',
       solid: '.platform.moving .solid',
-      offset: 0,
-      range: 489,
       animation: {
         shift: 5
       }
     };
 
     function MovingPlatform(options) {
+      var platform, _i, _len, _ref;
       MovingPlatform.__super__.constructor.apply(this, arguments);
       this.elements = {
         movingPlatform: document.querySelectorAll(this.options.movingPlatform),
         solid: document.querySelectorAll(this.options.solid)
       };
-    }
-
-    MovingPlatform.prototype.initPlatforms = function() {
-      var platform, _i, _len, _ref;
+      this.platform = [];
       _ref = this.elements.movingPlatform;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         platform = _ref[_i];
-        this.setOffset(platform);
+        this.initPlatform(platform);
       }
-    };
+    }
 
-    MovingPlatform.prototype.setOffset = function(platform) {
-      var child, offset, range;
-      offset = platform.getAttribute('data-offset');
-      offset = offset != null ? parseInt(offset, 10) : this.options.offset;
-      range = platform.getAttribute('data-range');
-      range = range != null ? parseInt(range, 10) : this.options.range;
-      platform.movements = {
-        offset: offset,
-        range: range,
-        direction: 'normal'
-      };
-      child = platform.firstElementChild;
-      if (child != null) {
-        child.position.x += offset;
-      }
+    MovingPlatform.prototype.initPlatform = function(platform) {
+      var index;
+      index = this.getIndex(platform);
+      this.platform[index] = new Platform(platform);
     };
 
     MovingPlatform.prototype.draw = function() {
       var platform, _i, _len, _ref;
-      _ref = this.elements.movingPlatform;
+      _ref = this.platform;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         platform = _ref[_i];
-        this.move(platform);
+        if (platform != null) {
+          this.move(platform);
+        }
       }
     };
 
     MovingPlatform.prototype.move = function(platform) {
-      var child;
-      child = platform.firstElementChild;
-      if (platform.movements.direction === 'normal') {
-        platform.movements.offset += this.options.animation.shift;
-        if (child != null) {
-          child.position.x += this.options.animation.shift;
-        }
+      if (platform.direction === 'normal') {
+        platform.offset += this.options.animation.shift;
+        platform.child.position.x += this.options.animation.shift;
       } else {
-        platform.movements.offset -= this.options.animation.shift;
-        if (child != null) {
-          child.position.x -= this.options.animation.shift;
-        }
+        platform.offset -= this.options.animation.shift;
+        platform.child.position.x -= this.options.animation.shift;
       }
-      if (platform.movements.offset === 0) {
-        platform.movements.direction = 'normal';
-      } else if (platform.movements.offset + platform.clientWidth >= platform.movements.range) {
-        platform.movements.direction = 'alternate';
+      if (platform.offset === 0) {
+        platform.direction = 'normal';
+      } else if (platform.offset + platform.width >= platform.range) {
+        platform.direction = 'alternate';
       }
-      platform.style[this.cssTransform] = "translate3d(" + platform.movements.offset + "px, 0, 0)";
+      platform.element.style[this.cssTransform] = "translate3d(" + platform.offset + "px, 0, 0)";
     };
 
     return MovingPlatform;

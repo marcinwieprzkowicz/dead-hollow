@@ -29,6 +29,7 @@ class Loading extends Base
         'javascripts/character.js',
         'javascripts/collision.js',
         'javascripts/control.js',
+        'javascripts/platform.js',
         'javascripts/moving-platform.js',
         'javascripts/map.js',
         'javascripts/game.js',

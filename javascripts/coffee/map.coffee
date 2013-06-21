@@ -166,7 +166,9 @@ class Map extends Base
 
     movingCol = @collision.checkAll @objs.character.domEl, @movingPlatform.elements.solid, 0, -@options.animation.shift
     if movingCol.status
-      if movingCol.element.parentNode.movements.direction == 'normal'
+      index = @getIndex movingCol.element.parentNode
+
+      if @movingPlatform.platform[index].direction == 'normal'
         @move -@movingPlatform.options.animation.shift, 0
       else
         @move @movingPlatform.options.animation.shift, 0

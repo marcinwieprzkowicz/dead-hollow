@@ -61,6 +61,10 @@ class Base
     element
 
 
+  getIndex: (element) ->
+    parseInt element.className.match(/\w*-(\d+)/)[1], 10
+
+
   setText: (element, text) ->
     if element.innerText
       element.innerText = text
