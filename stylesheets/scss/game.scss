@@ -101,7 +101,6 @@
   position: absolute;
   width: 70px;
   z-index: 110;
-  @include perspective(1000);
 
   div {
     color: #1f222f;
@@ -128,7 +127,6 @@
     background: url(../images/backgrounds/base-3.jpg) repeat-x;
     height: 160px;
     z-index: 60;
-    @include perspective(1000);
 
     .part {
       background: url(../images/backgrounds/base-1.jpg) repeat-x;
@@ -301,7 +299,6 @@
   height: 349px;
   position: absolute;
   z-index: 100;
-  @include perspective(1000);
 }
 
 .wall-1 {
@@ -493,7 +490,6 @@
   height: 126px;
   position: absolute;
   width: 189px;
-  @include perspective(1000);
 
   .solid {
     height: 95px;
@@ -677,7 +673,6 @@
   height: 349px;
   position: absolute;
   z-index: 80;
-  @include perspective(1000);
 
   li {
     background: url(../images/backgrounds/grating.png) no-repeat 0 -29px;
@@ -834,7 +829,6 @@
   position: absolute;
   width: 189px;
   z-index: 110;
-  @include perspective(1000);
   &.moving {
     @include transition(0.05s linear);
 
