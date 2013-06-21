@@ -50,7 +50,6 @@ class Game extends Base
         @control.addControlEvents()
 
       @map.add @character #add character mainObj to map
-      @map.movingPlatform.initPlatforms()
 
     setTimeout(=>
       @setText @elements.game.start, 'Resume'
@@ -60,11 +59,14 @@ class Game extends Base
     @character.clear()
     @map.animationsStopped false
 
-    @animation = setInterval @tick, 50
+    @animation = setInterval(=>
+      @tick()
+      return
+    , 50)
     return
 
 
-  tick: =>
+  tick: ->
     @map.draw()
     @map.handleCollisions()
     return

@@ -146,7 +146,7 @@ Moves/draws a map, handles collisions and also contains animations object.
     };
 
     Map.prototype.handleCollisions = function() {
-      var callback, lessThanShift, lowerCollision, movingCol, upperCollision, y,
+      var callback, index, lessThanShift, lowerCollision, movingCol, upperCollision, y,
         _this = this;
       lowerCollision = this.collision.checkAll(this.objs.character.domEl, null, 0, -this.options.animation.shift);
       if (lowerCollision.status) {
@@ -183,7 +183,8 @@ Moves/draws a map, handles collisions and also contains animations object.
       }
       movingCol = this.collision.checkAll(this.objs.character.domEl, this.movingPlatform.elements.solid, 0, -this.options.animation.shift);
       if (movingCol.status) {
-        if (movingCol.element.parentNode.movements.direction === 'normal') {
+        index = this.getIndex(movingCol.element.parentNode);
+        if (this.movingPlatform.platform[index].direction === 'normal') {
           this.move(-this.movingPlatform.options.animation.shift, 0);
         } else {
           this.move(this.movingPlatform.options.animation.shift, 0);

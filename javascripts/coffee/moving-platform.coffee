@@ -13,8 +13,6 @@ class MovingPlatform extends Base
   defaults:
     movingPlatform: '.platform.moving'
     solid: '.platform.moving .solid'
-    offset: 0
-    range: 489
     animation:
       shift: 5
 
@@ -25,48 +23,37 @@ class MovingPlatform extends Base
       movingPlatform: document.querySelectorAll @options.movingPlatform
       solid: document.querySelectorAll @options.solid
 
-
-  initPlatforms: ->
-    @setOffset platform for platform in @elements.movingPlatform
-    return
+    @platform = []
+    @initPlatform platform for platform in @elements.movingPlatform
 
 
-  setOffset: (platform) ->
-    offset = platform.getAttribute 'data-offset'
-    offset = if offset? then parseInt(offset, 10) else @options.offset
-    range = platform.getAttribute 'data-range'
-    range = if range? then parseInt(range, 10) else @options.range
-
-    platform.movements =
-      offset: offset
-      range: range
-      direction: 'normal'
-
-    child = platform.firstElementChild
-    child.position.x += offset if child?
+  initPlatform: (platform) ->
+    index = @getIndex platform
+    @platform[index] = new Platform platform
     return
 
 
   draw: ->
-    @move platform for platform in @elements.movingPlatform
+    @move platform for platform in @platform when platform?
     return
 
 
   move: (platform) ->
-    child = platform.firstElementChild
-    if platform.movements.direction == 'normal'
-      platform.movements.offset += @options.animation.shift
-      child.position.x += @options.animation.shift if child?
+    # child position są z dupy?!
+
+    if platform.direction == 'normal'
+      platform.offset += @options.animation.shift
+      platform.child.position.x += @options.animation.shift
     else
-      platform.movements.offset -= @options.animation.shift
-      child.position.x -= @options.animation.shift if child?
+      platform.offset -= @options.animation.shift
+      platform.child.position.x -= @options.animation.shift
 
-    if platform.movements.offset == 0
-      platform.movements.direction = 'normal'
-    else if platform.movements.offset + platform.clientWidth >= platform.movements.range
-      platform.movements.direction = 'alternate'
+    if platform.offset == 0
+      platform.direction = 'normal'
+    else if platform.offset + platform.width >= platform.range
+      platform.direction = 'alternate'
 
-    platform.style[@cssTransform] = "translate3d(#{platform.movements.offset}px, 0, 0)"
+    platform.element.style[@cssTransform] = "translate3d(#{platform.offset}px, 0, 0)"
     return
 
 
