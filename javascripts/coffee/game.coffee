@@ -36,7 +36,7 @@ class Game extends Base
     ,
       @audio
     )
-    @control = new Control({}, this, @map)
+    @control = new Control {}, this, @map
 
 
   start: ->
@@ -59,16 +59,10 @@ class Game extends Base
     @character.clear()
     @map.animationsStopped false
 
-    @animation = setInterval(=>
-      @tick()
+    @animation = setInterval =>
+      @map.draw()
       return
-    , 50)
-    return
-
-
-  tick: ->
-    @map.draw()
-    @map.handleCollisions()
+    , 50
     return
 
 
@@ -89,7 +83,7 @@ class Game extends Base
 
     setTimeout(=>
       @setText @elements.game.start, 'Start game'
-      @tick()
+      @map.draw()
     , 1000)
     return
 

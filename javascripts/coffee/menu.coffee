@@ -27,6 +27,7 @@ class Menu extends Base
 
 
   dragdealerDefaults =
+    disabled: true
     slide: false
     steps: 100
     left: -10
@@ -53,8 +54,26 @@ class Menu extends Base
       backToMenu: document.querySelectorAll @options.backToMenu
       retry: document.querySelector @options.retry
 
-    window.test = @game = new Game({}, this)
+    @game = new Game {}, this
+
+    @volumeControls()
     @setupEvents()
+
+
+  volumeControls: ->
+    unless Modernizr.ismobile
+      musicVolumeOptions = @merge {}, dragdealerDefaults,
+        x: @game.audio.background.getVolume() / 100
+        callback: (value) => @game.audio.background.setVolume Math.round(value * 100)
+
+      @musicVolume = new Dragdealer 'music-volume-slider', musicVolumeOptions
+
+    soundsVolumeOptions = @merge {}, dragdealerDefaults,
+      x: @game.audio.running.getVolume() / 100
+      callback: (value) => @game.sounds.setVolume Math.round(value * 100)
+
+    @soundsVolume = new Dragdealer 'sounds-volume-slider', soundsVolumeOptions
+    return
 
 
   setupEvents: ->
@@ -81,6 +100,9 @@ class Menu extends Base
       activeEl = link.getAttribute 'data-back'
       @fadeOut @element.section[activeEl]
       @fadeIn @element.main.element
+
+      @musicVolume.disable() if @musicVolume?
+      @soundsVolume.disable()
     return
 
 
@@ -97,23 +119,8 @@ class Menu extends Base
     @fadeIn @element.section.settings
     @flexcrollContent @element.section.settings
 
-    if !@musicVolume && !Modernizr.ismobile
-      musicVolumeOptions = @merge {}, dragdealerDefaults,
-        x: @game.audio.background.getVolume() / 100
-        callback: (value) =>
-          volume = Math.round value * 100
-          @game.audio.background.setVolume volume
-
-      @musicVolume = new Dragdealer('music-volume-slider', musicVolumeOptions)
-
-    unless @soundsVolume
-      soundsVolumeOptions = @merge {}, dragdealerDefaults,
-        x: @game.audio.running.getVolume() / 100
-        callback: (value) =>
-          volume = Math.round value * 100
-          @game.sounds.setVolume volume
-
-      @soundsVolume = new Dragdealer('sounds-volume-slider', soundsVolumeOptions)
+    @musicVolume.enable() if @musicVolume?
+    @soundsVolume.enable()
     return
 
 

@@ -99,9 +99,12 @@ class Map extends Base
 
 
   draw: ->
-    @elements.foreground.style[@cssTransform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
-    @elements.background.style[@cssTransform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
-    @movingPlatform.draw()
+    requestAnimationFrame =>
+      @elements.foreground.style[@cssTransform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
+      @elements.background.style[@cssTransform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
+      @movingPlatform.draw()
+
+      @handleCollisions()
     return
 
 
