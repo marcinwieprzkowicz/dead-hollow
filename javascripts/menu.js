@@ -39,6 +39,7 @@ Provides all services for menu.
     };
 
     dragdealerDefaults = {
+      disabled: true,
       slide: false,
       steps: 100,
       left: -10,
@@ -70,9 +71,31 @@ Provides all services for menu.
         backToMenu: document.querySelectorAll(this.options.backToMenu),
         retry: document.querySelector(this.options.retry)
       };
-      window.test = this.game = new Game({}, this);
+      this.game = new Game({}, this);
+      this.volumeControls();
       this.setupEvents();
     }
+
+    Menu.prototype.volumeControls = function() {
+      var musicVolumeOptions, soundsVolumeOptions,
+        _this = this;
+      if (!Modernizr.ismobile) {
+        musicVolumeOptions = this.merge({}, dragdealerDefaults, {
+          x: this.game.audio.background.getVolume() / 100,
+          callback: function(value) {
+            return _this.game.audio.background.setVolume(Math.round(value * 100));
+          }
+        });
+        this.musicVolume = new Dragdealer('music-volume-slider', musicVolumeOptions);
+      }
+      soundsVolumeOptions = this.merge({}, dragdealerDefaults, {
+        x: this.game.audio.running.getVolume() / 100,
+        callback: function(value) {
+          return _this.game.sounds.setVolume(Math.round(value * 100));
+        }
+      });
+      this.soundsVolume = new Dragdealer('sounds-volume-slider', soundsVolumeOptions);
+    };
 
     Menu.prototype.setupEvents = function() {
       var item, link, _i, _j, _len, _len1, _ref, _ref1,
@@ -112,7 +135,11 @@ Provides all services for menu.
         _this.stop(event);
         activeEl = link.getAttribute('data-back');
         _this.fadeOut(_this.element.section[activeEl]);
-        return _this.fadeIn(_this.element.main.element);
+        _this.fadeIn(_this.element.main.element);
+        if (_this.musicVolume != null) {
+          _this.musicVolume.disable();
+        }
+        return _this.soundsVolume.disable();
       });
     };
 
@@ -123,34 +150,14 @@ Provides all services for menu.
     };
 
     Menu.prototype.settings = function(event) {
-      var musicVolumeOptions, soundsVolumeOptions,
-        _this = this;
       this.stop(event);
       this.fadeOut(this.element.main.element);
       this.fadeIn(this.element.section.settings);
       this.flexcrollContent(this.element.section.settings);
-      if (!this.musicVolume && !Modernizr.ismobile) {
-        musicVolumeOptions = this.merge({}, dragdealerDefaults, {
-          x: this.game.audio.background.getVolume() / 100,
-          callback: function(value) {
-            var volume;
-            volume = Math.round(value * 100);
-            return _this.game.audio.background.setVolume(volume);
-          }
-        });
-        this.musicVolume = new Dragdealer('music-volume-slider', musicVolumeOptions);
+      if (this.musicVolume != null) {
+        this.musicVolume.enable();
       }
-      if (!this.soundsVolume) {
-        soundsVolumeOptions = this.merge({}, dragdealerDefaults, {
-          x: this.game.audio.running.getVolume() / 100,
-          callback: function(value) {
-            var volume;
-            volume = Math.round(value * 100);
-            return _this.game.sounds.setVolume(volume);
-          }
-        });
-        this.soundsVolume = new Dragdealer('sounds-volume-slider', soundsVolumeOptions);
-      }
+      this.soundsVolume.enable();
     };
 
     Menu.prototype.credits = function(event) {

@@ -22,6 +22,7 @@ class Loading extends Base
       cssanimations: 'CSS animations'
       csstransitions: 'CSS transitions'
       hascsstransforms3d: 'CSS transforms 3D'
+      raf: 'RequestAnimationFrame'
 
 
   files: ['javascripts/buzz.js',
@@ -56,9 +57,9 @@ class Loading extends Base
 
 
   constructor: ->
-    @features = ['multiplebgs', 'opacity', 'rgba' ,'cssanimations', 'csstransitions', 'hascsstransforms3d']
+    @features = ['multiplebgs', 'opacity', 'rgba' ,'cssanimations', 'csstransitions', 'hascsstransforms3d', 'raf']
     @progress = 0
-    @progressStep = Math.round(100 / (@features.length + @files.length))
+    @progressStep = Math.round 100 / (@features.length + @files.length)
 
     @menu = document.getElementById 'menu'
     @featuresTest = document.getElementById 'features-test'
@@ -81,7 +82,7 @@ class Loading extends Base
     @preloadPrefix()
     @hideMusicVolume() if Modernizr.ismobile
 
-    @checkFeature(0)
+    @checkFeature 0
 
 
   externalLinks: ->
@@ -174,6 +175,10 @@ class Loading extends Base
     Modernizr.load [
       test: Modernizr.classlist
       nope: 'javascripts/classList.min.js' # Thank you Eli Grey
+    ,
+      test: Modernizr.raf
+      complete: ->
+        window.requestAnimationFrame = window[Modernizr.prefixed('requestAnimationFrame', window, false)] if !window.requestAnimationFrame
     ,
       test: Modernizr.multiplebgs && Modernizr.opacity && Modernizr.rgba && Modernizr.cssanimations && Modernizr.csstransitions && Modernizr.hascsstransforms3d
       yep : @files

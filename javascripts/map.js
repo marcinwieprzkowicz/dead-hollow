@@ -112,9 +112,13 @@ Moves/draws a map, handles collisions and also contains animations object.
     };
 
     Map.prototype.draw = function() {
-      this.elements.foreground.style[this.cssTransform] = "translate3d(" + this.position.x + "px, " + this.position.y + "px, 0)";
-      this.elements.background.style[this.cssTransform] = "translate3d(" + this.position.x + "px, " + this.position.y + "px, 0)";
-      this.movingPlatform.draw();
+      var _this = this;
+      requestAnimationFrame(function() {
+        _this.elements.foreground.style[_this.cssTransform] = "translate3d(" + _this.position.x + "px, " + _this.position.y + "px, 0)";
+        _this.elements.background.style[_this.cssTransform] = "translate3d(" + _this.position.x + "px, " + _this.position.y + "px, 0)";
+        _this.movingPlatform.draw();
+        return _this.handleCollisions();
+      });
     };
 
     Map.prototype.move = function(x, y) {

@@ -67,13 +67,8 @@ and in the darkness bind them."
       this.character.clear();
       this.map.animationsStopped(false);
       this.animation = setInterval(function() {
-        _this.tick();
+        _this.map.draw();
       }, 50);
-    };
-
-    Game.prototype.tick = function() {
-      this.map.draw();
-      this.map.handleCollisions();
     };
 
     Game.prototype.pause = function() {
@@ -92,7 +87,7 @@ and in the darkness bind them."
       this.map.clearAnimation('left');
       setTimeout(function() {
         _this.setText(_this.elements.game.start, 'Start game');
-        return _this.tick();
+        return _this.map.draw();
       }, 1000);
     };
 
