@@ -27,6 +27,7 @@ class Loading extends Base
 
   files: ['javascripts/buzz.js',
         'javascripts/keypress.js',
+        'javascripts/solid.js',
         'javascripts/character.js',
         'javascripts/collision.js',
         'javascripts/control.js',
@@ -65,7 +66,7 @@ class Loading extends Base
     @featuresTest = document.getElementById 'features-test'
     @errorOccured = document.getElementById 'error-occured'
 
-    @elements =
+    @element =
       featuresTest:
         progressBar: @featuresTest.querySelector '.progressBar'
         description: @featuresTest.querySelector '.description'
@@ -74,7 +75,7 @@ class Loading extends Base
       externalLinks: document.querySelectorAll 'a[rel="external"]'
       musicVolume: document.querySelectorAll '.musicVolume'
 
-    @setText @elements.featuresTest.description, @message.loadingDescription.checkingBrowser
+    @setText @element.featuresTest.description, @message.loadingDescription.checkingBrowser
 
     @externalLinks()
     @preventScrolling() if Modernizr.touch
@@ -86,7 +87,7 @@ class Loading extends Base
 
 
   externalLinks: ->
-    link.target = '_blank' for link in @elements.externalLinks
+    link.target = '_blank' for link in @element.externalLinks
     return
 
 
@@ -132,7 +133,7 @@ class Loading extends Base
 
 
   hideMusicVolume: ->
-    element.style.display = 'none' for element in @elements.musicVolume
+    element.style.display = 'none' for element in @element.musicVolume
     return
 
 
@@ -153,14 +154,14 @@ class Loading extends Base
     else
       @progress += @progressStep
 
-    @elements.featuresTest.progressBar.style.width = "#{@progress}%"
+    @element.featuresTest.progressBar.style.width = "#{@progress}%"
     return
 
 
   showProblems: (type, detail) ->
     switch type
       when 'feature'
-        @elements.errorOccured.description.innerHTML = "Your browser doesn't support <strong>#{@message.feature[detail]}</strong>.<br />Update your browser or install new to start the game."
+        @element.errorOccured.description.innerHTML = "Your browser doesn't support <strong>#{@message.feature[detail]}</strong>.<br />Update your browser or install new to start the game."
 
     @fadeOut @featuresTest
     setTimeout(=>
@@ -170,7 +171,7 @@ class Loading extends Base
 
 
   loadFiles: ->
-    @setText @elements.featuresTest.description, @message.loadingDescription.loadingGame
+    @setText @element.featuresTest.description, @message.loadingDescription.loadingGame
 
     Modernizr.load [
       test: Modernizr.classlist

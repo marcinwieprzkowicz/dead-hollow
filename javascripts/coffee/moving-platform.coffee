@@ -19,18 +19,23 @@ class MovingPlatform extends Base
 
   constructor: (options) ->
     super
-    @elements =
+    @element =
       movingPlatform: document.querySelectorAll @options.movingPlatform
       solid: document.querySelectorAll @options.solid
 
-    @platform = []
-    @initPlatform platform for platform in @elements.movingPlatform
+    movingPlatformLength = @element.movingPlatform.length
+    movingPlatformIterator = 0
 
+    @platform = new Array movingPlatformLength
+    @solid = new Array movingPlatformLength
 
-  initPlatform: (platform) ->
-    index = @getIndex platform
-    @platform[index] = new Platform platform
-    return
+    while movingPlatformIterator < movingPlatformLength
+      platform = @element.movingPlatform[movingPlatformIterator]
+      index = @getIndex platform
+
+      @platform[index] = new Platform platform
+      @solid[movingPlatformIterator] = @platform[index].solid
+      movingPlatformIterator++
 
 
   draw: ->
@@ -41,10 +46,10 @@ class MovingPlatform extends Base
   move: (platform) ->
     if platform.direction == 'normal'
       platform.offset += @options.animation.shift
-      platform.child.position.x += @options.animation.shift
+      platform.solid.position.x += @options.animation.shift
     else
       platform.offset -= @options.animation.shift
-      platform.child.position.x -= @options.animation.shift
+      platform.solid.position.x -= @options.animation.shift
 
     if platform.offset == 0
       platform.direction = 'normal'

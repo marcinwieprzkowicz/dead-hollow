@@ -24,11 +24,11 @@ Moves/draws a map, handles collisions and also contains animations object.
         x: -2500,
         y: 50
       },
-      elements: {
+      element: {
         map: '#map',
         foreground: '#foreground',
         background: '#background',
-        door: '.door',
+        doors: '.door',
         theEndTrigger: '#the-end-trigger',
         infoTrigger: '#info div'
       },
@@ -41,6 +41,7 @@ Moves/draws a map, handles collisions and also contains animations object.
     };
 
     function Map(options, game) {
+      var door, doors, _i, _len, _ref;
       this.game = game;
       this.setDefaultPosition = __bind(this.setDefaultPosition, this);
 
@@ -61,20 +62,28 @@ Moves/draws a map, handles collisions and also contains animations object.
         }
       };
       this.objs = {};
-      this.elements = {
-        map: document.querySelector(this.options.elements.map),
-        foreground: document.querySelector(this.options.elements.foreground),
-        background: document.querySelector(this.options.elements.background),
-        door: document.querySelectorAll(this.options.elements.door),
-        theEndTrigger: document.querySelector(this.options.elements.theEndTrigger),
-        infoTrigger: document.querySelector(this.options.elements.infoTrigger)
+      this.element = {
+        map: document.querySelector(this.options.element.map),
+        foreground: document.querySelector(this.options.element.foreground),
+        background: document.querySelector(this.options.element.background),
+        doors: document.querySelectorAll(this.options.element.doors),
+        theEndTrigger: document.querySelector(this.options.element.theEndTrigger),
+        infoTrigger: document.querySelector(this.options.element.infoTrigger)
       };
-      this.elements.map.style.display = 'block';
+      this.element.map.style.display = 'block';
       this.collision = new Collision({}, this.position);
-      this.collision.calcPositions(this.elements.door);
-      this.collision.calcPositions(this.elements.theEndTrigger);
-      this.collision.calcPositions(this.elements.infoTrigger);
-      this.movingPlatform = new MovingPlatform();
+      doors = [];
+      _ref = this.element.doors;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        door = _ref[_i];
+        doors.push(new Solid(door));
+      }
+      this.solid = {
+        doors: doors,
+        theEndTrigger: new Solid(this.element.theEndTrigger),
+        infoTrigger: new Solid(this.element.infoTrigger)
+      };
+      this.movingPlatform = new MovingPlatform;
       this.addEvents();
     }
 
@@ -89,10 +98,10 @@ Moves/draws a map, handles collisions and also contains animations object.
     Map.prototype.addEvents = function() {
       var i, length, transitionEnd;
       i = 0;
-      length = this.elements.door.length;
+      length = this.element.doors.length;
       transitionEnd = this.getTransitionEndName();
       while (i < length) {
-        this.addEvent(this.elements.door[i], transitionEnd, function(event) {
+        this.addEvent(this.element.doors[i], transitionEnd, function(event) {
           event.target.parentNode.classList.remove('pending');
         });
         i++;
@@ -106,16 +115,16 @@ Moves/draws a map, handles collisions and also contains animations object.
     };
 
     Map.prototype.add = function(element) {
-      this.elements.map.appendChild(element.domEl);
+      this.element.map.appendChild(element.domEl);
       this.objs[element.options.id] = element;
-      this.collision.calcPositions(element.domEl);
+      element.solid = new Solid(element.domEl);
     };
 
     Map.prototype.draw = function() {
       var _this = this;
       requestAnimationFrame(function() {
-        _this.elements.foreground.style[_this.cssTransform] = "translate3d(" + _this.position.x + "px, " + _this.position.y + "px, 0)";
-        _this.elements.background.style[_this.cssTransform] = "translate3d(" + _this.position.x + "px, " + _this.position.y + "px, 0)";
+        _this.element.foreground.style[_this.cssTransform] = "translate3d(" + _this.position.x + "px, " + _this.position.y + "px, 0)";
+        _this.element.background.style[_this.cssTransform] = "translate3d(" + _this.position.x + "px, " + _this.position.y + "px, 0)";
         _this.movingPlatform.draw();
         return _this.handleCollisions();
       });
@@ -128,7 +137,7 @@ Moves/draws a map, handles collisions and also contains animations object.
         this.position.y += y;
       } else {
         this.position.y = this.options.position.y;
-        lowerCollision = this.collision.checkAll(this.objs.character.domEl, null, 0, -this.options.animation.shift);
+        lowerCollision = this.collision.checkAll(this.objs.character.solid, null, 0, -this.options.animation.shift);
         if (!lowerCollision.status) {
           this.game.gameOver(y);
         }
@@ -152,9 +161,9 @@ Moves/draws a map, handles collisions and also contains animations object.
     Map.prototype.handleCollisions = function() {
       var callback, index, lessThanShift, lowerCollision, movingCol, upperCollision, y,
         _this = this;
-      lowerCollision = this.collision.checkAll(this.objs.character.domEl, null, 0, -this.options.animation.shift);
+      lowerCollision = this.collision.checkAll(this.objs.character.solid, null, 0, -this.options.animation.shift);
       if (lowerCollision.status) {
-        lessThanShift = this.objs.character.domEl.position.y + this.objs.character.domEl.clientHeight - lowerCollision.element.position.y - this.position.y;
+        lessThanShift = this.objs.character.solid.position.y + this.objs.character.solid.height - lowerCollision.solid.position.y - this.position.y;
         this.move(0, lessThanShift);
         if (this.objs.character.inAir) {
           this.clearAnimation('up');
@@ -170,7 +179,7 @@ Moves/draws a map, handles collisions and also contains animations object.
           this.objs.character.stop('jump', callback);
         }
       } else {
-        upperCollision = this.collision.checkAll(this.objs.character.domEl, null, 0, this.options.animation.shift);
+        upperCollision = this.collision.checkAll(this.objs.character.solid, null, 0, this.options.animation.shift);
         if (upperCollision.status) {
           this.clearAnimation('up');
           this.animations.up.stopped = true;
@@ -185,26 +194,26 @@ Moves/draws a map, handles collisions and also contains animations object.
           this.objs.character.inAir++;
         }
       }
-      movingCol = this.collision.checkAll(this.objs.character.domEl, this.movingPlatform.elements.solid, 0, -this.options.animation.shift);
+      movingCol = this.collision.checkAll(this.objs.character.solid, this.movingPlatform.solid, 0, -this.options.animation.shift);
       if (movingCol.status) {
-        index = this.getIndex(movingCol.element.parentNode);
+        index = this.getIndex(movingCol.solid.element.parentNode);
         if (this.movingPlatform.platform[index].direction === 'normal') {
           this.move(-this.movingPlatform.options.animation.shift, 0);
         } else {
           this.move(this.movingPlatform.options.animation.shift, 0);
         }
       }
-      if (this.collision.checkBetween(this.objs.character.domEl, this.elements.theEndTrigger, 0, 0)) {
+      if (this.collision.checkBetween(this.objs.character.solid, this.solid.theEndTrigger, 0, 0)) {
         this.game.theEnd();
       }
-      if (this.collision.checkBetween(this.objs.character.domEl, this.elements.infoTrigger, 0, 0)) {
+      if (this.collision.checkBetween(this.objs.character.solid, this.solid.infoTrigger, 0, 0)) {
         this.game.aboutMe();
       }
     };
 
     Map.prototype.closeDoors = function() {
       var door, _i, _len, _ref;
-      _ref = this.elements.door;
+      _ref = this.element.doors;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         door = _ref[_i];
         door.classList.remove('open');

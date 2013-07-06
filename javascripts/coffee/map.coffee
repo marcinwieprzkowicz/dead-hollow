@@ -14,11 +14,11 @@ class Map extends Base
     position:
       x: -2500
       y: 50
-    elements:
+    element:
       map: '#map'
       foreground: '#foreground'
       background: '#background'
-      door: '.door'
+      doors: '.door'
       theEndTrigger: '#the-end-trigger'
       infoTrigger: '#info div'
     animation:
@@ -44,21 +44,26 @@ class Map extends Base
         stopped: true
 
     @objs = {}
-    @elements =
-      map: document.querySelector @options.elements.map
-      foreground: document.querySelector @options.elements.foreground
-      background: document.querySelector @options.elements.background
-      door: document.querySelectorAll @options.elements.door
-      theEndTrigger: document.querySelector @options.elements.theEndTrigger
-      infoTrigger: document.querySelector @options.elements.infoTrigger
+    @element =
+      map: document.querySelector @options.element.map
+      foreground: document.querySelector @options.element.foreground
+      background: document.querySelector @options.element.background
+      doors: document.querySelectorAll @options.element.doors
+      theEndTrigger: document.querySelector @options.element.theEndTrigger
+      infoTrigger: document.querySelector @options.element.infoTrigger
 
-    @elements.map.style.display = 'block'
-    @collision = new Collision({}, @position)
-    @collision.calcPositions @elements.door
-    @collision.calcPositions @elements.theEndTrigger
-    @collision.calcPositions @elements.infoTrigger
-    @movingPlatform = new MovingPlatform()
+    @element.map.style.display = 'block'
+    @collision = new Collision {}, @position
 
+    doors = []
+    doors.push new Solid(door) for door in @element.doors
+
+    @solid =
+      doors: doors
+      theEndTrigger: new Solid @element.theEndTrigger
+      infoTrigger: new Solid @element.infoTrigger
+
+    @movingPlatform = new MovingPlatform
     @addEvents()
 
 
@@ -71,14 +76,13 @@ class Map extends Base
 
   addEvents: ->
     i = 0
-    length = @elements.door.length
+    length = @element.doors.length
     transitionEnd = @getTransitionEndName()
 
     while i < length
-      @addEvent(@elements.door[i], transitionEnd, (event) ->
+      @addEvent @element.doors[i], transitionEnd, (event) ->
         event.target.parentNode.classList.remove 'pending'
         return
-      )
       i++
     return
 
@@ -91,17 +95,17 @@ class Map extends Base
 
 
   add: (element) ->
-    @elements.map.appendChild element.domEl
+    @element.map.appendChild element.domEl
     @objs[element.options.id] = element
 
-    @collision.calcPositions element.domEl
+    element.solid = new Solid element.domEl
     return
 
 
   draw: ->
     requestAnimationFrame =>
-      @elements.foreground.style[@cssTransform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
-      @elements.background.style[@cssTransform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
+      @element.foreground.style[@cssTransform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
+      @element.background.style[@cssTransform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
       @movingPlatform.draw()
 
       @handleCollisions()
@@ -116,7 +120,7 @@ class Map extends Base
     else
       @position.y = @options.position.y
 
-      lowerCollision = @collision.checkAll @objs.character.domEl, null, 0, -@options.animation.shift
+      lowerCollision = @collision.checkAll @objs.character.solid, null, 0, -@options.animation.shift
       @game.gameOver y unless lowerCollision.status
     return
 
@@ -133,11 +137,11 @@ class Map extends Base
 
 
   handleCollisions: ->
-    lowerCollision = @collision.checkAll @objs.character.domEl, null, 0, -@options.animation.shift
+    lowerCollision = @collision.checkAll @objs.character.solid, null, 0, -@options.animation.shift
 
     if lowerCollision.status
       #character.y + character.height - lowerCollision element.y - @position.y
-      lessThanShift = @objs.character.domEl.position.y + @objs.character.domEl.clientHeight - lowerCollision.element.position.y - @position.y
+      lessThanShift = @objs.character.solid.position.y + @objs.character.solid.height - lowerCollision.solid.position.y - @position.y
       @move 0, lessThanShift
 
       #handle landing
@@ -151,7 +155,7 @@ class Map extends Base
 
         @objs.character.stop 'jump', callback
     else
-      upperCollision = @collision.checkAll @objs.character.domEl, null, 0, @options.animation.shift
+      upperCollision = @collision.checkAll @objs.character.solid, null, 0, @options.animation.shift
 
       if upperCollision.status
         @clearAnimation 'up'
@@ -167,22 +171,22 @@ class Map extends Base
         @move 0, -y
         @objs.character.inAir++
 
-    movingCol = @collision.checkAll @objs.character.domEl, @movingPlatform.elements.solid, 0, -@options.animation.shift
+    movingCol = @collision.checkAll @objs.character.solid, @movingPlatform.solid, 0, -@options.animation.shift
     if movingCol.status
-      index = @getIndex movingCol.element.parentNode
-
+      index = @getIndex movingCol.solid.element.parentNode
+    
       if @movingPlatform.platform[index].direction == 'normal'
         @move -@movingPlatform.options.animation.shift, 0
       else
         @move @movingPlatform.options.animation.shift, 0
 
-    @game.theEnd() if @collision.checkBetween @objs.character.domEl, @elements.theEndTrigger, 0, 0
-    @game.aboutMe() if @collision.checkBetween @objs.character.domEl, @elements.infoTrigger, 0, 0
+    @game.theEnd() if @collision.checkBetween @objs.character.solid, @solid.theEndTrigger, 0, 0
+    @game.aboutMe() if @collision.checkBetween @objs.character.solid, @solid.infoTrigger, 0, 0
     return
 
 
   closeDoors: ->
-    door.classList.remove 'open' for door in @elements.door
+    door.classList.remove 'open' for door in @element.doors
     return
 
 

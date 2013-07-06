@@ -9,58 +9,39 @@ Provides two very useful methods: checkBetween & checkAll.
 ###
 
 
-getPosition = (obj) ->
-  x = 0
-  y = 0
-  while obj.offsetParent
-    x += obj.offsetLeft
-    y += obj.offsetTop
-    break if obj.offsetParent.id == 'map'
-    obj = obj.offsetParent
-  x: x
-  y: y
-
-
 class Collision extends Base
 
   defaults:
-    elements:
-      solid: '#map .solid'
+    element:
+      solids: '#map .solid'
 
 
   constructor: (options, @mapPosition) ->
     super
-    @elements =
-      solid: document.querySelectorAll @options.elements.solid
+    solidElements = document.querySelectorAll @options.element.solids
+    solidElementsLength = solidElements.length
+    solidIterator = 0
 
-    @calcPositions @elements.solid
+    window.solids = new Array length
 
-
-  calcPositions: (el) ->
-    length = el.length
-
-    if length
-      i = 0
-      while i < length
-        current = el[i]
-        current.position = getPosition current
-        i++
-    else
-      el.position = getPosition el
-    return
+    while solidIterator < solidElementsLength
+      solidElement = solidElements[solidIterator]
+      solidElement.setAttribute 'data-index', solidIterator
+      window.solids[solidIterator] = new Solid solidElement
+      solidIterator++
 
 
   # checking the collisions between two elements
   checkBetween: (firstEl, secondEl, shiftX, shiftY) ->
     left = Math.max firstEl.position.x - @mapPosition.x - shiftX, secondEl.position.x
-    right = Math.min firstEl.position.x + firstEl.clientWidth - @mapPosition.x - shiftX, secondEl.position.x + secondEl.clientWidth
+    right = Math.min firstEl.position.x + firstEl.width - @mapPosition.x - shiftX, secondEl.position.x + secondEl.width
     bottom = Math.max firstEl.position.y - @mapPosition.y - shiftY, secondEl.position.y
-    top = Math.min firstEl.position.y + firstEl.clientHeight - @mapPosition.y - shiftY, secondEl.position.y + secondEl.clientHeight
+    top = Math.min firstEl.position.y + firstEl.height - @mapPosition.y - shiftY, secondEl.position.y + secondEl.height
     left < right && bottom < top
 
 
   # checking the collisions between one element and array
-  checkAll: (element, elements = @elements.solid, shiftX, shiftY) ->
+  checkAll: (element, elements = window.solids, shiftX, shiftY) ->
     handle =
       status: false
     length = elements.length - 1
@@ -70,7 +51,7 @@ class Collision extends Base
       if @checkBetween element, elements[i], shiftX, shiftY
         handle =
           status: true
-          element: elements[i]
+          solid: elements[i]
         break
       else if i is length
         break
