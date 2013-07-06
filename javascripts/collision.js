@@ -11,75 +11,49 @@ Provides two very useful methods: checkBetween & checkAll.
 
 
 (function() {
-  var Collision, getPosition,
+  var Collision,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  getPosition = function(obj) {
-    var x, y;
-    x = 0;
-    y = 0;
-    while (obj.offsetParent) {
-      x += obj.offsetLeft;
-      y += obj.offsetTop;
-      if (obj.offsetParent.id === 'map') {
-        break;
-      }
-      obj = obj.offsetParent;
-    }
-    return {
-      x: x,
-      y: y
-    };
-  };
 
   Collision = (function(_super) {
 
     __extends(Collision, _super);
 
     Collision.prototype.defaults = {
-      elements: {
-        solid: '#map .solid'
+      element: {
+        solids: '#map .solid'
       }
     };
 
     function Collision(options, mapPosition) {
+      var solidElement, solidElements, solidElementsLength, solidIterator;
       this.mapPosition = mapPosition;
       Collision.__super__.constructor.apply(this, arguments);
-      this.elements = {
-        solid: document.querySelectorAll(this.options.elements.solid)
-      };
-      this.calcPositions(this.elements.solid);
-    }
-
-    Collision.prototype.calcPositions = function(el) {
-      var current, i, length;
-      length = el.length;
-      if (length) {
-        i = 0;
-        while (i < length) {
-          current = el[i];
-          current.position = getPosition(current);
-          i++;
-        }
-      } else {
-        el.position = getPosition(el);
+      solidElements = document.querySelectorAll(this.options.element.solids);
+      solidElementsLength = solidElements.length;
+      solidIterator = 0;
+      window.solids = new Array(length);
+      while (solidIterator < solidElementsLength) {
+        solidElement = solidElements[solidIterator];
+        solidElement.setAttribute('data-index', solidIterator);
+        window.solids[solidIterator] = new Solid(solidElement);
+        solidIterator++;
       }
-    };
+    }
 
     Collision.prototype.checkBetween = function(firstEl, secondEl, shiftX, shiftY) {
       var bottom, left, right, top;
       left = Math.max(firstEl.position.x - this.mapPosition.x - shiftX, secondEl.position.x);
-      right = Math.min(firstEl.position.x + firstEl.clientWidth - this.mapPosition.x - shiftX, secondEl.position.x + secondEl.clientWidth);
+      right = Math.min(firstEl.position.x + firstEl.width - this.mapPosition.x - shiftX, secondEl.position.x + secondEl.width);
       bottom = Math.max(firstEl.position.y - this.mapPosition.y - shiftY, secondEl.position.y);
-      top = Math.min(firstEl.position.y + firstEl.clientHeight - this.mapPosition.y - shiftY, secondEl.position.y + secondEl.clientHeight);
+      top = Math.min(firstEl.position.y + firstEl.height - this.mapPosition.y - shiftY, secondEl.position.y + secondEl.height);
       return left < right && bottom < top;
     };
 
     Collision.prototype.checkAll = function(element, elements, shiftX, shiftY) {
       var handle, i, length;
       if (elements == null) {
-        elements = this.elements.solid;
+        elements = window.solids;
       }
       handle = {
         status: false
@@ -90,7 +64,7 @@ Provides two very useful methods: checkBetween & checkAll.
         if (this.checkBetween(element, elements[i], shiftX, shiftY)) {
           handle = {
             status: true,
-            element: elements[i]
+            solid: elements[i]
           };
           break;
         } else if (i === length) {

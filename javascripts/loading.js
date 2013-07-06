@@ -35,7 +35,7 @@ Loads files via yepnope.js.
       }
     };
 
-    Loading.prototype.files = ['javascripts/buzz.js', 'javascripts/keypress.js', 'javascripts/character.js', 'javascripts/collision.js', 'javascripts/control.js', 'javascripts/platform.js', 'javascripts/moving-platform.js', 'javascripts/map.js', 'javascripts/game.js', 'preload!images/backgrounds/base-1.jpg', 'preload!images/backgrounds/base-2.jpg', 'preload!images/backgrounds/base-3.jpg', 'preload!images/backgrounds/border.png', 'preload!images/backgrounds/box.png', 'preload!images/backgrounds/door-leafs.png', 'preload!images/backgrounds/grating.png', 'preload!images/backgrounds/lighting.png', 'preload!images/backgrounds/pipelines.png', 'preload!images/backgrounds/platform.png', 'preload!images/backgrounds/trellis.png', 'preload!images/backgrounds/wall-clear.png', 'preload!images/backgrounds/wall-door.png', 'preload!images/backgrounds/wall.png', 'preload!images/character-sprites.png', 'preload!images/controls-sprites.png', 'preload!images/icons.png', 'preload!images/info-icon.png', 'stylesheets/character-sprites.css', 'stylesheets/game.css'];
+    Loading.prototype.files = ['javascripts/buzz.js', 'javascripts/keypress.js', 'javascripts/solid.js', 'javascripts/character.js', 'javascripts/collision.js', 'javascripts/control.js', 'javascripts/platform.js', 'javascripts/moving-platform.js', 'javascripts/map.js', 'javascripts/game.js', 'preload!images/backgrounds/base-1.jpg', 'preload!images/backgrounds/base-2.jpg', 'preload!images/backgrounds/base-3.jpg', 'preload!images/backgrounds/border.png', 'preload!images/backgrounds/box.png', 'preload!images/backgrounds/door-leafs.png', 'preload!images/backgrounds/grating.png', 'preload!images/backgrounds/lighting.png', 'preload!images/backgrounds/pipelines.png', 'preload!images/backgrounds/platform.png', 'preload!images/backgrounds/trellis.png', 'preload!images/backgrounds/wall-clear.png', 'preload!images/backgrounds/wall-door.png', 'preload!images/backgrounds/wall.png', 'preload!images/character-sprites.png', 'preload!images/controls-sprites.png', 'preload!images/icons.png', 'preload!images/info-icon.png', 'stylesheets/character-sprites.css', 'stylesheets/game.css'];
 
     function Loading() {
       this.features = ['multiplebgs', 'opacity', 'rgba', 'cssanimations', 'csstransitions', 'hascsstransforms3d', 'raf'];
@@ -44,7 +44,7 @@ Loads files via yepnope.js.
       this.menu = document.getElementById('menu');
       this.featuresTest = document.getElementById('features-test');
       this.errorOccured = document.getElementById('error-occured');
-      this.elements = {
+      this.element = {
         featuresTest: {
           progressBar: this.featuresTest.querySelector('.progressBar'),
           description: this.featuresTest.querySelector('.description')
@@ -55,7 +55,7 @@ Loads files via yepnope.js.
         externalLinks: document.querySelectorAll('a[rel="external"]'),
         musicVolume: document.querySelectorAll('.musicVolume')
       };
-      this.setText(this.elements.featuresTest.description, this.message.loadingDescription.checkingBrowser);
+      this.setText(this.element.featuresTest.description, this.message.loadingDescription.checkingBrowser);
       this.externalLinks();
       if (Modernizr.touch) {
         this.preventScrolling();
@@ -70,7 +70,7 @@ Loads files via yepnope.js.
 
     Loading.prototype.externalLinks = function() {
       var link, _i, _len, _ref;
-      _ref = this.elements.externalLinks;
+      _ref = this.element.externalLinks;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         link = _ref[_i];
         link.target = '_blank';
@@ -121,7 +121,7 @@ Loads files via yepnope.js.
 
     Loading.prototype.hideMusicVolume = function() {
       var element, _i, _len, _ref;
-      _ref = this.elements.musicVolume;
+      _ref = this.element.musicVolume;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         element = _ref[_i];
         element.style.display = 'none';
@@ -153,14 +153,14 @@ Loads files via yepnope.js.
       } else {
         this.progress += this.progressStep;
       }
-      this.elements.featuresTest.progressBar.style.width = "" + this.progress + "%";
+      this.element.featuresTest.progressBar.style.width = "" + this.progress + "%";
     };
 
     Loading.prototype.showProblems = function(type, detail) {
       var _this = this;
       switch (type) {
         case 'feature':
-          this.elements.errorOccured.description.innerHTML = "Your browser doesn't support <strong>" + this.message.feature[detail] + "</strong>.<br />Update your browser or install new to start the game.";
+          this.element.errorOccured.description.innerHTML = "Your browser doesn't support <strong>" + this.message.feature[detail] + "</strong>.<br />Update your browser or install new to start the game.";
       }
       this.fadeOut(this.featuresTest);
       setTimeout(function() {
@@ -170,7 +170,7 @@ Loads files via yepnope.js.
 
     Loading.prototype.loadFiles = function() {
       var _this = this;
-      this.setText(this.elements.featuresTest.description, this.message.loadingDescription.loadingGame);
+      this.setText(this.element.featuresTest.description, this.message.loadingDescription.loadingGame);
       Modernizr.load([
         {
           test: Modernizr.classlist,

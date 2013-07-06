@@ -23,7 +23,7 @@ class Game extends Base
   constructor: (options, @menu) ->
     super
     @paused = null
-    @elements =
+    @element =
       game:
         overlay: document.querySelector @options.game.overlay
         start: document.querySelector @options.game.start
@@ -40,7 +40,7 @@ class Game extends Base
 
 
   start: ->
-    @fadeOut @elements.game.overlay
+    @fadeOut @element.game.overlay
     @fadeOut @menu.element.main.element
 
     if @paused is null
@@ -52,7 +52,7 @@ class Game extends Base
       @map.add @character #add character mainObj to map
 
     setTimeout(=>
-      @setText @elements.game.start, 'Resume'
+      @setText @element.game.start, 'Resume'
     , 600)
 
     @paused = false
@@ -82,7 +82,7 @@ class Game extends Base
     @map.clearAnimation 'left'
 
     setTimeout(=>
-      @setText @elements.game.start, 'Start game'
+      @setText @element.game.start, 'Start game'
       @map.draw()
     , 1000)
     return
@@ -95,7 +95,7 @@ class Game extends Base
     @setText @menu.element.theEnd.header, 'The end'
     @menu.element.theEnd.congratulations.style.display = 'block'
 
-    @fadeIn @elements.game.overlay
+    @fadeIn @element.game.overlay
     @fadeIn @menu.element.section.credits
     @flexcrollContent @menu.element.section.credits
     return
@@ -116,7 +116,7 @@ class Game extends Base
   aboutMe: ->
     @pause()
     @reset()
-    @fadeIn @elements.game.overlay
+    @fadeIn @element.game.overlay
     @fadeIn @menu.element.section.aboutMe
     @flexcrollContent @menu.element.section.aboutMe
     return

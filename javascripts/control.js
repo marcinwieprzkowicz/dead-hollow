@@ -20,7 +20,7 @@ Handles keyboard and touch events.
 
     Control.prototype.defaults = {
       touchItems: '.touch',
-      controls: {
+      control: {
         backward: '.control .backward',
         forward: '.control .forward',
         buttonB: '.control .buttonB',
@@ -34,12 +34,12 @@ Handles keyboard and touch events.
       this.map = map;
       Control.__super__.constructor.apply(this, arguments);
       this.touchItems = document.querySelectorAll(this.options.touchItems);
-      this.controls = {
-        backward: document.querySelector(this.options.controls.backward),
-        forward: document.querySelector(this.options.controls.forward),
-        buttonB: document.querySelector(this.options.controls.buttonB),
-        buttonA: document.querySelector(this.options.controls.buttonA),
-        pause: document.querySelector(this.options.controls.pause)
+      this.control = {
+        backward: document.querySelector(this.options.control.backward),
+        forward: document.querySelector(this.options.control.forward),
+        buttonB: document.querySelector(this.options.control.buttonB),
+        buttonA: document.querySelector(this.options.control.buttonA),
+        pause: document.querySelector(this.options.control.pause)
       };
     }
 
@@ -51,14 +51,14 @@ Handles keyboard and touch events.
           keys: 'right',
           on_keydown: function() {
             var interval;
-            _this.controls.forward.classList.add('touched');
-            _this.controls.backward.classList.remove('touched');
+            _this.control.forward.classList.add('touched');
+            _this.control.backward.classList.remove('touched');
             if (!_this.game.paused) {
               _this.map.clearAnimation('right');
               _this.map.clearAnimation('left');
               interval = setInterval(function() {
                 var collision;
-                collision = _this.map.collision.checkAll(_this.map.objs.character.domEl, null, -_this.map.options.animation.shift, 0);
+                collision = _this.map.collision.checkAll(_this.map.objs.character.solid, null, -_this.map.options.animation.shift, 0);
                 if (!collision.status && !_this.map.animations.right.stopped) {
                   return _this.map.move(-_this.map.options.animation.shift, 0);
                 }
@@ -68,7 +68,7 @@ Handles keyboard and touch events.
             }
           },
           on_keyup: function() {
-            _this.controls.forward.classList.remove('touched');
+            _this.control.forward.classList.remove('touched');
             _this.map.clearAnimation('right');
             if (_this.map.animations.left.interval == null) {
               return _this.map.objs.character.stop('run');
@@ -80,14 +80,14 @@ Handles keyboard and touch events.
           keys: 'left',
           on_keydown: function() {
             var interval;
-            _this.controls.backward.classList.add('touched');
-            _this.controls.forward.classList.remove('touched');
+            _this.control.backward.classList.add('touched');
+            _this.control.forward.classList.remove('touched');
             if (!_this.game.paused) {
               _this.map.clearAnimation('right');
               _this.map.clearAnimation('left');
               interval = setInterval(function() {
                 var collision;
-                collision = _this.map.collision.checkAll(_this.map.objs.character.domEl, null, _this.map.options.animation.shift, 0);
+                collision = _this.map.collision.checkAll(_this.map.objs.character.solid, null, _this.map.options.animation.shift, 0);
                 if (!collision.status && !_this.map.animations.left.stopped) {
                   return _this.map.move(_this.map.options.animation.shift, 0);
                 }
@@ -97,7 +97,7 @@ Handles keyboard and touch events.
             }
           },
           on_keyup: function() {
-            _this.controls.backward.classList.remove('touched');
+            _this.control.backward.classList.remove('touched');
             _this.map.clearAnimation('left');
             if (_this.map.animations.right.interval == null) {
               return _this.map.objs.character.stop('run');
@@ -109,7 +109,7 @@ Handles keyboard and touch events.
           keys: 'up',
           on_keydown: function() {
             var interval, t;
-            _this.controls.buttonB.classList.add('touched');
+            _this.control.buttonB.classList.add('touched');
             if (!(_this.map.animations.up.interval != null) && !_this.map.animations.up.stopped) {
               t = 0;
               interval = setInterval(function() {
@@ -124,28 +124,31 @@ Handles keyboard and touch events.
             }
           },
           on_keyup: function() {
-            return _this.controls.buttonB.classList.remove('touched');
+            return _this.control.buttonB.classList.remove('touched');
           },
           prevent_repeat: true,
           prevent_default: true
         }, {
           keys: 'space',
           on_keydown: function() {
-            var bgWall, classList, doorCollision, fgWall, solidCollision, wallClass;
-            _this.controls.buttonA.classList.add('touched');
+            var bgWall, doorCollision, fgWall, solid, solidCollision, solidElement, solidIndex, wallClass;
+            _this.control.buttonA.classList.add('touched');
             if (!_this.game.paused) {
-              doorCollision = _this.map.collision.checkAll(_this.map.objs.character.domEl, _this.map.elements.door, 0, 0);
+              doorCollision = _this.map.collision.checkAll(_this.map.objs.character.solid, _this.map.solid.doors, 0, 0);
               if (doorCollision.status) {
-                classList = doorCollision.element.getAttribute('class');
-                wallClass = classList.match(/wall-\d+/g)[0];
+                wallClass = doorCollision.solid.element.className.match(/wall-\d+/g)[0];
                 bgWall = document.querySelector("#background ." + wallClass);
                 fgWall = document.querySelector("#foreground ." + wallClass);
-                solidCollision = _this.map.collision.checkBetween(_this.map.objs.character.domEl, fgWall.querySelector('.solid'), 0, _this.map.options.doorsRadius);
-                if (!doorCollision.element.classList.contains('pending') && !solidCollision) {
+                solidElement = fgWall.querySelector('.solid');
+                solidIndex = parseInt(solidElement.getAttribute('data-index'), 10);
+                solid = window.solids[solidIndex];
+                solidCollision = _this.map.collision.checkBetween(_this.map.objs.character.solid, solid, 0, _this.map.options.doorsRadius);
+                if (!doorCollision.solid.element.classList.contains('pending') && !solidCollision.status) {
                   bgWall.classList.toggle('open');
                   bgWall.classList.add('pending');
                   fgWall.classList.toggle('open');
                   fgWall.classList.add('pending');
+                  solid.getHeightAgain();
                   if (_this.game.audio.openingDoors.getVolume() > 0) {
                     return _this.game.audio.openingDoors.play();
                   }
@@ -154,14 +157,14 @@ Handles keyboard and touch events.
             }
           },
           on_keyup: function() {
-            return _this.controls.buttonA.classList.remove('touched');
+            return _this.control.buttonA.classList.remove('touched');
           },
           prevent_repeat: true,
           prevent_default: true
         }, {
           keys: 'escape',
           on_keydown: function() {
-            _this.controls.pause.classList.add('touched');
+            _this.control.pause.classList.add('touched');
             if (_this.game.paused) {
               return _this.game.start();
             } else {
@@ -169,14 +172,14 @@ Handles keyboard and touch events.
             }
           },
           on_keyup: function() {
-            return _this.controls.pause.classList.remove('touched');
+            return _this.control.pause.classList.remove('touched');
           },
           prevent_repeat: true,
           prevent_default: true
         }, {
           keys: 'p',
           on_keydown: function() {
-            _this.controls.pause.classList.add('touched');
+            _this.control.pause.classList.add('touched');
             if (_this.game.paused) {
               return _this.game.start();
             } else {
@@ -184,7 +187,7 @@ Handles keyboard and touch events.
             }
           },
           on_keyup: function() {
-            return _this.controls.pause.classList.remove('touched');
+            return _this.control.pause.classList.remove('touched');
           },
           prevent_repeat: true,
           prevent_default: true
@@ -206,76 +209,76 @@ Handles keyboard and touch events.
     Control.prototype.addControlEvents = function() {
       var controller, _i, _len, _ref,
         _this = this;
-      _ref = this.controls;
+      _ref = this.control;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         controller = _ref[_i];
         this.preventLongPressMenu(controller);
       }
-      this.addEvent(this.controls.backward, 'touchstart', function() {
+      this.addEvent(this.control.backward, 'touchstart', function() {
         document.body.onkeydown({
           keyCode: 37
         });
-        return _this.controls.backward.classList.add('touched');
+        return _this.control.backward.classList.add('touched');
       });
-      this.addEvent(this.controls.backward, 'touchend', function() {
+      this.addEvent(this.control.backward, 'touchend', function() {
         document.body.onkeyup({
           keyCode: 37
         });
-        return _this.controls.backward.classList.remove('touched');
+        return _this.control.backward.classList.remove('touched');
       });
-      this.addEvent(this.controls.forward, 'touchstart', function() {
+      this.addEvent(this.control.forward, 'touchstart', function() {
         document.body.onkeydown({
           keyCode: 39
         });
-        return _this.controls.forward.classList.add('touched');
+        return _this.control.forward.classList.add('touched');
       });
-      this.addEvent(this.controls.forward, 'touchend', function() {
+      this.addEvent(this.control.forward, 'touchend', function() {
         document.body.onkeyup({
           keyCode: 39
         });
-        return _this.controls.forward.classList.remove('touched');
+        return _this.control.forward.classList.remove('touched');
       });
-      this.addEvent(this.controls.buttonB, 'touchstart', function() {
+      this.addEvent(this.control.buttonB, 'touchstart', function() {
         document.body.onkeydown({
           keyCode: 38
         });
-        return _this.controls.buttonB.classList.add('touched');
+        return _this.control.buttonB.classList.add('touched');
       });
-      this.addEvent(this.controls.buttonB, 'touchend', function() {
+      this.addEvent(this.control.buttonB, 'touchend', function() {
         document.body.onkeyup({
           keyCode: 38
         });
-        return _this.controls.buttonB.classList.remove('touched');
+        return _this.control.buttonB.classList.remove('touched');
       });
-      this.addEvent(this.controls.buttonA, 'touchstart', function() {
+      this.addEvent(this.control.buttonA, 'touchstart', function() {
         document.body.onkeydown({
           keyCode: 32
         });
-        return _this.controls.buttonA.classList.add('touched');
+        return _this.control.buttonA.classList.add('touched');
       });
-      this.addEvent(this.controls.buttonA, 'touchend', function() {
+      this.addEvent(this.control.buttonA, 'touchend', function() {
         document.body.onkeyup({
           keyCode: 32
         });
-        return _this.controls.buttonA.classList.remove('touched');
+        return _this.control.buttonA.classList.remove('touched');
       });
-      this.addEvent(this.controls.pause, 'touchstart', function() {
+      this.addEvent(this.control.pause, 'touchstart', function() {
         document.body.onkeydown({
           keyCode: 27
         });
-        return _this.controls.pause.classList.add('touched');
+        return _this.control.pause.classList.add('touched');
       });
-      this.addEvent(this.controls.pause, 'touchend', function() {
+      this.addEvent(this.control.pause, 'touchend', function() {
         document.body.onkeyup({
           keyCode: 27
         });
-        return _this.controls.pause.classList.remove('touched');
+        return _this.control.pause.classList.remove('touched');
       });
     };
 
     Control.prototype.pause = function() {
       this.game.pause();
-      this.fadeIn(this.game.elements.game.overlay);
+      this.fadeIn(this.game.element.game.overlay);
       this.fadeIn(this.game.menu.element.main.element);
     };
 

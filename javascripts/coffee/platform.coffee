@@ -1,3 +1,12 @@
+###
+
+Platform CoffeeScript class.
+
+@author: Marcin Wieprzkowicz (marcin.wieprzkowicz@gmail.com)
+
+###
+
+
 class Platform
 
   defaults:
@@ -6,18 +15,19 @@ class Platform
     direction: 'normal' # or alternate
 
 
-  constructor: (platform) ->
-    offset = platform.getAttribute 'data-offset'
-    range = platform.getAttribute 'data-range'
+  constructor: (element) ->
+    offset = element.getAttribute 'data-offset'
+    range = element.getAttribute 'data-range'
 
-    @element = platform
-    @child = platform.firstElementChild
+    @element = element
     @direction = @defaults.direction
     @offset = if offset? then parseInt(offset, 10) else @defaults.offset
     @range = if range? then parseInt(range, 10) else @defaults.range
-    @width = platform.clientWidth
+    @width = element.clientWidth
 
-    @child.position.x += @offset
+    solidIndex = parseInt element.firstElementChild.getAttribute('data-index'), 10
+    @solid = window.solids[solidIndex]
+    @solid.position.x += @offset
 
 
 (exports ? this).Platform = Platform

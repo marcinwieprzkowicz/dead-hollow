@@ -33,7 +33,7 @@ and in the darkness bind them."
       this.menu = menu;
       Game.__super__.constructor.apply(this, arguments);
       this.paused = null;
-      this.elements = {
+      this.element = {
         game: {
           overlay: document.querySelector(this.options.game.overlay),
           start: document.querySelector(this.options.game.start)
@@ -50,7 +50,7 @@ and in the darkness bind them."
 
     Game.prototype.start = function() {
       var _this = this;
-      this.fadeOut(this.elements.game.overlay);
+      this.fadeOut(this.element.game.overlay);
       this.fadeOut(this.menu.element.main.element);
       if (this.paused === null) {
         this.control.addKeyboardEvents();
@@ -61,7 +61,7 @@ and in the darkness bind them."
         this.map.add(this.character);
       }
       setTimeout(function() {
-        return _this.setText(_this.elements.game.start, 'Resume');
+        return _this.setText(_this.element.game.start, 'Resume');
       }, 600);
       this.paused = false;
       this.character.clear();
@@ -86,7 +86,7 @@ and in the darkness bind them."
       this.map.clearAnimation('right');
       this.map.clearAnimation('left');
       setTimeout(function() {
-        _this.setText(_this.elements.game.start, 'Start game');
+        _this.setText(_this.element.game.start, 'Start game');
         return _this.map.draw();
       }, 1000);
     };
@@ -96,7 +96,7 @@ and in the darkness bind them."
       this.reset();
       this.setText(this.menu.element.theEnd.header, 'The end');
       this.menu.element.theEnd.congratulations.style.display = 'block';
-      this.fadeIn(this.elements.game.overlay);
+      this.fadeIn(this.element.game.overlay);
       this.fadeIn(this.menu.element.section.credits);
       this.flexcrollContent(this.menu.element.section.credits);
     };
@@ -115,7 +115,7 @@ and in the darkness bind them."
     Game.prototype.aboutMe = function() {
       this.pause();
       this.reset();
-      this.fadeIn(this.elements.game.overlay);
+      this.fadeIn(this.element.game.overlay);
       this.fadeIn(this.menu.element.section.aboutMe);
       this.flexcrollContent(this.menu.element.section.aboutMe);
     };

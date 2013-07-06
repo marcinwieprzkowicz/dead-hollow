@@ -27,25 +27,24 @@ Creates special type of platforms - moving platforms (Wow! I know, impressive, i
     };
 
     function MovingPlatform(options) {
-      var platform, _i, _len, _ref;
+      var index, movingPlatformIterator, movingPlatformLength, platform;
       MovingPlatform.__super__.constructor.apply(this, arguments);
-      this.elements = {
+      this.element = {
         movingPlatform: document.querySelectorAll(this.options.movingPlatform),
         solid: document.querySelectorAll(this.options.solid)
       };
-      this.platform = [];
-      _ref = this.elements.movingPlatform;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        platform = _ref[_i];
-        this.initPlatform(platform);
+      movingPlatformLength = this.element.movingPlatform.length;
+      movingPlatformIterator = 0;
+      this.platform = new Array(movingPlatformLength);
+      this.solid = new Array(movingPlatformLength);
+      while (movingPlatformIterator < movingPlatformLength) {
+        platform = this.element.movingPlatform[movingPlatformIterator];
+        index = this.getIndex(platform);
+        this.platform[index] = new Platform(platform);
+        this.solid[movingPlatformIterator] = this.platform[index].solid;
+        movingPlatformIterator++;
       }
     }
-
-    MovingPlatform.prototype.initPlatform = function(platform) {
-      var index;
-      index = this.getIndex(platform);
-      this.platform[index] = new Platform(platform);
-    };
 
     MovingPlatform.prototype.draw = function() {
       var platform, _i, _len, _ref;
@@ -61,10 +60,10 @@ Creates special type of platforms - moving platforms (Wow! I know, impressive, i
     MovingPlatform.prototype.move = function(platform) {
       if (platform.direction === 'normal') {
         platform.offset += this.options.animation.shift;
-        platform.child.position.x += this.options.animation.shift;
+        platform.solid.position.x += this.options.animation.shift;
       } else {
         platform.offset -= this.options.animation.shift;
-        platform.child.position.x -= this.options.animation.shift;
+        platform.solid.position.x -= this.options.animation.shift;
       }
       if (platform.offset === 0) {
         platform.direction = 'normal';
