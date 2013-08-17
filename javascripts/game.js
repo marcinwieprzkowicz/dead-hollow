@@ -40,12 +40,6 @@ and in the darkness bind them."
         }
       };
       this.initAudio();
-      this.map = new Map({}, this);
-      this.character = new Character({
-        id: 'character',
-        klass: 'visualization'
-      }, this.audio);
-      this.control = new Control({}, this, this.map);
     }
 
     Game.prototype.start = function() {
@@ -53,12 +47,18 @@ and in the darkness bind them."
       this.fadeOut(this.element.game.overlay);
       this.fadeOut(this.menu.element.main.element);
       if (this.paused === null) {
+        this.map = new Map({}, this);
+        this.character = new Character({
+          id: 'character',
+          klass: 'visualization'
+        }, this.audio);
+        this.map.add(this.character);
+        this.control = new Control({}, this, this.map);
         this.control.addKeyboardEvents();
         if (Modernizr.touch) {
           this.control.showTouchItems();
           this.control.addControlEvents();
         }
-        this.map.add(this.character);
       }
       setTimeout(function() {
         return _this.setText(_this.element.game.start, 'Resume');

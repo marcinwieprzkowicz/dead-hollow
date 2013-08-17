@@ -41,7 +41,7 @@ class Control extends Base
     ,
       keys: 'left'
       on_keydown: => @goLeft()
-      on_keyup: => @clearRight()
+      on_keyup: => @clearLeft()
       prevent_repeat: true
       prevent_default: true
     ,

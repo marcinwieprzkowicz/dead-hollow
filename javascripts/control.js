@@ -63,7 +63,7 @@ Handles keyboard and touch events.
             return _this.goLeft();
           },
           on_keyup: function() {
-            return _this.clearRight();
+            return _this.clearLeft();
           },
           prevent_repeat: true,
           prevent_default: true
