@@ -29,14 +29,6 @@ class Game extends Base
         start: document.querySelector @options.game.start
 
     @initAudio()
-    @map = new Map({}, this)
-    @character = new Character(
-      id: 'character'
-      klass: 'visualization'
-    ,
-      @audio
-    )
-    @control = new Control {}, this, @map
 
 
   start: ->
@@ -44,12 +36,20 @@ class Game extends Base
     @fadeOut @menu.element.main.element
 
     if @paused is null
+      @map = new Map {}, this
+      @character = new Character(
+        id: 'character'
+        klass: 'visualization'
+      ,
+        @audio
+      )
+      @map.add @character #add character mainObj to map
+
+      @control = new Control {}, this, @map
       @control.addKeyboardEvents()
       if Modernizr.touch
         @control.showTouchItems()
         @control.addControlEvents()
-
-      @map.add @character #add character mainObj to map
 
     setTimeout(=>
       @setText @element.game.start, 'Resume'
