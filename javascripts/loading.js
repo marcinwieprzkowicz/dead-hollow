@@ -30,15 +30,14 @@ Loads files via yepnope.js.
         rgba: 'RGBA',
         cssanimations: 'CSS animations',
         csstransitions: 'CSS transitions',
-        hascsstransforms3d: 'CSS transforms 3D',
-        raf: 'RequestAnimationFrame'
+        hascsstransforms3d: 'CSS transforms 3D'
       }
     };
 
-    Loading.prototype.files = ['javascripts/buzz.js', 'javascripts/keypress.js', 'javascripts/solid.js', 'javascripts/character.js', 'javascripts/collision.js', 'javascripts/control.js', 'javascripts/platform.js', 'javascripts/moving-platform.js', 'javascripts/map.js', 'javascripts/game.js', 'preload!images/backgrounds/base-1.jpg', 'preload!images/backgrounds/base-2.jpg', 'preload!images/backgrounds/base-3.jpg', 'preload!images/backgrounds/border.png', 'preload!images/backgrounds/box.png', 'preload!images/backgrounds/door-leafs.png', 'preload!images/backgrounds/grating.png', 'preload!images/backgrounds/lighting.png', 'preload!images/backgrounds/pipelines.png', 'preload!images/backgrounds/platform.png', 'preload!images/backgrounds/trellis.png', 'preload!images/backgrounds/wall-clear.png', 'preload!images/backgrounds/wall-door.png', 'preload!images/backgrounds/wall.png', 'preload!images/character-sprites.png', 'preload!images/controls-sprites.png', 'preload!images/icons.png', 'preload!images/info-icon.png', 'stylesheets/character-sprites.css', 'stylesheets/game.css'];
+    Loading.prototype.files = ['javascripts/lib/buzz.js', 'javascripts/lib/keypress.js', 'javascripts/solid.js', 'javascripts/character.js', 'javascripts/collision.js', 'javascripts/control.js', 'javascripts/platform.js', 'javascripts/moving-platform.js', 'javascripts/map.js', 'javascripts/game.js', 'preload!images/backgrounds/base-1.jpg', 'preload!images/backgrounds/base-2.jpg', 'preload!images/backgrounds/base-3.jpg', 'preload!images/backgrounds/border.png', 'preload!images/backgrounds/box.png', 'preload!images/backgrounds/door-leafs.png', 'preload!images/backgrounds/grating.png', 'preload!images/backgrounds/lighting.png', 'preload!images/backgrounds/pipelines.png', 'preload!images/backgrounds/platform.png', 'preload!images/backgrounds/trellis.png', 'preload!images/backgrounds/wall-clear.png', 'preload!images/backgrounds/wall-door.png', 'preload!images/backgrounds/wall.png', 'preload!images/character-sprites.png', 'preload!images/controls-sprites.png', 'preload!images/icons.png', 'preload!images/info-icon.png', 'stylesheets/character-sprites.css', 'stylesheets/game.css'];
 
     function Loading() {
-      this.features = ['multiplebgs', 'opacity', 'rgba', 'cssanimations', 'csstransitions', 'hascsstransforms3d', 'raf'];
+      this.features = ['multiplebgs', 'opacity', 'rgba', 'cssanimations', 'csstransitions', 'hascsstransforms3d'];
       this.progress = 0;
       this.progressStep = Math.round(100 / (this.features.length + this.files.length));
       this.menu = document.getElementById('menu');
@@ -174,14 +173,10 @@ Loads files via yepnope.js.
       Modernizr.load([
         {
           test: Modernizr.classlist,
-          nope: 'javascripts/classList.min.js'
+          nope: 'javascripts/shim/classList.min.js'
         }, {
           test: Modernizr.raf,
-          complete: function() {
-            if (!window.requestAnimationFrame) {
-              return window.requestAnimationFrame = window[Modernizr.prefixed('requestAnimationFrame', window, false)];
-            }
-          }
+          nope: 'javascripts/shim/requestAnimationFrame.js'
         }, {
           test: Modernizr.multiplebgs && Modernizr.opacity && Modernizr.rgba && Modernizr.cssanimations && Modernizr.csstransitions && Modernizr.hascsstransforms3d,
           yep: this.files,

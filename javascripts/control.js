@@ -50,150 +50,147 @@ Handles keyboard and touch events.
         {
           keys: 'right',
           on_keydown: function() {
-            var interval;
-            _this.control.forward.classList.add('touched');
-            _this.control.backward.classList.remove('touched');
-            if (!_this.game.paused) {
-              _this.map.clearAnimation('right');
-              _this.map.clearAnimation('left');
-              interval = setInterval(function() {
-                var collision;
-                collision = _this.map.collision.checkAll(_this.map.objs.character.solid, null, -_this.map.options.animation.shift, 0);
-                if (!collision.status && !_this.map.animations.right.stopped) {
-                  return _this.map.move(-_this.map.options.animation.shift, 0);
-                }
-              }, _this.map.options.animation.duration);
-              _this.map.animations.right.interval = interval;
-              return _this.map.objs.character.move();
-            }
+            return _this.goRight();
           },
           on_keyup: function() {
-            _this.control.forward.classList.remove('touched');
-            _this.map.clearAnimation('right');
-            if (_this.map.animations.left.interval == null) {
-              return _this.map.objs.character.stop('run');
-            }
+            return _this.clearRight();
           },
           prevent_repeat: true,
           prevent_default: true
         }, {
           keys: 'left',
           on_keydown: function() {
-            var interval;
-            _this.control.backward.classList.add('touched');
-            _this.control.forward.classList.remove('touched');
-            if (!_this.game.paused) {
-              _this.map.clearAnimation('right');
-              _this.map.clearAnimation('left');
-              interval = setInterval(function() {
-                var collision;
-                collision = _this.map.collision.checkAll(_this.map.objs.character.solid, null, _this.map.options.animation.shift, 0);
-                if (!collision.status && !_this.map.animations.left.stopped) {
-                  return _this.map.move(_this.map.options.animation.shift, 0);
-                }
-              }, _this.map.options.animation.duration);
-              _this.map.animations.left.interval = interval;
-              return _this.map.objs.character.move(true);
-            }
+            return _this.goLeft();
           },
           on_keyup: function() {
-            _this.control.backward.classList.remove('touched');
-            _this.map.clearAnimation('left');
-            if (_this.map.animations.right.interval == null) {
-              return _this.map.objs.character.stop('run');
-            }
+            return _this.clearRight();
           },
           prevent_repeat: true,
           prevent_default: true
         }, {
           keys: 'up',
           on_keydown: function() {
-            var interval, t;
-            _this.control.buttonB.classList.add('touched');
-            if (!(_this.map.animations.up.interval != null) && !_this.map.animations.up.stopped) {
-              t = 0;
-              interval = setInterval(function() {
-                var y;
-                if (!_this.game.paused) {
-                  y = Math.round(_this.map.objs.character.options.jump.force * _this.map.objs.character.options.jump.sinusAngle - _this.map.options.animation.gravity * t);
-                  _this.map.move(0, y);
-                  return t++;
-                }
-              }, _this.map.options.animation.duration);
-              return _this.map.animations.up.interval = interval;
-            }
-          },
-          on_keyup: function() {
-            return _this.control.buttonB.classList.remove('touched');
+            return _this.goUp();
           },
           prevent_repeat: true,
           prevent_default: true
         }, {
           keys: 'space',
           on_keydown: function() {
-            var bgWall, doorCollision, fgWall, solid, solidCollision, solidElement, solidIndex, wallClass;
-            _this.control.buttonA.classList.add('touched');
-            if (!_this.game.paused) {
-              doorCollision = _this.map.collision.checkAll(_this.map.objs.character.solid, _this.map.solid.doors, 0, 0);
-              if (doorCollision.status) {
-                wallClass = doorCollision.solid.element.className.match(/wall-\d+/g)[0];
-                bgWall = document.querySelector("#background ." + wallClass);
-                fgWall = document.querySelector("#foreground ." + wallClass);
-                solidElement = fgWall.querySelector('.solid');
-                solidIndex = parseInt(solidElement.getAttribute('data-index'), 10);
-                solid = window.solids[solidIndex];
-                solidCollision = _this.map.collision.checkBetween(_this.map.objs.character.solid, solid, 0, _this.map.options.doorsRadius);
-                if (!doorCollision.solid.element.classList.contains('pending') && !solidCollision.status) {
-                  bgWall.classList.toggle('open');
-                  bgWall.classList.add('pending');
-                  fgWall.classList.toggle('open');
-                  fgWall.classList.add('pending');
-                  solid.getHeightAgain();
-                  if (_this.game.audio.openingDoors.getVolume() > 0) {
-                    return _this.game.audio.openingDoors.play();
-                  }
-                }
-              }
-            }
-          },
-          on_keyup: function() {
-            return _this.control.buttonA.classList.remove('touched');
+            return _this.actionButton();
           },
           prevent_repeat: true,
           prevent_default: true
         }, {
           keys: 'escape',
           on_keydown: function() {
-            _this.control.pause.classList.add('touched');
-            if (_this.game.paused) {
-              return _this.game.start();
-            } else {
-              return _this.pause();
-            }
-          },
-          on_keyup: function() {
-            return _this.control.pause.classList.remove('touched');
+            return _this.pause();
           },
           prevent_repeat: true,
           prevent_default: true
         }, {
           keys: 'p',
           on_keydown: function() {
-            _this.control.pause.classList.add('touched');
-            if (_this.game.paused) {
-              return _this.game.start();
-            } else {
-              return _this.pause();
-            }
-          },
-          on_keyup: function() {
-            return _this.control.pause.classList.remove('touched');
+            return _this.pause();
           },
           prevent_repeat: true,
           prevent_default: true
         }
       ];
       keypress.register_many(movements);
+    };
+
+    Control.prototype.goRight = function() {
+      var interval,
+        _this = this;
+      if (!this.game.paused) {
+        this.map.clearAnimation('right');
+        this.map.clearAnimation('left');
+        interval = setInterval(function() {
+          var collision;
+          collision = _this.map.collision.checkAll(_this.map.objs.character.solid, null, -_this.map.options.animation.shift, 0);
+          if (!collision.status && !_this.map.animations.right.stopped) {
+            return _this.map.move(-_this.map.options.animation.shift, 0);
+          }
+        }, this.map.options.animation.duration);
+        this.map.animations.right.interval = interval;
+        this.map.objs.character.move();
+      }
+    };
+
+    Control.prototype.clearRight = function() {
+      this.map.clearAnimation('right');
+      if (this.map.animations.left.interval == null) {
+        this.map.objs.character.stop('run');
+      }
+    };
+
+    Control.prototype.goLeft = function() {
+      var interval,
+        _this = this;
+      if (!this.game.paused) {
+        this.map.clearAnimation('right');
+        this.map.clearAnimation('left');
+        interval = setInterval(function() {
+          var collision;
+          collision = _this.map.collision.checkAll(_this.map.objs.character.solid, null, _this.map.options.animation.shift, 0);
+          if (!collision.status && !_this.map.animations.left.stopped) {
+            return _this.map.move(_this.map.options.animation.shift, 0);
+          }
+        }, this.map.options.animation.duration);
+        this.map.animations.left.interval = interval;
+        this.map.objs.character.move(true);
+      }
+    };
+
+    Control.prototype.clearLeft = function() {
+      this.map.clearAnimation('left');
+      if (this.map.animations.right.interval == null) {
+        this.map.objs.character.stop('run');
+      }
+    };
+
+    Control.prototype.goUp = function() {
+      var interval, t,
+        _this = this;
+      if (!(this.map.animations.up.interval != null) && !this.map.animations.up.stopped) {
+        t = 0;
+        interval = setInterval(function() {
+          var y;
+          if (!_this.game.paused) {
+            y = Math.round(_this.map.objs.character.options.jump.force * _this.map.objs.character.options.jump.sinusAngle - _this.map.options.animation.gravity * t);
+            _this.map.move(0, y);
+            return t++;
+          }
+        }, this.map.options.animation.duration);
+        this.map.animations.up.interval = interval;
+      }
+    };
+
+    Control.prototype.actionButton = function() {
+      var bgWall, doorCollision, fgWall, solid, solidCollision, solidElement, solidIndex, wallClass;
+      if (!this.game.paused) {
+        doorCollision = this.map.collision.checkAll(this.map.objs.character.solid, this.map.solid.doors, 0, 0);
+        if (doorCollision.status) {
+          wallClass = doorCollision.solid.element.className.match(/wall-\d+/g)[0];
+          bgWall = document.querySelector("#background ." + wallClass);
+          fgWall = document.querySelector("#foreground ." + wallClass);
+          solidElement = fgWall.querySelector('.solid');
+          solidIndex = parseInt(solidElement.getAttribute('data-index'), 10);
+          solid = window.solids[solidIndex];
+          solidCollision = this.map.collision.checkBetween(this.map.objs.character.solid, solid, 0, this.map.options.doorsRadius);
+          if (!doorCollision.solid.element.classList.contains('pending') && !solidCollision.status) {
+            bgWall.classList.toggle('open');
+            bgWall.classList.add('pending');
+            fgWall.classList.toggle('open');
+            fgWall.classList.add('pending');
+            solid.getHeightAgain();
+            if (this.game.audio.openingDoors.getVolume() > 0) {
+              return this.game.audio.openingDoors.play();
+            }
+          }
+        }
+      }
     };
 
     Control.prototype.showTouchItems = function() {
@@ -277,9 +274,13 @@ Handles keyboard and touch events.
     };
 
     Control.prototype.pause = function() {
-      this.game.pause();
-      this.fadeIn(this.game.element.game.overlay);
-      this.fadeIn(this.game.menu.element.main.element);
+      if (this.game.paused) {
+        this.game.start();
+      } else {
+        this.game.pause();
+        this.fadeIn(this.game.element.game.overlay);
+        this.fadeIn(this.game.menu.element.main.element);
+      }
     };
 
     return Control;

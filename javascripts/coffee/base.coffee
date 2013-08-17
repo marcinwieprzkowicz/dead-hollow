@@ -38,6 +38,7 @@ class Base
     e
 
 
+  # to do: fix this!
   preventLongPressMenu: (element) ->
     element.ontouchstart = @stop
     element.ontouchmove = @stop

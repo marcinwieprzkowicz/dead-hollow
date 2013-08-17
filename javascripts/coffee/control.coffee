@@ -34,120 +34,125 @@ class Control extends Base
   addKeyboardEvents: ->
     movements = [
       keys: 'right'
-      on_keydown: =>
-        @control.forward.classList.add 'touched'
-        @control.backward.classList.remove 'touched'
-        unless @game.paused
-          @map.clearAnimation 'right'
-          @map.clearAnimation 'left'
-
-          interval = setInterval(=>
-            collision = @map.collision.checkAll @map.objs.character.solid, null, -@map.options.animation.shift, 0
-
-            @map.move -@map.options.animation.shift, 0 if !collision.status && !@map.animations.right.stopped
-          , @map.options.animation.duration)
-
-          @map.animations.right.interval = interval
-          @map.objs.character.move()
-      on_keyup: =>
-        @control.forward.classList.remove 'touched'
-        @map.clearAnimation 'right'
-        @map.objs.character.stop 'run' unless @map.animations.left.interval?
+      on_keydown: => @goRight()
+      on_keyup: => @clearRight()
       prevent_repeat: true
       prevent_default: true
     ,
       keys: 'left'
-      on_keydown: =>
-        @control.backward.classList.add 'touched'
-        @control.forward.classList.remove 'touched'
-        unless @game.paused
-          @map.clearAnimation 'right'
-          @map.clearAnimation 'left'
-
-          interval = setInterval(=>
-            collision = @map.collision.checkAll @map.objs.character.solid, null, @map.options.animation.shift, 0
-
-            @map.move @map.options.animation.shift, 0 if !collision.status && !@map.animations.left.stopped
-          , @map.options.animation.duration)
-
-          @map.animations.left.interval = interval
-          @map.objs.character.move true
-      on_keyup: =>
-        @control.backward.classList.remove 'touched'
-        @map.clearAnimation 'left'
-        @map.objs.character.stop 'run' unless @map.animations.right.interval?
+      on_keydown: => @goLeft()
+      on_keyup: => @clearRight()
       prevent_repeat: true
       prevent_default: true
     ,
       keys: 'up'
-      on_keydown: =>
-        @control.buttonB.classList.add 'touched'
-        if !@map.animations.up.interval? && !@map.animations.up.stopped
-          t = 0
-
-          interval = setInterval(=>
-            unless @game.paused
-              y = Math.round(@map.objs.character.options.jump.force * @map.objs.character.options.jump.sinusAngle - @map.options.animation.gravity * t)
-              @map.move 0, y
-              t++
-          , @map.options.animation.duration)
-
-          @map.animations.up.interval = interval
-      on_keyup: =>
-        @control.buttonB.classList.remove 'touched'
+      on_keydown: => @goUp()
       prevent_repeat: true
       prevent_default: true
     ,
       keys: 'space'
-      on_keydown: =>
-        @control.buttonA.classList.add 'touched'
-        unless @game.paused
-          doorCollision = @map.collision.checkAll @map.objs.character.solid, @map.solid.doors, 0, 0
-
-          if doorCollision.status
-            wallClass = doorCollision.solid.element.className.match(/wall-\d+/g)[0]
-
-            bgWall = document.querySelector "#background .#{wallClass}"
-            fgWall = document.querySelector "#foreground .#{wallClass}"
-
-            solidElement = fgWall.querySelector '.solid'
-            solidIndex = parseInt solidElement.getAttribute('data-index'), 10
-            solid = window.solids[solidIndex]
-
-            solidCollision = @map.collision.checkBetween @map.objs.character.solid, solid, 0, @map.options.doorsRadius
-
-            if !doorCollision.solid.element.classList.contains('pending') && !solidCollision.status
-              bgWall.classList.toggle 'open'
-              bgWall.classList.add 'pending'
-              fgWall.classList.toggle 'open'
-              fgWall.classList.add 'pending'
-              solid.getHeightAgain()
-              @game.audio.openingDoors.play() if @game.audio.openingDoors.getVolume() > 0
-      on_keyup: =>
-        @control.buttonA.classList.remove 'touched'
+      on_keydown: => @actionButton()
       prevent_repeat: true
       prevent_default: true
     ,
       keys: 'escape'
-      on_keydown: =>
-        @control.pause.classList.add 'touched'
-        if @game.paused then @game.start() else @pause()
-      on_keyup: =>
-        @control.pause.classList.remove 'touched'
+      on_keydown: => @pause()
       prevent_repeat: true
       prevent_default: true
     ,
       keys: 'p'
-      on_keydown: =>
-        @control.pause.classList.add 'touched'
-        if @game.paused then @game.start() else @pause()
-      on_keyup: =>
-        @control.pause.classList.remove 'touched'
+      on_keydown: => @pause()
       prevent_repeat: true
       prevent_default: true
     ]
+
     keypress.register_many movements
     return
+
+
+  # to do: DRY
+  goRight: ->
+    unless @game.paused
+      @map.clearAnimation 'right'
+      @map.clearAnimation 'left'
+
+      interval = setInterval(=>
+        collision = @map.collision.checkAll @map.objs.character.solid, null, -@map.options.animation.shift, 0
+
+        @map.move -@map.options.animation.shift, 0 if !collision.status && !@map.animations.right.stopped
+      , @map.options.animation.duration)
+
+      @map.animations.right.interval = interval
+      @map.objs.character.move()
+    return
+
+
+  clearRight: ->
+    @map.clearAnimation 'right'
+    @map.objs.character.stop 'run' unless @map.animations.left.interval?
+    return
+
+
+  goLeft: ->
+    unless @game.paused
+      @map.clearAnimation 'right'
+      @map.clearAnimation 'left'
+
+      interval = setInterval(=>
+        collision = @map.collision.checkAll @map.objs.character.solid, null, @map.options.animation.shift, 0
+
+        @map.move @map.options.animation.shift, 0 if !collision.status && !@map.animations.left.stopped
+      , @map.options.animation.duration)
+
+      @map.animations.left.interval = interval
+      @map.objs.character.move true
+    return
+
+
+  clearLeft: ->
+    @map.clearAnimation 'left'
+    @map.objs.character.stop 'run' unless @map.animations.right.interval?
+    return
+
+
+  goUp: ->
+    if !@map.animations.up.interval? && !@map.animations.up.stopped
+      t = 0
+
+      interval = setInterval(=>
+        unless @game.paused
+          y = Math.round(@map.objs.character.options.jump.force * @map.objs.character.options.jump.sinusAngle - @map.options.animation.gravity * t)
+          @map.move 0, y
+          t++
+      , @map.options.animation.duration)
+
+      @map.animations.up.interval = interval
+    return
+
+
+  actionButton: ->
+    unless @game.paused
+      doorCollision = @map.collision.checkAll @map.objs.character.solid, @map.solid.doors, 0, 0
+
+      if doorCollision.status
+        wallClass = doorCollision.solid.element.className.match(/wall-\d+/g)[0]
+
+        bgWall = document.querySelector "#background .#{wallClass}"
+        fgWall = document.querySelector "#foreground .#{wallClass}"
+
+        solidElement = fgWall.querySelector '.solid'
+        solidIndex = parseInt solidElement.getAttribute('data-index'), 10
+        solid = window.solids[solidIndex]
+
+        solidCollision = @map.collision.checkBetween @map.objs.character.solid, solid, 0, @map.options.doorsRadius
+
+        if !doorCollision.solid.element.classList.contains('pending') && !solidCollision.status
+          bgWall.classList.toggle 'open'
+          bgWall.classList.add 'pending'
+          fgWall.classList.toggle 'open'
+          fgWall.classList.add 'pending'
+          solid.getHeightAgain()
+          @game.audio.openingDoors.play() if @game.audio.openingDoors.getVolume() > 0
 
 
   showTouchItems: ->
@@ -222,9 +227,12 @@ class Control extends Base
 
 
   pause: ->
-    @game.pause()
-    @fadeIn @game.element.game.overlay
-    @fadeIn @game.menu.element.main.element
+    if @game.paused
+      @game.start()
+    else
+      @game.pause()
+      @fadeIn @game.element.game.overlay
+      @fadeIn @game.menu.element.main.element
     return
 
 
