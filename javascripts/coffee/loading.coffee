@@ -24,8 +24,8 @@ class Loading extends Base
       hascsstransforms3d: 'CSS transforms 3D'
 
 
-  files: ['javascripts/buzz.js',
-        'javascripts/keypress.js',
+  files: ['javascripts/lib/buzz.js',
+        'javascripts/lib/keypress.js',
         'javascripts/solid.js',
         'javascripts/character.js',
         'javascripts/collision.js',
