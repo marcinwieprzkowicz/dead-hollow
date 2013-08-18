@@ -34,12 +34,21 @@ Loads files via yepnope.js.
       }
     };
 
-    Loading.prototype.files = ['javascripts/lib/buzz.js', 'javascripts/lib/keypress.js', 'javascripts/solid.js', 'javascripts/character.js', 'javascripts/collision.js', 'javascripts/control.js', 'javascripts/platform.js', 'javascripts/moving-platform.js', 'javascripts/map.js', 'javascripts/game.js', 'preload!images/backgrounds/base-1.jpg', 'preload!images/backgrounds/base-2.jpg', 'preload!images/backgrounds/base-3.jpg', 'preload!images/backgrounds/border.png', 'preload!images/backgrounds/box.png', 'preload!images/backgrounds/door-leafs.png', 'preload!images/backgrounds/grating.png', 'preload!images/backgrounds/lighting.png', 'preload!images/backgrounds/pipelines.png', 'preload!images/backgrounds/platform.png', 'preload!images/backgrounds/trellis.png', 'preload!images/backgrounds/wall-clear.png', 'preload!images/backgrounds/wall-door.png', 'preload!images/backgrounds/wall.png', 'preload!images/character-sprites.png', 'preload!images/controls-sprites.png', 'preload!images/icons.png', 'preload!images/info-icon.png', 'stylesheets/character-sprites.css', 'stylesheets/game.css'];
+    Loading.prototype.files = ['javascripts/lib/buzz.js', 'javascripts/lib/keypress.js', 'javascripts/solid.js', 'javascripts/character.js', 'javascripts/collision.js', 'javascripts/control.js', 'javascripts/platform.js', 'javascripts/moving-platform.js', 'javascripts/map.js', 'javascripts/game.js', 'stylesheets/character-sprites.css', 'stylesheets/game.css'];
+
+    Loading.prototype.images = ['images/backgrounds/base-1.jpg', 'images/backgrounds/base-2.jpg', 'images/backgrounds/base-3.jpg', 'images/backgrounds/border.png', 'images/backgrounds/box.png', 'images/backgrounds/door-leafs.png', 'images/backgrounds/grating.png', 'images/backgrounds/lighting.png', 'images/backgrounds/pipelines.png', 'images/backgrounds/platform.png', 'images/backgrounds/trellis.png', 'images/backgrounds/wall-clear.png', 'images/backgrounds/wall-door.png', 'images/backgrounds/wall.png', 'images/character-sprites.png', 'images/controls-sprites.png', 'images/icons.png', 'images/info-icon.png'];
+
+    Loading.prototype.features = ['multiplebgs', 'opacity', 'rgba', 'cssanimations', 'csstransitions', 'hascsstransforms3d'];
 
     function Loading() {
-      this.features = ['multiplebgs', 'opacity', 'rgba', 'cssanimations', 'csstransitions', 'hascsstransforms3d'];
-      this.progress = 0;
-      this.progressStep = Math.round(100 / (this.features.length + this.files.length));
+      var steps;
+      steps = this.features.length + this.files.length + this.images.length;
+      this.progress = {
+        value: 0,
+        loaded: 0,
+        steps: steps,
+        step: parseFloat((100 / steps).toFixed(10))
+      };
       this.menu = document.getElementById('menu');
       this.featuresTest = document.getElementById('features-test');
       this.errorOccured = document.getElementById('error-occured');
@@ -60,7 +69,6 @@ Loads files via yepnope.js.
         this.preventScrolling();
       }
       this.addCustomTests();
-      this.preloadPrefix();
       if (Modernizr.ismobile) {
         this.hideMusicVolume();
       }
@@ -111,13 +119,6 @@ Loads files via yepnope.js.
       });
     };
 
-    Loading.prototype.preloadPrefix = function() {
-      yepnope.addPrefix('preload', function(resource) {
-        resource.noexec = true;
-        return resource;
-      });
-    };
-
     Loading.prototype.hideMusicVolume = function() {
       var element, _i, _len, _ref;
       _ref = this.element.musicVolume;
@@ -128,12 +129,14 @@ Loads files via yepnope.js.
     };
 
     Loading.prototype.checkFeature = function(index) {
-      var property;
+      var featuresLength, property;
       property = this.features[index];
+      featuresLength = this.features.length;
       if (Modernizr.hasOwnProperty(property) && Modernizr[property]) {
         this.updateProgress();
         index++;
-        if (index === this.features.length) {
+        if (index === featuresLength) {
+          this.loadImages();
           this.loadFiles();
         } else {
           this.checkFeature(index);
@@ -143,16 +146,20 @@ Loads files via yepnope.js.
       }
     };
 
-    Loading.prototype.updateProgress = function(complete) {
-      if (complete == null) {
-        complete = false;
+    Loading.prototype.updateProgress = function() {
+      var _this = this;
+      this.progress.value += this.progress.step;
+      this.progress.loaded++;
+      if (this.progress.loaded === this.progress.steps) {
+        this.progress.value = 100;
+        setTimeout(function() {
+          _this.fadeOut(_this.featuresTest);
+          _this.fadeOut(_this.errorOccured);
+          _this.fadeIn(_this.menu);
+          return new Menu();
+        }, 400);
       }
-      if (complete) {
-        this.progress = 100;
-      } else {
-        this.progress += this.progressStep;
-      }
-      this.element.featuresTest.progressBar.style.width = "" + this.progress + "%";
+      this.element.featuresTest.progressBar.style.width = "" + this.progress.value + "%";
     };
 
     Loading.prototype.showProblems = function(type, detail) {
@@ -165,6 +172,15 @@ Loads files via yepnope.js.
       setTimeout(function() {
         return _this.fadeIn(_this.errorOccured);
       }, 600);
+    };
+
+    Loading.prototype.loadImages = function() {
+      var _this = this;
+      new preLoader(this.images, {
+        onProgress: function(src, imageEl, index) {
+          return _this.updateProgress();
+        }
+      });
     };
 
     Loading.prototype.loadFiles = function() {
@@ -184,15 +200,6 @@ Loads files via yepnope.js.
             if (result) {
               return _this.updateProgress();
             }
-          },
-          complete: function() {
-            _this.updateProgress(true);
-            return setTimeout(function() {
-              _this.fadeOut(_this.featuresTest);
-              _this.fadeOut(_this.errorOccured);
-              _this.fadeIn(_this.menu);
-              return new Menu();
-            }, 400);
           }
         }
       ]);

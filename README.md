@@ -22,6 +22,7 @@ Libraries:
 * Jay Salvat: **[Buzz](http://jaysalvat.com)**
 * Ovidiu Cherecheș: **[Dragdealer JS](http://code.ovidiu.ch/dragdealer/)**
 * Hesido.com: **[fleXcroll](http://www.hesido.com/web.php?page=customscrollbar)**
+* Dimitar ChristoffL **[pre-loader](https://github.com/DimitarChristoff/pre-loader)**
 
 Also thanks to:
 * **[Adrian Woźniak](http://github.com/Eraden)**
