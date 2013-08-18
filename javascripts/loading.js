@@ -191,9 +191,6 @@ Loads files via yepnope.js.
           test: Modernizr.classlist,
           nope: 'javascripts/shim/classList.min.js'
         }, {
-          test: Modernizr.raf,
-          nope: 'javascripts/shim/requestAnimationFrame.js'
-        }, {
           test: Modernizr.multiplebgs && Modernizr.opacity && Modernizr.rgba && Modernizr.cssanimations && Modernizr.csstransitions && Modernizr.hascsstransforms3d,
           yep: this.files,
           callback: function(url, result, key) {

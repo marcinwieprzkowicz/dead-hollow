@@ -205,9 +205,6 @@ class Loading extends Base
       test: Modernizr.classlist
       nope: 'javascripts/shim/classList.min.js' # Thank you Eli Grey
     ,
-      test: Modernizr.raf
-      nope: 'javascripts/shim/requestAnimationFrame.js'
-    ,
       test: Modernizr.multiplebgs && Modernizr.opacity && Modernizr.rgba && Modernizr.cssanimations && Modernizr.csstransitions && Modernizr.hascsstransforms3d
       yep : @files
       callback: (url, result, key) =>
