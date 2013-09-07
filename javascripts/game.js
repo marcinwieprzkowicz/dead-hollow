@@ -32,7 +32,6 @@ and in the darkness bind them."
     function Game(options, menu) {
       this.menu = menu;
       Game.__super__.constructor.apply(this, arguments);
-      this.paused = null;
       this.element = {
         game: {
           overlay: document.querySelector(this.options.game.overlay),
@@ -40,83 +39,76 @@ and in the darkness bind them."
         }
       };
       this.initAudio();
+      this.map = new Map({}, this);
+      this.character = new Character({
+        id: 'character',
+        klass: 'visualization'
+      }, this.audio);
+      this.map.add(this.character);
+      this.control = new Control({}, this, this.map);
+      this.control.addKeyboardEvents();
+      if (Modernizr.touch) {
+        this.control.showTouchItems().addControlEvents();
+      }
     }
 
     Game.prototype.start = function() {
       var _this = this;
-      this.fadeOut(this.element.game.overlay);
-      this.fadeOut(this.menu.element.main.element);
-      if (this.paused === null) {
-        this.map = new Map({}, this);
-        this.character = new Character({
-          id: 'character',
-          klass: 'visualization'
-        }, this.audio);
-        this.map.add(this.character);
-        this.control = new Control({}, this, this.map);
-        this.control.addKeyboardEvents();
-        if (Modernizr.touch) {
-          this.control.showTouchItems();
-          this.control.addControlEvents();
-        }
-      }
-      setTimeout(function() {
+      this.fadeOut([this.element.game.overlay, this.menu.element.main.element], function() {
         return _this.setText(_this.element.game.start, 'Resume');
-      }, 600);
-      this.paused = false;
-      this.character.clear();
-      this.map.animationsStopped(false);
+      });
+      this.character.domElement.classList.remove('paused');
+      this.globals.pause = false;
       this.animation = setInterval(function() {
+        _this.map.handleCollisions();
         _this.map.draw();
       }, 50);
     };
 
     Game.prototype.pause = function() {
-      this.paused = true;
-      this.character.domEl.classList.add('paused');
-      this.map.animationsStopped(true);
       clearInterval(this.animation);
+      this.globals.pause = true;
+      this.character.domElement.classList.add('paused');
     };
 
     Game.prototype.reset = function() {
       var _this = this;
-      this.map.setDefaultPosition();
-      this.map.closeDoors();
-      this.map.clearAnimation('up');
-      this.map.clearAnimation('right');
-      this.map.clearAnimation('left');
+      this.map.setDefaultPosition().closeDoors();
+      this.character.reset();
       setTimeout(function() {
-        _this.setText(_this.element.game.start, 'Start game');
-        return _this.map.draw();
+        return _this.setText(_this.element.game.start, 'Start game');
       }, 1000);
     };
 
     Game.prototype.theEnd = function() {
+      var _this = this;
       this.pause();
-      this.reset();
       this.setText(this.menu.element.theEnd.header, 'The end');
       this.menu.element.theEnd.congratulations.style.display = 'block';
-      this.fadeIn(this.element.game.overlay);
-      this.fadeIn(this.menu.element.section.credits);
+      this.fadeIn([this.element.game.overlay, this.menu.element.section.credits], function() {
+        return _this.reset();
+      });
       this.flexcrollContent(this.menu.element.section.credits);
     };
 
     Game.prototype.gameOver = function(speed) {
       var _this = this;
-      this.character.domEl.classList.add('death');
-      this.character.domEl.style[this.cssTransform] = "translate3d(0, " + (Math.abs(speed) * 20) + "px, 0)";
+      this.character.domElement.classList.add('death');
+      this.character.domElement.style[this.globals.css.transform] = "translate3d(0, " + (Math.abs(speed) * 20) + "px, 0)";
       setTimeout(function() {
         _this.pause();
-        _this.reset();
-        return _this.fadeIn(_this.menu.element.section.gameOver);
+        return _this.fadeIn([_this.element.game.overlay, _this.menu.element.section.gameOver], function() {
+          return _this.reset();
+        });
       }, 1000);
     };
 
     Game.prototype.aboutMe = function() {
+      var _this = this;
       this.pause();
-      this.reset();
-      this.fadeIn(this.element.game.overlay);
-      this.fadeIn(this.menu.element.section.aboutMe);
+      this.fadeIn([this.element.game.overlay, this.menu.element.section.aboutMe], function() {
+        return _this.reset();
+      });
       this.flexcrollContent(this.menu.element.section.aboutMe);
     };
 

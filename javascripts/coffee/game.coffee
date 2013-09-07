@@ -22,102 +22,85 @@ class Game extends Base
 
   constructor: (options, @menu) ->
     super
-    @paused = null
     @element =
       game:
         overlay: document.querySelector @options.game.overlay
         start: document.querySelector @options.game.start
 
     @initAudio()
+    @map = new Map {}, this
+    @character = new Character(
+      id: 'character'
+      klass: 'visualization'
+    ,
+      @audio
+    )
+    @map.add @character #add character mainObj to map
+
+    @control = new Control {}, this, @map
+    @control.addKeyboardEvents()
+    @control.showTouchItems().addControlEvents() if Modernizr.touch
 
 
   start: ->
-    @fadeOut @element.game.overlay
-    @fadeOut @menu.element.main.element
-
-    if @paused is null
-      @map = new Map {}, this
-      @character = new Character(
-        id: 'character'
-        klass: 'visualization'
-      ,
-        @audio
-      )
-      @map.add @character #add character mainObj to map
-
-      @control = new Control {}, this, @map
-      @control.addKeyboardEvents()
-      if Modernizr.touch
-        @control.showTouchItems()
-        @control.addControlEvents()
-
-    setTimeout(=>
+    @fadeOut [@element.game.overlay, @menu.element.main.element], =>
       @setText @element.game.start, 'Resume'
-    , 600)
 
-    @paused = false
-    @character.clear()
-    @map.animationsStopped false
+    @character.domElement.classList.remove 'paused'
+    @globals.pause = false
 
+    # main loop
     @animation = setInterval =>
+      @map.handleCollisions()
       @map.draw()
       return
     , 50
+
     return
 
 
   pause: ->
-    @paused = true
-    @character.domEl.classList.add 'paused'
-    @map.animationsStopped true
     clearInterval @animation
+    @globals.pause = true
+    @character.domElement.classList.add 'paused'
     return
 
 
   reset: ->
-    @map.setDefaultPosition()
-    @map.closeDoors()
-    @map.clearAnimation 'up'
-    @map.clearAnimation 'right'
-    @map.clearAnimation 'left'
+    @map.setDefaultPosition().closeDoors()
+    @character.reset()
 
     setTimeout(=>
       @setText @element.game.start, 'Start game'
-      @map.draw()
     , 1000)
     return
 
 
   theEnd: ->
     @pause()
-    @reset()
 
     @setText @menu.element.theEnd.header, 'The end'
     @menu.element.theEnd.congratulations.style.display = 'block'
 
-    @fadeIn @element.game.overlay
-    @fadeIn @menu.element.section.credits
+    @fadeIn [@element.game.overlay, @menu.element.section.credits], => @reset()
     @flexcrollContent @menu.element.section.credits
     return
 
 
   gameOver: (speed) ->
-    @character.domEl.classList.add 'death'
-    @character.domEl.style[@cssTransform] = "translate3d(0, #{Math.abs(speed) * 20}px, 0)"
+    @character.domElement.classList.add 'death'
+    @character.domElement.style[@globals.css.transform] = "translate3d(0, #{Math.abs(speed) * 20}px, 0)"
 
     setTimeout(=>
       @pause()
-      @reset()
-      @fadeIn @menu.element.section.gameOver
+      @fadeIn [@element.game.overlay, @menu.element.section.gameOver], => @reset()
     , 1000)
     return
 
 
   aboutMe: ->
     @pause()
-    @reset()
-    @fadeIn @element.game.overlay
-    @fadeIn @menu.element.section.aboutMe
+    @fadeIn [@element.game.overlay, @menu.element.section.aboutMe], => @reset()
     @flexcrollContent @menu.element.section.aboutMe
     return
 

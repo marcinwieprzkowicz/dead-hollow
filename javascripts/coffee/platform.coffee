@@ -26,7 +26,7 @@ class Platform
     @width = element.clientWidth
 
     solidIndex = parseInt element.firstElementChild.getAttribute('data-index'), 10
-    @solid = window.solids[solidIndex]
+    @solid = window.deadHollow.solids[solidIndex]
     @solid.position.x += @offset
 
 

@@ -19,6 +19,8 @@ Loads files via yepnope.js.
 
     __extends(Loading, _super);
 
+    Loading.prototype.defaults = {};
+
     Loading.prototype.message = {
       loadingDescription: {
         checkingBrowser: 'Checking your browser...',
@@ -40,8 +42,9 @@ Loads files via yepnope.js.
 
     Loading.prototype.features = ['multiplebgs', 'opacity', 'rgba', 'cssanimations', 'csstransitions', 'hascsstransforms3d'];
 
-    function Loading() {
+    function Loading(options) {
       var steps;
+      Loading.__super__.constructor.apply(this, arguments);
       steps = this.features.length + this.files.length + this.images.length;
       this.progress = {
         value: 0,
@@ -153,8 +156,7 @@ Loads files via yepnope.js.
       if (this.progress.loaded === this.progress.steps) {
         this.progress.value = 100;
         setTimeout(function() {
-          _this.fadeOut(_this.featuresTest);
-          _this.fadeOut(_this.errorOccured);
+          _this.fadeOut([_this.featuresTest, _this.errorOccured]);
           _this.fadeIn(_this.menu);
           return new Menu();
         }, 400);

@@ -50,27 +50,30 @@ Handles keyboard and touch events.
         {
           keys: 'right',
           on_keydown: function() {
-            return _this.goRight();
+            return _this.globals.movement.forward = 1;
           },
           on_keyup: function() {
-            return _this.clearRight();
+            return _this.globals.movement.forward = 0;
           },
           prevent_repeat: true,
           prevent_default: true
         }, {
           keys: 'left',
           on_keydown: function() {
-            return _this.goLeft();
+            return _this.globals.movement.backward = 1;
           },
           on_keyup: function() {
-            return _this.clearLeft();
+            return _this.globals.movement.backward = 0;
           },
           prevent_repeat: true,
           prevent_default: true
         }, {
           keys: 'up',
           on_keydown: function() {
-            return _this.goUp();
+            return _this.globals.movement.up = 1;
+          },
+          on_keyup: function() {
+            return _this.globals.movement.up = 0;
           },
           prevent_repeat: true,
           prevent_default: true
@@ -98,78 +101,12 @@ Handles keyboard and touch events.
         }
       ];
       keypress.register_many(movements);
-    };
-
-    Control.prototype.goRight = function() {
-      var interval,
-        _this = this;
-      if (!this.game.paused) {
-        this.map.clearAnimation('right');
-        this.map.clearAnimation('left');
-        interval = setInterval(function() {
-          var collision;
-          collision = _this.map.collision.checkAll(_this.map.objs.character.solid, null, -_this.map.options.animation.shift, 0);
-          if (!collision.status && !_this.map.animations.right.stopped) {
-            return _this.map.move(-_this.map.options.animation.shift, 0);
-          }
-        }, this.map.options.animation.duration);
-        this.map.animations.right.interval = interval;
-        this.map.objs.character.move();
-      }
-    };
-
-    Control.prototype.clearRight = function() {
-      this.map.clearAnimation('right');
-      if (this.map.animations.left.interval == null) {
-        this.map.objs.character.stop('run');
-      }
-    };
-
-    Control.prototype.goLeft = function() {
-      var interval,
-        _this = this;
-      if (!this.game.paused) {
-        this.map.clearAnimation('right');
-        this.map.clearAnimation('left');
-        interval = setInterval(function() {
-          var collision;
-          collision = _this.map.collision.checkAll(_this.map.objs.character.solid, null, _this.map.options.animation.shift, 0);
-          if (!collision.status && !_this.map.animations.left.stopped) {
-            return _this.map.move(_this.map.options.animation.shift, 0);
-          }
-        }, this.map.options.animation.duration);
-        this.map.animations.left.interval = interval;
-        this.map.objs.character.move(true);
-      }
-    };
-
-    Control.prototype.clearLeft = function() {
-      this.map.clearAnimation('left');
-      if (this.map.animations.right.interval == null) {
-        this.map.objs.character.stop('run');
-      }
-    };
-
-    Control.prototype.goUp = function() {
-      var interval, t,
-        _this = this;
-      if (!(this.map.animations.up.interval != null) && !this.map.animations.up.stopped) {
-        t = 0;
-        interval = setInterval(function() {
-          var y;
-          if (!_this.game.paused) {
-            y = Math.round(_this.map.objs.character.options.jump.force * _this.map.objs.character.options.jump.sinusAngle - _this.map.options.animation.gravity * t);
-            _this.map.move(0, y);
-            return t++;
-          }
-        }, this.map.options.animation.duration);
-        this.map.animations.up.interval = interval;
-      }
+      return this;
     };
 
     Control.prototype.actionButton = function() {
       var bgWall, doorCollision, fgWall, solid, solidCollision, solidElement, solidIndex, wallClass;
-      if (!this.game.paused) {
+      if (!this.globals.pause) {
         doorCollision = this.map.collision.checkAll(this.map.objs.character.solid, this.map.solid.doors, 0, 0);
         if (doorCollision.status) {
           wallClass = doorCollision.solid.element.className.match(/wall-\d+/g)[0];
@@ -177,7 +114,7 @@ Handles keyboard and touch events.
           fgWall = document.querySelector("#foreground ." + wallClass);
           solidElement = fgWall.querySelector('.solid');
           solidIndex = parseInt(solidElement.getAttribute('data-index'), 10);
-          solid = window.solids[solidIndex];
+          solid = this.globals.solids[solidIndex];
           solidCollision = this.map.collision.checkBetween(this.map.objs.character.solid, solid, 0, this.map.options.doorsRadius);
           if (!doorCollision.solid.element.classList.contains('pending') && !solidCollision.status) {
             bgWall.classList.toggle('open');
@@ -186,31 +123,26 @@ Handles keyboard and touch events.
             fgWall.classList.add('pending');
             solid.getHeightAgain();
             if (this.game.audio.openingDoors.getVolume() > 0) {
-              return this.game.audio.openingDoors.play();
+              this.game.audio.openingDoors.play();
             }
           }
         }
       }
+      return this;
     };
 
     Control.prototype.showTouchItems = function() {
-      var i, length;
-      i = 0;
-      length = this.touchItems.length;
-      while (i < length) {
-        this.touchItems[i].style.display = 'block';
-        i++;
+      var item, _i, _len, _ref;
+      _ref = this.touchItems;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        item.style.display = 'block';
       }
+      return this;
     };
 
     Control.prototype.addControlEvents = function() {
-      var controller, _i, _len, _ref,
-        _this = this;
-      _ref = this.control;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        controller = _ref[_i];
-        this.preventLongPressMenu(controller);
-      }
+      var _this = this;
       this.addEvent(this.control.backward, 'touchstart', function() {
         document.body.onkeydown({
           keyCode: 37
@@ -271,16 +203,18 @@ Handles keyboard and touch events.
         });
         return _this.control.pause.classList.remove('touched');
       });
+      return this;
     };
 
     Control.prototype.pause = function() {
-      if (this.game.paused) {
+      if (this.globals.pause) {
         this.game.start();
       } else {
         this.game.pause();
         this.fadeIn(this.game.element.game.overlay);
         this.fadeIn(this.game.menu.element.main.element);
       }
+      return this;
     };
 
     return Control;

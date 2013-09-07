@@ -21,13 +21,12 @@ class Collision extends Base
     solidElements = document.querySelectorAll @options.element.solids
     solidElementsLength = solidElements.length
     solidIterator = 0
-
-    window.solids = new Array length
+    @globals.solids = new Array solidElementsLength
 
     while solidIterator < solidElementsLength
       solidElement = solidElements[solidIterator]
       solidElement.setAttribute 'data-index', solidIterator
-      window.solids[solidIterator] = new Solid solidElement
+      @globals.solids[solidIterator] = new Solid solidElement
       solidIterator++
 
 
@@ -41,7 +40,7 @@ class Collision extends Base
 
 
   # checking the collisions between one element and array
-  checkAll: (element, elements = window.solids, shiftX, shiftY) ->
+  checkAll: (element, elements = @globals.solids, shiftX, shiftY) ->
     handle =
       status: false
     length = elements.length - 1

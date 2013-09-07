@@ -11,9 +11,21 @@ It also contains many useful functions.
 
 
 (function() {
-  var Base,
+  var Base, transitionEnd,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty;
+
+  transitionEnd = function() {
+    var transitionEndEventNames;
+    transitionEndEventNames = {
+      'WebkitTransition': 'webkitTransitionEnd',
+      'MozTransition': 'transitionend',
+      'OTransition': 'oTransitionEnd',
+      'msTransition': 'MSTransitionEnd',
+      'transition': 'transitionend'
+    };
+    return transitionEndEventNames[Modernizr.prefixed('transition')];
+  };
 
   Base = (function() {
 
@@ -21,12 +33,30 @@ It also contains many useful functions.
 
     function Base(options) {
       this.setOptions(options);
-      this.cssTransform = Modernizr.prefixed('transform');
+      this.globals = this.initGlobals();
     }
 
     Base.prototype.setOptions = function(options) {
       this.options = this.merge({}, this.defaults, options);
       return this;
+    };
+
+    Base.prototype.initGlobals = function() {
+      return window.deadHollow = window.deadHollow || {
+        pause: false,
+        solids: [],
+        movement: {
+          forward: 0,
+          backward: 0,
+          up: 0
+        },
+        css: {
+          transform: Modernizr.prefixed('transform')
+        },
+        event: {
+          transitionEnd: transitionEnd()
+        }
+      };
     };
 
     Base.prototype.addEvent = function(element, event, callback, useCapture) {
@@ -37,37 +67,61 @@ It also contains many useful functions.
       return element;
     };
 
-    Base.prototype.stop = function(event) {
-      var e;
-      e = event || window.event;
-      e.preventDefault && e.preventDefault();
-      e.stopPropagation && e.stopPropagation();
-      e.cancelBubble = true;
-      e.returnValue = false;
-      return e;
+    Base.prototype.stop = function() {
+      if (event && event.preventDefault) {
+        event.preventDefault();
+      }
+      return event;
     };
 
-    Base.prototype.preventLongPressMenu = function(element) {
-      element.ontouchstart = this.stop;
-      element.ontouchmove = this.stop;
-      element.ontouchend = this.stop;
-      return element.ontouchcancel = this.stop;
+    Base.prototype.fadeIn = function(elements, complete) {
+      var callback, element, fade, _i, _len;
+      if (!(elements instanceof Array)) {
+        elements = [elements];
+      }
+      fade = function(element) {
+        element.classList.remove('hide');
+        element.classList.add('show');
+        element.style.opacity = 1;
+        element.style.visibility = 'visible';
+        return element;
+      };
+      for (_i = 0, _len = elements.length; _i < _len; _i++) {
+        element = elements[_i];
+        fade(element);
+      }
+      if (complete) {
+        transitionEnd = this.globals.event.transitionEnd;
+        this.addEvent(elements[0], transitionEnd, callback = function() {
+          elements[0].removeEventListener(transitionEnd, callback, false);
+          return complete.call(this);
+        });
+      }
     };
 
-    Base.prototype.fadeIn = function(element) {
-      element.classList.remove('hide');
-      element.classList.add('show');
-      element.style.opacity = 1;
-      element.style.visibility = 'visible';
-      return element;
-    };
-
-    Base.prototype.fadeOut = function(element) {
-      element.classList.remove('show');
-      element.classList.add('hide');
-      element.style.opacity = 0;
-      element.style.visibility = 'hidden';
-      return element;
+    Base.prototype.fadeOut = function(elements, complete) {
+      var callback, element, fade, _i, _len;
+      if (!(elements instanceof Array)) {
+        elements = [elements];
+      }
+      fade = function(element) {
+        element.classList.remove('show');
+        element.classList.add('hide');
+        element.style.opacity = 0;
+        element.style.visibility = 'hidden';
+        return element;
+      };
+      for (_i = 0, _len = elements.length; _i < _len; _i++) {
+        element = elements[_i];
+        fade(element);
+      }
+      if (complete) {
+        transitionEnd = this.globals.event.transitionEnd;
+        this.addEvent(elements[0], transitionEnd, callback = function() {
+          elements[0].removeEventListener(transitionEnd, callback, false);
+          return complete.call(this);
+        });
+      }
     };
 
     Base.prototype.getIndex = function(element) {
@@ -81,18 +135,6 @@ It also contains many useful functions.
         element.textContent = text;
       }
       return element;
-    };
-
-    Base.prototype.getTransitionEndName = function() {
-      var transitionEndEventNames;
-      transitionEndEventNames = {
-        'WebkitTransition': 'webkitTransitionEnd',
-        'MozTransition': 'transitionend',
-        'OTransition': 'oTransitionEnd',
-        'msTransition': 'MSTransitionEnd',
-        'transition': 'transitionend'
-      };
-      return transitionEndEventNames[Modernizr.prefixed('transition')];
     };
 
     Base.prototype.flexcrollContent = function(element) {

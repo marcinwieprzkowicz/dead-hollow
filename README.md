@@ -6,10 +6,6 @@ Dead Hollow is a HTML5 game built like a typical website where animations and tr
 **[Let's play Dead Hollow](http://marcinwieprzkowicz.github.io/dead-hollow/)**
 
 
-##Hire me
-In mid-July 2013 I'm moving to London, UK. If you are looking for Front-end engineer with knowledge of ruby on rails, I'm open for proposals. Just send me a message on: **[marcin.wieprzkowicz@gmail.com](mailto:marcin.wieprzkowicz@gmail.com)**.
-
-
 ##Credits
 * Marcin Wieprzkowicz: Originator
 
@@ -22,7 +18,7 @@ Libraries:
 * Jay Salvat: **[Buzz](http://jaysalvat.com)**
 * Ovidiu Cherecheș: **[Dragdealer JS](http://code.ovidiu.ch/dragdealer/)**
 * Hesido.com: **[fleXcroll](http://www.hesido.com/web.php?page=customscrollbar)**
-* Dimitar ChristoffL **[pre-loader](https://github.com/DimitarChristoff/pre-loader)**
+* Dimitar Christoff **[pre-loader](https://github.com/DimitarChristoff/pre-loader)**
 
 Also thanks to:
 * **[Adrian Woźniak](http://github.com/Eraden)**
@@ -53,8 +49,9 @@ P.S. There is a reason why I didn't use ready-made solutions. I wanted to improv
 
 ##Issues
 The game is still **unfinished** and has a few issues that has to be solved.
-* performance under iPad
+* performance (iPad)
 * touchmove event: unhandled
+* disabling the context menu on long taps (Android)
 * the map is static: templates?
 * ...and so on
 

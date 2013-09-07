@@ -34,19 +34,20 @@ class Control extends Base
   addKeyboardEvents: ->
     movements = [
       keys: 'right'
-      on_keydown: => @goRight()
-      on_keyup: => @clearRight()
+      on_keydown: => @globals.movement.forward = 1
+      on_keyup: => @globals.movement.forward = 0
       prevent_repeat: true
       prevent_default: true
     ,
       keys: 'left'
-      on_keydown: => @goLeft()
-      on_keyup: => @clearLeft()
+      on_keydown: => @globals.movement.backward = 1
+      on_keyup: => @globals.movement.backward = 0
       prevent_repeat: true
       prevent_default: true
     ,
       keys: 'up'
-      on_keydown: => @goUp()
+      on_keydown: => @globals.movement.up = 1
+      on_keyup: => @globals.movement.up = 0
       prevent_repeat: true
       prevent_default: true
     ,
@@ -67,71 +68,11 @@ class Control extends Base
     ]
 
     keypress.register_many movements
-    return
-
-
-  # to do: DRY
-  goRight: ->
-    unless @game.paused
-      @map.clearAnimation 'right'
-      @map.clearAnimation 'left'
-
-      interval = setInterval(=>
-        collision = @map.collision.checkAll @map.objs.character.solid, null, -@map.options.animation.shift, 0
-
-        @map.move -@map.options.animation.shift, 0 if !collision.status && !@map.animations.right.stopped
-      , @map.options.animation.duration)
-
-      @map.animations.right.interval = interval
-      @map.objs.character.move()
-    return
-
-
-  clearRight: ->
-    @map.clearAnimation 'right'
-    @map.objs.character.stop 'run' unless @map.animations.left.interval?
-    return
-
-
-  goLeft: ->
-    unless @game.paused
-      @map.clearAnimation 'right'
-      @map.clearAnimation 'left'
-
-      interval = setInterval(=>
-        collision = @map.collision.checkAll @map.objs.character.solid, null, @map.options.animation.shift, 0
-
-        @map.move @map.options.animation.shift, 0 if !collision.status && !@map.animations.left.stopped
-      , @map.options.animation.duration)
-
-      @map.animations.left.interval = interval
-      @map.objs.character.move true
-    return
-
-
-  clearLeft: ->
-    @map.clearAnimation 'left'
-    @map.objs.character.stop 'run' unless @map.animations.right.interval?
-    return
-
-
-  goUp: ->
-    if !@map.animations.up.interval? && !@map.animations.up.stopped
-      t = 0
-
-      interval = setInterval(=>
-        unless @game.paused
-          y = Math.round(@map.objs.character.options.jump.force * @map.objs.character.options.jump.sinusAngle - @map.options.animation.gravity * t)
-          @map.move 0, y
-          t++
-      , @map.options.animation.duration)
-
-      @map.animations.up.interval = interval
-    return
+    this
 
 
   actionButton: ->
-    unless @game.paused
+    unless @globals.pause
       doorCollision = @map.collision.checkAll @map.objs.character.solid, @map.solid.doors, 0, 0
 
       if doorCollision.status
@@ -142,7 +83,7 @@ class Control extends Base
 
         solidElement = fgWall.querySelector '.solid'
         solidIndex = parseInt solidElement.getAttribute('data-index'), 10
-        solid = window.solids[solidIndex]
+        solid = @globals.solids[solidIndex]
 
         solidCollision = @map.collision.checkBetween @map.objs.character.solid, solid, 0, @map.options.doorsRadius
 
@@ -153,22 +94,15 @@ class Control extends Base
           fgWall.classList.add 'pending'
           solid.getHeightAgain()
           @game.audio.openingDoors.play() if @game.audio.openingDoors.getVolume() > 0
+    this
 
 
   showTouchItems: ->
-    i = 0
-    length = @touchItems.length
-
-    while i < length
-      @touchItems[i].style.display = 'block'
-      i++
-    return
+    item.style.display = 'block' for item in @touchItems
+    this
 
 
   addControlEvents: ->
-    # disabling the context menu on long taps (Android)
-    @preventLongPressMenu controller for controller in @control
-
     # left
     @addEvent(@control.backward, 'touchstart', =>
       document.body.onkeydown keyCode: 37
@@ -223,17 +157,17 @@ class Control extends Base
       document.body.onkeyup keyCode: 27
       @control.pause.classList.remove 'touched'
     )
-    return
+    this
 
 
   pause: ->
-    if @game.paused
+    if @globals.pause
       @game.start()
     else
       @game.pause()
       @fadeIn @game.element.game.overlay
       @fadeIn @game.menu.element.main.element
-    return
+    this
 
 
 (exports ? this).Control = Control

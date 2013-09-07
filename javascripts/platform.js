@@ -29,7 +29,7 @@ Platform CoffeeScript class.
       this.range = range != null ? parseInt(range, 10) : this.defaults.range;
       this.width = element.clientWidth;
       solidIndex = parseInt(element.firstElementChild.getAttribute('data-index'), 10);
-      this.solid = window.solids[solidIndex];
+      this.solid = window.deadHollow.solids[solidIndex];
       this.solid.position.x += this.offset;
     }
 
