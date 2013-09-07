@@ -70,7 +70,7 @@ Creates special type of platforms - moving platforms (Wow! I know, impressive, i
       } else if (platform.offset + platform.width >= platform.range) {
         platform.direction = 'alternate';
       }
-      platform.element.style[this.cssTransform] = "translate3d(" + platform.offset + "px, 0, 0)";
+      platform.element.style[this.globals.css.transform] = "translate3d(" + platform.offset + "px, 0, 0)";
     };
 
     return MovingPlatform;

@@ -11,6 +11,9 @@ Loads files via yepnope.js.
 
 class Loading extends Base
 
+  defaults: {}
+
+
   message:
     loadingDescription:
       checkingBrowser: 'Checking your browser...'
@@ -66,7 +69,8 @@ class Loading extends Base
             'hascsstransforms3d']
 
 
-  constructor: ->
+  constructor: (options) ->
+    super
     steps = @features.length + @files.length + @images.length
 
     @progress =
@@ -169,8 +173,7 @@ class Loading extends Base
       @progress.value = 100
 
       setTimeout(=>
-        @fadeOut @featuresTest
-        @fadeOut @errorOccured
+        @fadeOut [@featuresTest, @errorOccured]
         @fadeIn @menu
 
         new Menu()

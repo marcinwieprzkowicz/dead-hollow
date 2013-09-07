@@ -16,72 +16,69 @@ class Character extends Base
     animation:
       gravity: 2
     jump:
+      force: 0
       height: 120
-      angle: Math.PI / 4 #45 deg
 
 
   constructor: (options, @audio) ->
-    @setOptions options
-
-    @inAir = 0 # 0 - false | > 0 - true
-    @createEl()
-
-
-  setOptions: (options) ->
     super
-    @cssTransform = Modernizr.prefixed 'transform'
-    @options.jump.sinusAngle = Math.round Math.sin(@options.jump.angle)
-    @options.jump.force = Math.round(Math.sqrt(2 * @options.jump.height * 2) / @options.jump.sinusAngle)
+    @options.jump.force = Math.round Math.sqrt(2 * @options.jump.height * @options.animation.gravity)
+    @setDefaults()
+    @createDomElement()
 
 
-  createEl: ->
-    subEl = document.createElement 'div'
-    subEl.classList.add @options.klass
-
-    @domEl = document.createElement 'div'
-    @domEl.id = @options.id
-    @domEl.appendChild subEl
-    return
+  setDefaults: ->
+    @inAir = false
+    @appliedForce = 0
+    @ticks = 1
+    this
 
 
-  clear: ->
-    @domEl.style[@cssTransform] = 'translate3d(0, 0, 0)'
-    @domEl.classList.remove 'death'
-    @domEl.classList.remove 'paused'
-    return
+  createDomElement: ->
+    subElement = document.createElement 'div'
+    subElement.classList.add @options.klass
+
+    @domElement = document.createElement 'div'
+    @domElement.id = @options.id
+    @domElement.appendChild subElement
+    this
+
+
+  reset: ->
+    @domElement.style[@globals.css.transform] = 'translate3d(0, 0, 0)' # after death
+    @domElement.className = ''
+    @setDefaults()
+    this
 
 
   move: (inverted = false) ->
-    if inverted then @domEl.classList.add 'inverted' else @domEl.classList.remove 'inverted'
+    if inverted then @domElement.classList.add 'inverted' else @domElement.classList.remove 'inverted'
     if !@inAir
-      @domEl.classList.add 'run'
+      @domElement.classList.add 'run'
       @audio.running.play() if @audio.running.getVolume() > 0
     return
 
 
   jump: ->
-    @inAir = 1
-    @domEl.classList.add 'jump'
+    @inAir = true
+    @domElement.classList.add 'jump'
     @audio.running.stop() if @audio.running.getVolume() > 0
     return
 
 
-  stop: (animation, callback) ->
+  stop: (animation) ->
     switch animation
       when 'run'
-        @domEl.classList.remove 'run'
+        @domElement.classList.remove 'run'
         @audio.running.stop() if @audio.running.getVolume() > 0
-        callback.call this if callback?
       when 'jump'
-        @inAir = 0
-        @domEl.classList.add 'inAir'
-        @domEl.classList.remove 'jump'
-        @domEl.classList.add 'landing'
+        @setDefaults()
+        @domElement.classList.add 'inAir'
+        @domElement.classList.remove 'jump'
+        @domElement.classList.add 'landing'
         @audio.landing.play() if @audio.landing.getVolume() > 0
         setTimeout(=>
-          @domEl.classList.remove 'landing'
-          @domEl.classList.remove 'inAir'
-          callback.call this if callback?
+          @domElement.classList.remove 'landing', 'inAir'
         , 200)
     return
 

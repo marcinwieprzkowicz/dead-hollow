@@ -47,20 +47,6 @@ Moves/draws a map, handles collisions and also contains animations object.
 
       Map.__super__.constructor.apply(this, arguments);
       this.setDefaultPosition();
-      this.animations = {
-        right: {
-          interval: void 0,
-          stopped: true
-        },
-        left: {
-          interval: void 0,
-          stopped: true
-        },
-        up: {
-          interval: void 0,
-          stopped: true
-        }
-      };
       this.objs = {};
       this.element = {
         map: document.querySelector(this.options.element.map),
@@ -93,13 +79,14 @@ Moves/draws a map, handles collisions and also contains animations object.
       }
       this.position.x = this.options.position.x;
       this.position.y = this.options.position.y;
+      return this;
     };
 
     Map.prototype.addEvents = function() {
       var i, length, transitionEnd;
       i = 0;
       length = this.element.doors.length;
-      transitionEnd = this.getTransitionEndName();
+      transitionEnd = this.globals.event.transitionEnd;
       while (i < length) {
         this.addEvent(this.element.doors[i], transitionEnd, function(event) {
           event.target.parentNode.classList.remove('pending');
@@ -108,92 +95,70 @@ Moves/draws a map, handles collisions and also contains animations object.
       }
     };
 
-    Map.prototype.animationsStopped = function(stopped) {
-      this.animations.right.stopped = stopped;
-      this.animations.left.stopped = stopped;
-      this.animations.up.stopped = stopped;
-    };
-
     Map.prototype.add = function(element) {
-      this.element.map.appendChild(element.domEl);
+      this.element.map.appendChild(element.domElement);
       this.objs[element.options.id] = element;
-      element.solid = new Solid(element.domEl);
+      element.solid = new Solid(element.domElement);
     };
 
     Map.prototype.draw = function() {
       var _this = this;
-      requestAnimationFrame(function() {
-        _this.element.foreground.style[_this.cssTransform] = "translate3d(" + _this.position.x + "px, " + _this.position.y + "px, 0)";
-        _this.element.background.style[_this.cssTransform] = "translate3d(" + _this.position.x + "px, " + _this.position.y + "px, 0)";
+      return requestAnimationFrame(function() {
+        _this.element.foreground.style[_this.globals.css.transform] = "translate3d(" + _this.position.x + "px, " + _this.position.y + "px, 0)";
+        _this.element.background.style[_this.globals.css.transform] = "translate3d(" + _this.position.x + "px, " + _this.position.y + "px, 0)";
         _this.movingPlatform.draw();
-        return _this.handleCollisions();
       });
     };
 
     Map.prototype.move = function(x, y) {
-      var lowerCollision;
+      var lowerVerticalCollision;
       this.position.x += x;
       if (this.position.y + y >= this.options.position.y) {
         this.position.y += y;
       } else {
         this.position.y = this.options.position.y;
-        lowerCollision = this.collision.checkAll(this.objs.character.solid, null, 0, -this.options.animation.shift);
-        if (!lowerCollision.status) {
+        lowerVerticalCollision = this.collision.checkAll(this.objs.character.solid, null, 0, -this.options.animation.shift);
+        if (!lowerVerticalCollision.status) {
           this.game.gameOver(y);
         }
       }
     };
 
-    Map.prototype.clearAnimation = function(animation) {
-      var interval;
-      if (animation in this.animations) {
-        interval = this.animations[animation].interval;
-        if (interval != null) {
-          clearInterval(interval);
-          this.animations[animation] = {
-            interval: void 0,
-            stopped: this.game.paused
-          };
-        }
-      }
-    };
-
     Map.prototype.handleCollisions = function() {
-      var callback, index, lessThanShift, lowerCollision, movingCol, upperCollision, y,
-        _this = this;
-      lowerCollision = this.collision.checkAll(this.objs.character.solid, null, 0, -this.options.animation.shift);
-      if (lowerCollision.status) {
-        lessThanShift = this.objs.character.solid.position.y + this.objs.character.solid.height - lowerCollision.solid.position.y - this.position.y;
-        this.move(0, lessThanShift);
-        if (this.objs.character.inAir) {
-          this.clearAnimation('up');
-          callback = function() {
-            _this.animations.up.stopped = false;
-            if (_this.animations.right.interval != null) {
-              _this.objs.character.move();
-            }
-            if (_this.animations.left.interval != null) {
-              return _this.objs.character.move(true);
-            }
-          };
-          this.objs.character.stop('jump', callback);
+      var horizontal, horizontalCollision, index, lessThanShift, lowerVerticalCollision, movingCol, upperVerticalCollision, vertical, y;
+      horizontal = (this.globals.movement.backward - this.globals.movement.forward) * this.options.animation.shift;
+      vertical = 0;
+      if (horizontal !== 0) {
+        horizontalCollision = this.collision.checkAll(this.objs.character.solid, null, horizontal, 0);
+        this.objs.character.move(horizontal > 0);
+        if (horizontalCollision.status) {
+          horizontal = 0;
         }
       } else {
-        upperCollision = this.collision.checkAll(this.objs.character.solid, null, 0, this.options.animation.shift);
-        if (upperCollision.status) {
-          this.clearAnimation('up');
-          this.animations.up.stopped = true;
-          this.move(0, -this.options.animation.shift);
-        } else if (!this.objs.character.inAir) {
-          this.animations.up.stopped = true;
-          this.objs.character.stop('run');
-          this.objs.character.jump();
-        } else if (!(this.animations.up.interval != null)) {
-          y = this.options.animation.gravity * this.objs.character.inAir;
-          this.move(0, -y);
-          this.objs.character.inAir++;
-        }
+        this.objs.character.stop('run');
       }
+      lowerVerticalCollision = this.collision.checkAll(this.objs.character.solid, null, 0, -this.options.animation.shift);
+      if (lowerVerticalCollision.status) {
+        lessThanShift = this.objs.character.solid.position.y + this.objs.character.solid.height - lowerVerticalCollision.solid.position.y - this.position.y;
+        vertical += lessThanShift;
+        if (this.objs.character.inAir) {
+          this.objs.character.stop('jump');
+        }
+      } else {
+        upperVerticalCollision = this.collision.checkAll(this.objs.character.solid, null, 0, this.options.animation.shift);
+        if (upperVerticalCollision.status) {
+          this.objs.character.appliedForce = 0;
+        }
+        this.objs.character.jump();
+        y = -this.options.animation.gravity * this.objs.character.ticks;
+        this.objs.character.ticks++;
+        vertical += y;
+      }
+      vertical += this.objs.character.appliedForce;
+      if (this.globals.movement.up && !this.objs.character.inAir) {
+        this.objs.character.appliedForce = this.objs.character.options.jump.force;
+      }
+      this.move(horizontal, vertical);
       movingCol = this.collision.checkAll(this.objs.character.solid, this.movingPlatform.solid, 0, -this.options.animation.shift);
       if (movingCol.status) {
         index = this.getIndex(movingCol.solid.element.parentNode);
@@ -218,6 +183,7 @@ Moves/draws a map, handles collisions and also contains animations object.
         door = _ref[_i];
         door.classList.remove('open');
       }
+      return this;
     };
 
     return Map;

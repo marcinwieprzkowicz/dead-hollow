@@ -9,6 +9,16 @@ It also contains many useful functions.
 ###
 
 
+transitionEnd = ->
+  transitionEndEventNames =
+    'WebkitTransition' : 'webkitTransitionEnd'
+    'MozTransition'    : 'transitionend'
+    'OTransition'      : 'oTransitionEnd'
+    'msTransition'     : 'MSTransitionEnd'
+    'transition'       : 'transitionend'
+  transitionEndEventNames[ Modernizr.prefixed 'transition' ]
+
+
 class Base
 
   defaults: {}
@@ -16,7 +26,7 @@ class Base
 
   constructor: (options) ->
     @setOptions options
-    @cssTransform = Modernizr.prefixed 'transform'
+    @globals = @initGlobals()
 
 
   setOptions: (options) ->
@@ -24,42 +34,69 @@ class Base
     this
 
 
+  initGlobals: ->
+    window.deadHollow = window.deadHollow || {
+      pause: false
+      solids: []
+      movement:
+        forward: 0
+        backward: 0
+        up: 0
+      css:
+        transform: Modernizr.prefixed 'transform'
+      event:
+        transitionEnd: transitionEnd()
+    }
+
+
   addEvent: (element, event, callback, useCapture = false) ->
     element.addEventListener event, callback, useCapture
     element
 
 
-  stop: (event) ->
-    e = event || window.event
-    e.preventDefault && e.preventDefault()
-    e.stopPropagation && e.stopPropagation()
-    e.cancelBubble = true
-    e.returnValue = false
-    e
+  stop: () ->
+    event.preventDefault() if event && event.preventDefault
+    event
 
 
-  # to do: fix this!
-  preventLongPressMenu: (element) ->
-    element.ontouchstart = @stop
-    element.ontouchmove = @stop
-    element.ontouchend = @stop
-    element.ontouchcancel = @stop
+  fadeIn: (elements, complete) ->
+    elements = [elements] unless elements instanceof Array
+    fade = (element) ->
+      element.classList.remove 'hide'
+      element.classList.add 'show'
+      element.style.opacity = 1
+      element.style.visibility = 'visible'
+      element
+
+    fade element for element in elements
+
+    if complete
+      transitionEnd = @globals.event.transitionEnd
+      @addEvent(elements[0], transitionEnd, callback = ->
+        elements[0].removeEventListener(transitionEnd, callback, false)
+        complete.call this
+      )
+    return
 
 
-  fadeIn: (element) ->
-    element.classList.remove 'hide'
-    element.classList.add 'show'
-    element.style.opacity = 1
-    element.style.visibility = 'visible'
-    element
+  fadeOut: (elements, complete) ->
+    elements = [elements] unless elements instanceof Array
+    fade = (element) ->
+      element.classList.remove 'show'
+      element.classList.add 'hide'
+      element.style.opacity = 0
+      element.style.visibility = 'hidden'
+      element
 
+    fade element for element in elements
 
-  fadeOut: (element) ->
-    element.classList.remove 'show'
-    element.classList.add 'hide'
-    element.style.opacity = 0
-    element.style.visibility = 'hidden'
-    element
+    if complete
+      transitionEnd = @globals.event.transitionEnd
+      @addEvent(elements[0], transitionEnd, callback = ->
+        elements[0].removeEventListener(transitionEnd, callback, false)
+        complete.call this
+      )
+    return
 
 
   getIndex: (element) ->
@@ -72,16 +109,6 @@ class Base
     else
       element.textContent = text
     element
-
-
-  getTransitionEndName: ->
-    transitionEndEventNames =
-      'WebkitTransition' : 'webkitTransitionEnd'
-      'MozTransition'    : 'transitionend'
-      'OTransition'      : 'oTransitionEnd'
-      'msTransition'     : 'MSTransitionEnd'
-      'transition'       : 'transitionend'
-    transitionEndEventNames[ Modernizr.prefixed 'transition' ]
 
 
   flexcrollContent: (element) ->

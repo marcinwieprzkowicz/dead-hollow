@@ -32,11 +32,11 @@ Provides two very useful methods: checkBetween & checkAll.
       solidElements = document.querySelectorAll(this.options.element.solids);
       solidElementsLength = solidElements.length;
       solidIterator = 0;
-      window.solids = new Array(length);
+      this.globals.solids = new Array(solidElementsLength);
       while (solidIterator < solidElementsLength) {
         solidElement = solidElements[solidIterator];
         solidElement.setAttribute('data-index', solidIterator);
-        window.solids[solidIterator] = new Solid(solidElement);
+        this.globals.solids[solidIterator] = new Solid(solidElement);
         solidIterator++;
       }
     }
@@ -53,7 +53,7 @@ Provides two very useful methods: checkBetween & checkAll.
     Collision.prototype.checkAll = function(element, elements, shiftX, shiftY) {
       var handle, i, length;
       if (elements == null) {
-        elements = window.solids;
+        elements = this.globals.solids;
       }
       handle = {
         status: false

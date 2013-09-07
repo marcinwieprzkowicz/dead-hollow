@@ -56,7 +56,7 @@ class MovingPlatform extends Base
     else if platform.offset + platform.width >= platform.range
       platform.direction = 'alternate'
 
-    platform.element.style[@cssTransform] = "translate3d(#{platform.offset}px, 0, 0)"
+    platform.element.style[@globals.css.transform] = "translate3d(#{platform.offset}px, 0, 0)"
     return
 
 

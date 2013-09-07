@@ -32,17 +32,6 @@ class Map extends Base
     super
     @setDefaultPosition()
 
-    @animations =
-      right:
-        interval: undefined
-        stopped: true
-      left:
-        interval: undefined
-        stopped: true
-      up:
-        interval: undefined
-        stopped: true
-
     @objs = {}
     @element =
       map: document.querySelector @options.element.map
@@ -71,13 +60,13 @@ class Map extends Base
     @position = {} unless @position?
     @position.x = @options.position.x
     @position.y = @options.position.y
-    return
+    this
 
 
   addEvents: ->
     i = 0
     length = @element.doors.length
-    transitionEnd = @getTransitionEndName()
+    transitionEnd = @globals.event.transitionEnd
 
     while i < length
       @addEvent @element.doors[i], transitionEnd, (event) ->
@@ -87,29 +76,20 @@ class Map extends Base
     return
 
 
-  animationsStopped: (stopped) ->
-    @animations.right.stopped = stopped
-    @animations.left.stopped = stopped
-    @animations.up.stopped = stopped
-    return
-
-
   add: (element) ->
-    @element.map.appendChild element.domEl
+    @element.map.appendChild element.domElement
     @objs[element.options.id] = element
 
-    element.solid = new Solid element.domEl
+    element.solid = new Solid element.domElement
     return
 
 
   draw: ->
     requestAnimationFrame =>
-      @element.foreground.style[@cssTransform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
-      @element.background.style[@cssTransform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
+      @element.foreground.style[@globals.css.transform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
+      @element.background.style[@globals.css.transform] = "translate3d(#{@position.x}px, #{@position.y}px, 0)"
       @movingPlatform.draw()
-
-      @handleCollisions()
-    return
+      return
 
 
   move: (x, y) ->
@@ -120,61 +100,47 @@ class Map extends Base
     else
       @position.y = @options.position.y
 
-      lowerCollision = @collision.checkAll @objs.character.solid, null, 0, -@options.animation.shift
-      @game.gameOver y unless lowerCollision.status
-    return
-
-
-  clearAnimation: (animation) ->
-    if animation of @animations
-      interval = @animations[animation].interval
-      if interval?
-        clearInterval interval
-        @animations[animation] =
-          interval: undefined
-          stopped: @game.paused
+      lowerVerticalCollision = @collision.checkAll @objs.character.solid, null, 0, -@options.animation.shift
+      @game.gameOver y unless lowerVerticalCollision.status
     return
 
 
   handleCollisions: ->
-    lowerCollision = @collision.checkAll @objs.character.solid, null, 0, -@options.animation.shift
+    horizontal = (@globals.movement.backward - @globals.movement.forward) * @options.animation.shift
+    vertical = 0
 
-    if lowerCollision.status
-      #character.y + character.height - lowerCollision element.y - @position.y
-      lessThanShift = @objs.character.solid.position.y + @objs.character.solid.height - lowerCollision.solid.position.y - @position.y
-      @move 0, lessThanShift
-
-      #handle landing
-      if @objs.character.inAir
-        @clearAnimation 'up'
-
-        callback = =>
-          @animations.up.stopped = false
-          @objs.character.move() if @animations.right.interval?
-          @objs.character.move(true) if @animations.left.interval?
-
-        @objs.character.stop 'jump', callback
+    if horizontal != 0
+      horizontalCollision = @collision.checkAll @objs.character.solid, null, horizontal, 0
+      @objs.character.move horizontal > 0
+      horizontal = 0 if horizontalCollision.status
     else
-      upperCollision = @collision.checkAll @objs.character.solid, null, 0, @options.animation.shift
+      @objs.character.stop 'run'
 
-      if upperCollision.status
-        @clearAnimation 'up'
-        @animations.up.stopped = true # prevent jumping in air
-        @move 0, -@options.animation.shift
-      else if !@objs.character.inAir
-        #handle jumping
-        @animations.up.stopped = true
-        @objs.character.stop 'run'
-        @objs.character.jump()
-      else if !@animations.up.interval?
-        y = @options.animation.gravity * @objs.character.inAir
-        @move 0, -y
-        @objs.character.inAir++
+    lowerVerticalCollision = @collision.checkAll @objs.character.solid, null, 0, -@options.animation.shift
+
+    if lowerVerticalCollision.status # landing
+      # character.y + character.height - lowerCollision element.y - @position.y
+      lessThanShift = @objs.character.solid.position.y + @objs.character.solid.height - lowerVerticalCollision.solid.position.y - @position.y
+      vertical += lessThanShift
+
+      @objs.character.stop 'jump' if @objs.character.inAir
+    else
+      upperVerticalCollision = @collision.checkAll @objs.character.solid, null, 0, @options.animation.shift
+      @objs.character.appliedForce = 0 if upperVerticalCollision.status
+      @objs.character.jump()
+      # gravity
+      y = -@options.animation.gravity * @objs.character.ticks
+      @objs.character.ticks++
+      vertical += y
+
+    vertical += @objs.character.appliedForce
+    @objs.character.appliedForce = @objs.character.options.jump.force if @globals.movement.up && !@objs.character.inAir
+    @move horizontal, vertical
 
     movingCol = @collision.checkAll @objs.character.solid, @movingPlatform.solid, 0, -@options.animation.shift
     if movingCol.status
       index = @getIndex movingCol.solid.element.parentNode
-    
+
       if @movingPlatform.platform[index].direction == 'normal'
         @move -@movingPlatform.options.animation.shift, 0
       else
@@ -187,7 +153,7 @@ class Map extends Base
 
   closeDoors: ->
     door.classList.remove 'open' for door in @element.doors
-    return
+    this
 
 
 (exports ? this).Map = Map

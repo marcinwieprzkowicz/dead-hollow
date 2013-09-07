@@ -23,38 +23,41 @@ Creates a main character and controls all of his behavior.
         gravity: 2
       },
       jump: {
-        height: 120,
-        angle: Math.PI / 4
+        force: 0,
+        height: 120
       }
     };
 
     function Character(options, audio) {
       this.audio = audio;
-      this.setOptions(options);
-      this.inAir = 0;
-      this.createEl();
+      Character.__super__.constructor.apply(this, arguments);
+      this.options.jump.force = Math.round(Math.sqrt(2 * this.options.jump.height * this.options.animation.gravity));
+      this.setDefaults();
+      this.createDomElement();
     }
 
-    Character.prototype.setOptions = function(options) {
-      Character.__super__.setOptions.apply(this, arguments);
-      this.cssTransform = Modernizr.prefixed('transform');
-      this.options.jump.sinusAngle = Math.round(Math.sin(this.options.jump.angle));
-      return this.options.jump.force = Math.round(Math.sqrt(2 * this.options.jump.height * 2) / this.options.jump.sinusAngle);
+    Character.prototype.setDefaults = function() {
+      this.inAir = false;
+      this.appliedForce = 0;
+      this.ticks = 1;
+      return this;
     };
 
-    Character.prototype.createEl = function() {
-      var subEl;
-      subEl = document.createElement('div');
-      subEl.classList.add(this.options.klass);
-      this.domEl = document.createElement('div');
-      this.domEl.id = this.options.id;
-      this.domEl.appendChild(subEl);
+    Character.prototype.createDomElement = function() {
+      var subElement;
+      subElement = document.createElement('div');
+      subElement.classList.add(this.options.klass);
+      this.domElement = document.createElement('div');
+      this.domElement.id = this.options.id;
+      this.domElement.appendChild(subElement);
+      return this;
     };
 
-    Character.prototype.clear = function() {
-      this.domEl.style[this.cssTransform] = 'translate3d(0, 0, 0)';
-      this.domEl.classList.remove('death');
-      this.domEl.classList.remove('paused');
+    Character.prototype.reset = function() {
+      this.domElement.style[this.globals.css.transform] = 'translate3d(0, 0, 0)';
+      this.domElement.className = '';
+      this.setDefaults();
+      return this;
     };
 
     Character.prototype.move = function(inverted) {
@@ -62,12 +65,12 @@ Creates a main character and controls all of his behavior.
         inverted = false;
       }
       if (inverted) {
-        this.domEl.classList.add('inverted');
+        this.domElement.classList.add('inverted');
       } else {
-        this.domEl.classList.remove('inverted');
+        this.domElement.classList.remove('inverted');
       }
       if (!this.inAir) {
-        this.domEl.classList.add('run');
+        this.domElement.classList.add('run');
         if (this.audio.running.getVolume() > 0) {
           this.audio.running.play();
         }
@@ -75,39 +78,32 @@ Creates a main character and controls all of his behavior.
     };
 
     Character.prototype.jump = function() {
-      this.inAir = 1;
-      this.domEl.classList.add('jump');
+      this.inAir = true;
+      this.domElement.classList.add('jump');
       if (this.audio.running.getVolume() > 0) {
         this.audio.running.stop();
       }
     };
 
-    Character.prototype.stop = function(animation, callback) {
+    Character.prototype.stop = function(animation) {
       var _this = this;
       switch (animation) {
         case 'run':
-          this.domEl.classList.remove('run');
+          this.domElement.classList.remove('run');
           if (this.audio.running.getVolume() > 0) {
             this.audio.running.stop();
           }
-          if (callback != null) {
-            callback.call(this);
-          }
           break;
         case 'jump':
-          this.inAir = 0;
-          this.domEl.classList.add('inAir');
-          this.domEl.classList.remove('jump');
-          this.domEl.classList.add('landing');
+          this.setDefaults();
+          this.domElement.classList.add('inAir');
+          this.domElement.classList.remove('jump');
+          this.domElement.classList.add('landing');
           if (this.audio.landing.getVolume() > 0) {
             this.audio.landing.play();
           }
           setTimeout(function() {
-            _this.domEl.classList.remove('landing');
-            _this.domEl.classList.remove('inAir');
-            if (callback != null) {
-              return callback.call(_this);
-            }
+            return _this.domElement.classList.remove('landing', 'inAir');
           }, 200);
       }
     };
