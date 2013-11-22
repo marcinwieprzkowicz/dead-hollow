@@ -49,14 +49,14 @@ class Base
     }
 
 
-  addEvent: (element, event, callback, useCapture = false) ->
-    element.addEventListener event, callback, useCapture
+  addEvent: (element, type, callback, useCapture = false) ->
+    element.addEventListener type, callback, useCapture
     element
 
 
-  stop: () ->
-    event.preventDefault() if event && event.preventDefault
-    event
+  stop: (evt) ->
+    evt.preventDefault() if evt && evt.preventDefault
+    evt
 
 
   fadeIn: (elements, complete) ->
