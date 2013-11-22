@@ -59,19 +59,19 @@ It also contains many useful functions.
       };
     };
 
-    Base.prototype.addEvent = function(element, event, callback, useCapture) {
+    Base.prototype.addEvent = function(element, type, callback, useCapture) {
       if (useCapture == null) {
         useCapture = false;
       }
-      element.addEventListener(event, callback, useCapture);
+      element.addEventListener(type, callback, useCapture);
       return element;
     };
 
-    Base.prototype.stop = function() {
-      if (event && event.preventDefault) {
-        event.preventDefault();
+    Base.prototype.stop = function(evt) {
+      if (evt && evt.preventDefault) {
+        evt.preventDefault();
       }
-      return event;
+      return evt;
     };
 
     Base.prototype.fadeIn = function(elements, complete) {
