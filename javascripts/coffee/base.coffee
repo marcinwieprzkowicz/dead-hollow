@@ -49,9 +49,12 @@ class Base
     }
 
 
-  addEvent: (element, type, callback, useCapture = false) ->
-    element.addEventListener type, callback, useCapture
-    element
+  addEvent: (element, types, callback, useCapture = false) ->
+    types = types.split ' '
+
+    types.forEach (type) ->
+      element.addEventListener type, callback, useCapture
+    return
 
 
   stop: (evt) ->

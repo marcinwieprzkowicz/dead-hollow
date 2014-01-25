@@ -105,57 +105,39 @@ class Control extends Base
   addControlEvents: ->
     # left
     @addEvent(@control.backward, 'touchstart', =>
-      document.body.onkeydown keyCode: 37
-      @control.backward.classList.add 'touched'
+      @globals.movement.backward = 1
     )
 
     @addEvent(@control.backward, 'touchend', =>
-      document.body.onkeyup keyCode: 37
-      @control.backward.classList.remove 'touched'
+      @globals.movement.backward = 0
     )
 
     # right
     @addEvent(@control.forward, 'touchstart', =>
-      document.body.onkeydown keyCode: 39
-      @control.forward.classList.add 'touched'
+      @globals.movement.forward = 1
     )
 
     @addEvent(@control.forward, 'touchend', =>
-      document.body.onkeyup keyCode: 39
-      @control.forward.classList.remove 'touched'
+      @globals.movement.forward = 0
     )
 
     # button B
     @addEvent(@control.buttonB, 'touchstart', =>
-      document.body.onkeydown keyCode: 38
-      @control.buttonB.classList.add 'touched'
+      @globals.movement.up = 1
     )
 
     @addEvent(@control.buttonB, 'touchend', =>
-      document.body.onkeyup keyCode: 38
-      @control.buttonB.classList.remove 'touched'
+      @globals.movement.up = 0
     )
 
     # button A
     @addEvent(@control.buttonA, 'touchstart', =>
-      document.body.onkeydown keyCode: 32
-      @control.buttonA.classList.add 'touched'
-    )
-
-    @addEvent(@control.buttonA, 'touchend', =>
-      document.body.onkeyup keyCode: 32
-      @control.buttonA.classList.remove 'touched'
+      @actionButton()
     )
 
     # pause
     @addEvent(@control.pause, 'touchstart', =>
-      document.body.onkeydown keyCode: 27
-      @control.pause.classList.add 'touched'
-    )
-
-    @addEvent(@control.pause, 'touchend', =>
-      document.body.onkeyup keyCode: 27
-      @control.pause.classList.remove 'touched'
+      @pause()
     )
     this
 

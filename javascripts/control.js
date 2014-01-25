@@ -144,64 +144,28 @@ Handles keyboard and touch events.
     Control.prototype.addControlEvents = function() {
       var _this = this;
       this.addEvent(this.control.backward, 'touchstart', function() {
-        document.body.onkeydown({
-          keyCode: 37
-        });
-        return _this.control.backward.classList.add('touched');
+        return _this.globals.movement.backward = 1;
       });
       this.addEvent(this.control.backward, 'touchend', function() {
-        document.body.onkeyup({
-          keyCode: 37
-        });
-        return _this.control.backward.classList.remove('touched');
+        return _this.globals.movement.backward = 0;
       });
       this.addEvent(this.control.forward, 'touchstart', function() {
-        document.body.onkeydown({
-          keyCode: 39
-        });
-        return _this.control.forward.classList.add('touched');
+        return _this.globals.movement.forward = 1;
       });
       this.addEvent(this.control.forward, 'touchend', function() {
-        document.body.onkeyup({
-          keyCode: 39
-        });
-        return _this.control.forward.classList.remove('touched');
+        return _this.globals.movement.forward = 0;
       });
       this.addEvent(this.control.buttonB, 'touchstart', function() {
-        document.body.onkeydown({
-          keyCode: 38
-        });
-        return _this.control.buttonB.classList.add('touched');
+        return _this.globals.movement.up = 1;
       });
       this.addEvent(this.control.buttonB, 'touchend', function() {
-        document.body.onkeyup({
-          keyCode: 38
-        });
-        return _this.control.buttonB.classList.remove('touched');
+        return _this.globals.movement.up = 0;
       });
       this.addEvent(this.control.buttonA, 'touchstart', function() {
-        document.body.onkeydown({
-          keyCode: 32
-        });
-        return _this.control.buttonA.classList.add('touched');
-      });
-      this.addEvent(this.control.buttonA, 'touchend', function() {
-        document.body.onkeyup({
-          keyCode: 32
-        });
-        return _this.control.buttonA.classList.remove('touched');
+        return _this.actionButton();
       });
       this.addEvent(this.control.pause, 'touchstart', function() {
-        document.body.onkeydown({
-          keyCode: 27
-        });
-        return _this.control.pause.classList.add('touched');
-      });
-      this.addEvent(this.control.pause, 'touchend', function() {
-        document.body.onkeyup({
-          keyCode: 27
-        });
-        return _this.control.pause.classList.remove('touched');
+        return _this.pause();
       });
       return this;
     };

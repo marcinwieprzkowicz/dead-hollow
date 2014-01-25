@@ -59,12 +59,14 @@ It also contains many useful functions.
       };
     };
 
-    Base.prototype.addEvent = function(element, type, callback, useCapture) {
+    Base.prototype.addEvent = function(element, types, callback, useCapture) {
       if (useCapture == null) {
         useCapture = false;
       }
-      element.addEventListener(type, callback, useCapture);
-      return element;
+      types = types.split(' ');
+      types.forEach(function(type) {
+        return element.addEventListener(type, callback, useCapture);
+      });
     };
 
     Base.prototype.stop = function(evt) {

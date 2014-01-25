@@ -110,7 +110,7 @@ Provides all services for menu.
         link = _ref1[_j];
         this.backToMenu(link);
       }
-      this.addEvent(this.element.retry, 'click', function(event) {
+      this.addEvent(this.element.retry, 'click touchend', function(event) {
         _this.stop(event);
         _this.fadeOut(_this.element.section.gameOver);
         return _this.game.start();
@@ -119,7 +119,7 @@ Provides all services for menu.
 
     Menu.prototype.menuItem = function(item) {
       var _this = this;
-      this.addEvent(item, 'click', function(event) {
+      this.addEvent(item, 'click touchend', function(event) {
         var bindTo;
         bindTo = item.getAttribute('data-bind');
         if (_this[bindTo]) {
@@ -130,7 +130,7 @@ Provides all services for menu.
 
     Menu.prototype.backToMenu = function(link) {
       var _this = this;
-      this.addEvent(link, 'click', function(event) {
+      this.addEvent(link, 'click touchend', function(event) {
         var activeEl;
         _this.stop(event);
         activeEl = link.getAttribute('data-back');
