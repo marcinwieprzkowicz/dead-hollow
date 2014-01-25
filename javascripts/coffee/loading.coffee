@@ -95,6 +95,7 @@ class Loading extends Base
     @setText @element.featuresTest.description, @message.loadingDescription.checkingBrowser
 
     @externalLinks()
+    @preventContextMenu()
     @preventScrolling() if Modernizr.touch
     @addCustomTests()
     @hideMusicVolume() if Modernizr.ismobile
@@ -104,6 +105,12 @@ class Loading extends Base
 
   externalLinks: ->
     link.target = '_blank' for link in @element.externalLinks
+    return
+
+
+  preventContextMenu: ->
+    @addEvent document, 'contextmenu', (event) =>
+      @stop event
     return
 
 

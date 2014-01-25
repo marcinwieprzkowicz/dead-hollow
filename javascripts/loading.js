@@ -68,6 +68,7 @@ Loads files via yepnope.js.
       };
       this.setText(this.element.featuresTest.description, this.message.loadingDescription.checkingBrowser);
       this.externalLinks();
+      this.preventContextMenu();
       if (Modernizr.touch) {
         this.preventScrolling();
       }
@@ -85,6 +86,13 @@ Loads files via yepnope.js.
         link = _ref[_i];
         link.target = '_blank';
       }
+    };
+
+    Loading.prototype.preventContextMenu = function() {
+      var _this = this;
+      this.addEvent(document, 'contextmenu', function(event) {
+        return _this.stop(event);
+      });
     };
 
     Loading.prototype.preventScrolling = function() {

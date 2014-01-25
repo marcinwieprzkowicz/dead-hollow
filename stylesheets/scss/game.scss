@@ -1189,25 +1189,25 @@
       @include no-touchie();
       &.backward {
       }
-      &.backward.touched {
+      &.backward:active {
         background-position: 0 -75px;
       }
       &.forward {
         background-position: -75px 0;
       }
-      &.forward.touched {
+      &.forward:active {
         background-position: -75px -75px;
       }
       &.buttonB {
         background-position: -150px 0;
       }
-      &.buttonB.touched {
+      &.buttonB:active {
         background-position: -150px -75px;
       }
       &.buttonA {
         background-position: -225px 0;
       }
-      &.buttonA.touched {
+      &.buttonA:active {
         background-position: -225px -75px;
       }
     }

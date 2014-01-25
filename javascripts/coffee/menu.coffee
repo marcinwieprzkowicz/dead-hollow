@@ -80,7 +80,7 @@ class Menu extends Base
     @menuItem item for item in @element.main.items
     @backToMenu link for link in @element.backToMenu
 
-    @addEvent @element.retry, 'click', (event) =>
+    @addEvent @element.retry, 'click touchend', (event) =>
       @stop event
       @fadeOut @element.section.gameOver
       @game.start()
@@ -88,14 +88,14 @@ class Menu extends Base
 
 
   menuItem: (item) ->
-    @addEvent item, 'click', (event) =>
+    @addEvent item, 'click touchend', (event) =>
       bindTo = item.getAttribute 'data-bind'
       this[bindTo].call this, event if this[bindTo]
     return
 
 
   backToMenu: (link) ->
-    @addEvent link, 'click', (event) =>
+    @addEvent link, 'click touchend', (event) =>
       @stop event
       activeEl = link.getAttribute 'data-back'
       @fadeOut @element.section[activeEl]
