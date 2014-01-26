@@ -11,10 +11,30 @@ class Solid
 
   constructor: (element) ->
     @element = element
-
     @position = @getPosition element
-    @height = element.clientHeight
-    @width = element.clientWidth
+
+    if element.classList.contains 'platform'
+      @height = 1
+
+      if element.classList.contains 'moving'
+        @width = 94
+        @position.x += 27
+        @position.y += 10
+      else if element.classList.contains 'cropped'
+        @width = 88
+      else if element.classList.contains 'floorDirection'
+        @width = 161
+        @position.x += 60
+        @position.y += 24
+      else if element.classList.contains 'floorAltDirection'
+        @width = 60
+        @position.y += 24
+      else
+        @width = 85
+        @position.x += 27
+    else
+      @height = element.clientHeight
+      @width = element.clientWidth
 
 
   getPosition: (element) ->

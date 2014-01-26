@@ -16,8 +16,29 @@ Solid CoffeeScript class.
     function Solid(element) {
       this.element = element;
       this.position = this.getPosition(element);
-      this.height = element.clientHeight;
-      this.width = element.clientWidth;
+      if (element.classList.contains('platform')) {
+        this.height = 1;
+        if (element.classList.contains('moving')) {
+          this.width = 94;
+          this.position.x += 27;
+          this.position.y += 10;
+        } else if (element.classList.contains('cropped')) {
+          this.width = 88;
+        } else if (element.classList.contains('floorDirection')) {
+          this.width = 161;
+          this.position.x += 60;
+          this.position.y += 24;
+        } else if (element.classList.contains('floorAltDirection')) {
+          this.width = 60;
+          this.position.y += 24;
+        } else {
+          this.width = 85;
+          this.position.x += 27;
+        }
+      } else {
+        this.height = element.clientHeight;
+        this.width = element.clientWidth;
+      }
     }
 
     Solid.prototype.getPosition = function(element) {
