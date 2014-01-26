@@ -694,23 +694,17 @@
     &.torn {
       background-position: -378px -29px;
     }
-    &.between:before {
+    &.between {
       background: url(../images/backgrounds/grating.png) no-repeat -567px -29px;
-      content: ' ';
       height: 266px;
-      position: absolute;
-      right: -35px;
+      margin: 0 -35px 0 -1px;
       width: 36px;
-      top: 0;
     }
-    &.toWall:after {
+    &.toWall {
       background: url(../images/backgrounds/grating.png) no-repeat -608px -29px;
-      content: ' ';
       height: 269px;
-      position: absolute;
-      right: -88px;
+      margin-left: -1px;
       width: 89px;
-      top: 0;
     }
     &.space {
       margin-left: 192px;
@@ -728,11 +722,11 @@
       &.torn {
         background-position: -378px -82px;
       }
-      &.between:before {
+      &.between {
         background-position: -567px -82px;
         height: 184px;
       }
-      &.toWall:after {
+      &.toWall {
         background-position: -608px -82px;
         height: 187px;
       }
