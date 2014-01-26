@@ -35,6 +35,11 @@ Solid CoffeeScript class.
           this.width = 85;
           this.position.x += 27;
         }
+      } else if (element.classList.contains('box')) {
+        this.height = 95;
+        this.width = 147;
+        this.position.y += 8;
+        this.position.x += 21;
       } else {
         this.height = element.clientHeight;
         this.width = element.clientWidth;

@@ -32,6 +32,11 @@ class Solid
       else
         @width = 85
         @position.x += 27
+    else if element.classList.contains 'box'
+      @height = 95
+      @width = 147
+      @position.y += 8
+      @position.x += 21
     else
       @height = element.clientHeight
       @width = element.clientWidth

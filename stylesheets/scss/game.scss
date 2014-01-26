@@ -494,12 +494,6 @@
   width: 189px;
   @include perspective(1000);
 
-  .solid {
-    height: 95px;
-    margin: 8px 0 0 21px;
-    width: 147px;
-  }
-
   .shadow,
   .cover {
     background: url(../images/backgrounds/box.png) no-repeat;
