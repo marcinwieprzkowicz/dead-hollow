@@ -12,7 +12,7 @@ class MovingPlatform extends Base
 
   defaults:
     movingPlatform: '.platform.moving'
-    solid: '.platform.moving .solid'
+    solid: '.platform.moving.solid'
     animation:
       shift: 5
 

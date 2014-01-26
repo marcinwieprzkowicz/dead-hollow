@@ -132,13 +132,6 @@
 
     .part {
       background: url(../images/backgrounds/base-1.jpg) repeat-x;
-
-      .solid:last-child {
-        bottom: 0;
-        height: 40px;
-        position: absolute;
-        width: 100%;
-      }
     }
   }
   &.wallBg {
@@ -493,12 +486,6 @@
   position: absolute;
   width: 189px;
   @include perspective(1000);
-
-  .solid {
-    height: 95px;
-    margin: 8px 0 0 21px;
-    width: 147px;
-  }
 
   .shadow,
   .cover {

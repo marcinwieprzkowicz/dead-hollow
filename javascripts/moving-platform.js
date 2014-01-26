@@ -20,7 +20,7 @@ Creates special type of platforms - moving platforms (Wow! I know, impressive, i
 
     MovingPlatform.prototype.defaults = {
       movingPlatform: '.platform.moving',
-      solid: '.platform.moving .solid',
+      solid: '.platform.moving.solid',
       animation: {
         shift: 5
       }
