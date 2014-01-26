@@ -132,13 +132,6 @@
 
     .part {
       background: url(../images/backgrounds/base-1.jpg) repeat-x;
-
-      .solid:last-child {
-        bottom: 0;
-        height: 40px;
-        position: absolute;
-        width: 100%;
-      }
     }
   }
   &.wallBg {

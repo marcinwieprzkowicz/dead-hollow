@@ -40,6 +40,10 @@ Solid CoffeeScript class.
         this.width = 147;
         this.position.y += 8;
         this.position.x += 21;
+      } else if (element.classList.contains('part')) {
+        this.height = 40;
+        this.width = element.clientWidth;
+        this.position.y += 120;
       } else {
         this.height = element.clientHeight;
         this.width = element.clientWidth;

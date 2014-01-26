@@ -161,7 +161,7 @@ Moves/draws a map, handles collisions and also contains animations object.
       this.move(horizontal, vertical);
       movingCol = this.collision.checkAll(this.objs.character.solid, this.movingPlatform.solid, 0, -this.options.animation.shift);
       if (movingCol.status) {
-        index = this.getIndex(movingCol.solid.element.parentNode);
+        index = this.getIndex(movingCol.solid.element);
         if (this.movingPlatform.platform[index].direction === 'normal') {
           this.move(-this.movingPlatform.options.animation.shift, 0);
         } else {
