@@ -435,7 +435,10 @@
     background: url(../images/backgrounds/door-leafs.png) no-repeat;
     height: 103px;
     position: absolute;
-    @include transition(all 1s linear);
+    -webkit-transition: -webkit-transform 1s linear;
+    -moz-transition: -moz-transform 1s linear;
+    -ms-transition: -ms-transform 1s linear;
+    transition: transform 1s linear;
   }
 }
 
@@ -444,13 +447,11 @@
     width: 80px;
 
     .doorLeaf {
-      bottom: 24px;
-      left: 51px;
       width: 47px;
-      @include transform(translate3d(0, 0, 0));
+      @include transform(translate3d(51px, -127px, 0));
     }
     &.open .doorLeaf {
-      @include transform(translate3d(-24px, -10px, 0));
+      @include transform(translate3d(27px, -137px, 0));
     }
   }
 }
@@ -470,10 +471,8 @@
 
     .doorLeaf {
       background-position: -48px 0;
-      left: -3px;
-      bottom: 17px;
       width: 49px;
-      @include transform(translate3d(0, 0, 0));
+      @include transform(translate3d(-3px, -120px, 0));
     }
     &.open {
       .solid {
@@ -481,7 +480,7 @@
       }
 
       .doorLeaf {
-        @include transform(translate3d(27px, 11px, 0));
+        @include transform(translate3d(24px, -109px, 0));
       }
     }
   }

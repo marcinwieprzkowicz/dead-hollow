@@ -36,7 +36,7 @@ Loads files via yepnope.js.
       }
     };
 
-    Loading.prototype.files = ['javascripts/lib/buzz.js', 'javascripts/lib/keypress.js', 'javascripts/solid.js', 'javascripts/character.js', 'javascripts/collision.js', 'javascripts/control.js', 'javascripts/platform.js', 'javascripts/moving-platform.js', 'javascripts/map.js', 'javascripts/game.js', 'stylesheets/character-sprites.css', 'stylesheets/game.css'];
+    Loading.prototype.files = ['javascripts/lib/buzz-1.1.0.min.js', 'javascripts/lib/keypress-1.0.9.min.js', 'javascripts/solid.js', 'javascripts/character.js', 'javascripts/collision.js', 'javascripts/control.js', 'javascripts/platform.js', 'javascripts/moving-platform.js', 'javascripts/map.js', 'javascripts/game.js', 'stylesheets/character-sprites.css', 'stylesheets/game.css'];
 
     Loading.prototype.images = ['images/backgrounds/base-1.jpg', 'images/backgrounds/base-2.jpg', 'images/backgrounds/base-3.jpg', 'images/backgrounds/border.png', 'images/backgrounds/box.png', 'images/backgrounds/door-leafs.png', 'images/backgrounds/grating.png', 'images/backgrounds/lighting.png', 'images/backgrounds/pipelines.png', 'images/backgrounds/platform.png', 'images/backgrounds/trellis.png', 'images/backgrounds/wall-clear.png', 'images/backgrounds/wall-door.png', 'images/backgrounds/wall.png', 'images/character-sprites.png', 'images/controls-sprites.png', 'images/icons.png', 'images/info-icon.png'];
 
