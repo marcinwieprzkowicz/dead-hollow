@@ -25,7 +25,7 @@ class Platform
     @range = if range? then parseInt(range, 10) else @defaults.range
     @width = element.clientWidth
 
-    solidIndex = parseInt element.firstElementChild.getAttribute('data-index'), 10
+    solidIndex = parseInt element.getAttribute('data-index'), 10
     @solid = window.deadHollow.solids[solidIndex]
     @solid.position.x += @offset
 

@@ -133,7 +133,7 @@
     .part {
       background: url(../images/backgrounds/base-1.jpg) repeat-x;
 
-      > .solid {
+      .solid:last-child {
         bottom: 0;
         height: 40px;
         position: absolute;
@@ -830,46 +830,20 @@
   @include perspective(1000);
   &.moving {
     @include transition(0.05s linear);
-
-    .solid {
-      margin: 10px 0 0 27px;
-      width: 94px;
-    }
   }
   &.cropped {
     background-position: -34px 0;
     width: 155px;
-
-    .solid {
-      margin-left: 0;
-      width: 88px;
-    }
   }
   &.floorDirection {
     background-position: 0 -51px;
     height: 64px;
     width: 221px;
-
-    .solid {
-      margin: 24px 0 0 60px;
-      width: 161px;
-    }
   }
   &.floorAltDirection {
     background-position: 0 -116px;
     height: 64px;
     width: 130px;
-
-    .solid {
-      margin: 24px 0 0 0;
-      width: 60px;
-    }
-  }
-
-  .solid {
-    height: 1px;
-    margin: 0 0 0 27px;
-    width: 85px;
   }
 }
 
