@@ -49,9 +49,8 @@ P.S. There is a reason why I didn't use ready-made solutions. I wanted to improv
 
 ##Issues
 The game is still **unfinished** and has a few issues that has to be solved.
-* performance (iPad)
-* touchmove event: unhandled
-* disabling the context menu on long taps (Android)
+* performance iOS & Android
+* touchmove & touchcancel event: unhandled
 * the map is static: templates?
 * ...and so on
 
